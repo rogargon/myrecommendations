@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <title>{% block title %}MyRestaurants by MyRecommentdations.org{% endblock %}</title>
+</head>
+
+<body>
+
+<div id="header">
+    {% block header %}
+        {% if user.username %}
+            <p>User {{ user.username }}</p>
+        {% else %}
+            <p><a href="/login/">Sign in</a></p>
+        {% endif %}
+    {% endblock %}
+</div>
+
+
+<div id="sidebar">
+    {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+        </ul>
+    {% endblock %}
+</div>
+
+<div id="content">
+    {% block content %}
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% endblock %}
+</div>
+
+<div id="footer">
+    {% block footer %}{% endblock %}
+</div>
+
+</body>
+</html>

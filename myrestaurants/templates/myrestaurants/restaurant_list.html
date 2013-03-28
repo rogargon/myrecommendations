@@ -1,0 +1,17 @@
+{% extends "myrestaurants/base.html" %}
+
+{% block content %}
+
+<h1>Restaurants</h1>
+
+{% if latest_restaurant_list %}
+    <ul>
+        {% for restaurant in latest_restaurant_list %}
+            <li><a href="{% url 'myrestaurants:restaurant_detail' restaurant.id %}">{{ restaurant.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No restaurants are available.</p>
+{% endif %}
+
+{% endblock %}
