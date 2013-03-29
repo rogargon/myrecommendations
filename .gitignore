@@ -1,3 +1,6 @@
+*.iml
+.idea/*
+
 sqlite.db
 
 *.py[cod]
