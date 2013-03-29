@@ -1,7 +1,8 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="{% static "style/base.css" %}" />
     <title>{% block title %}MyRestaurants by MyRecommentdations.org{% endblock %}</title>
 </head>
 
@@ -21,7 +22,7 @@
 <div id="sidebar">
     {% block sidebar %}
         <ul>
-            <li><a href="/">Home</a></li>
+            <li><a href="/myrestaurants">Home</a></li>
         </ul>
     {% endblock %}
 </div>
