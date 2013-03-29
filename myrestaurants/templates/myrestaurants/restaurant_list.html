@@ -2,7 +2,12 @@
 
 {% block content %}
 
-<h1>Restaurants</h1>
+<h1>
+    Restaurants
+    {% if user %}
+        (<a href="{% url 'myrestaurants:restaurant_create' %}">add</a>)
+    {% endif %}
+</h1>
 
 {% if latest_restaurant_list %}
     <ul>

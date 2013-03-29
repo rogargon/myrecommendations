@@ -2,7 +2,12 @@
 
 {% block content %}
 
-<h1>{{ restaurant.name }}</h1>
+<h1>
+    {{ restaurant.name }}
+    {% if user == restaurant.user %}
+        (<a href="{% url 'myrestaurants:restaurant_edit' restaurant.id %}">edit</a>)
+    {% endif %}
+</h1>
 
 {% with restaurant.address as address %}
 <h2>Address:</h2>
@@ -13,8 +18,12 @@
 </p>
 {% endwith %}
 
-{% if restaurant.dish_set.all %}
-<h2>Dishes</h2>
+<h2>
+    Dishes
+    {% if user %}
+        (<a href="{% url 'myrestaurants:dish_create' restaurant.id %}">add</a>)
+    {% endif %}
+</h2>
 <ul>
     {% for dish in restaurant.dish_set.all %}
         <li><a href="{% url 'myrestaurants:dish_detail' restaurant.id dish.id %}">{{ dish.name }}</a></li>
@@ -22,7 +31,6 @@
         <li>Sorry, no dishes for this restaurant yet.</li>
     {% endfor %}
 </ul>
-{% endif %}
 
 {% endblock %}
 

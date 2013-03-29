@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, UpdateView, CreateView
 from django.utils import timezone
-from models import *
-from views import DishDetail
+
+from myrestaurants.models import Restaurant, RestaurantForm, Dish, DishForm
 
 urlpatterns = patterns('',
     # ex: /myrestaurants/
@@ -17,8 +17,24 @@ urlpatterns = patterns('',
     url(r'^restaurant/(?P<pk>\d+)/$',
         DetailView.as_view(
             model = Restaurant,
-            template_name = "myrestaurants/restaurant_detail.html"),
+            template_name = 'myrestaurants/restaurant_detail.html'),
         name='restaurant_detail'),
+
+    # ex: /myrestaurants/restaurant/1/edit/
+    url(r'^restaurant/(?P<pk>\d+)/edit/$',
+        UpdateView.as_view(
+            model = Restaurant,
+            template_name = 'myrestaurants/restaurant_form.html',
+            form_class = RestaurantForm),
+        name='restaurant_edit'),
+
+    # ex: /myrestaurants/restaurant/create/
+    url(r'^restaurant/create/$',
+        CreateView.as_view(
+            model = Restaurant,
+            template_name = 'myrestaurants/restaurant_form.html',
+            form_class = RestaurantForm),
+        name='restaurant_create'),
 
     # ex: /myrestaurants/restaurant/1/dish/1/
     url(r'^restaurant/(?P<pkr>\d+)/dish/(?P<pk>\d+)/$',
@@ -26,4 +42,20 @@ urlpatterns = patterns('',
             model=Dish,
             template_name='myrestaurants/dish_detail.html'),
         name='dish_detail'),
+
+    # ex: /myrestaurants/restaurant/1/dish/1/edit/
+    url(r'^restaurant/(?P<pkr>\d+)/dish/(?P<pk>\d+)/edit/$',
+        UpdateView.as_view(
+            model = Dish,
+            template_name = 'myrestaurants/dish_form.html',
+            form_class = DishForm),
+        name='dish_edit'),
+
+    # ex: /myrestaurants/restaurant/1/dish/create/
+    url(r'^restaurant/(?P<pk>\d+)/dish/create/$',
+        CreateView.as_view(
+            model = Dish,
+            template_name = 'myrestaurants/dish_form.html',
+            form_class = DishForm),
+        name='dish_create'),
 )

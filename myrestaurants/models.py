@@ -1,8 +1,8 @@
+# Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from datetime import date
-
-# Create your models here.
 
 class Address(models.Model):
     street = models.TextField()
@@ -28,23 +28,25 @@ class Restaurant(models.Model):
 
     def __unicode__(self):
         return u"%s" % self.name
+    def get_absolute_url(self):
+        return reverse('myrestaurants:restaurant_detail', kwargs={'pk': self.pk})
+
 
 class Dish(models.Model):
     name = models.TextField()
     description = models.TextField(blank=True)
+    price = models.DecimalField('Euro amount', max_digits=8, decimal_places=2, blank=True, null=True)
     user = models.ForeignKey(User, null=True, default=User.objects.get(id=1))
     date = models.DateField(null=True, default=date.today)
     restaurant = models.ForeignKey(Restaurant, blank=True, null=True)
 
     def __unicode__(self):
         return u"%s" % self.name
+    def get_absolute_url(self):
+        return reverse('myrestaurants:dish_detail', kwargs={'pkr': self.restaurant.pk, 'pk': self.pk})
 
-class Price(models.Model):
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    currency = models.TextField()
+class Review(models.Model):
+    rating = models.PositiveSmallIntegerField(blank=False, null=False, default=2, choices=((1,'1'),(2,'2'),(3,'3')))
+    comment = models.TextField()
     user = models.ForeignKey(User, null=True, default=User.objects.get(id=1))
     date = models.DateField(null=True, default=date.today)
-    dish = models.ForeignKey(Dish, blank=True, null=True)
-
-    def __unicode__(self):
-        return u"%d %s" % (self.amount, self.currency)

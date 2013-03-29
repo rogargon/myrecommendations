@@ -7,6 +7,15 @@
 <p>{{ dish.description }}</p>
 <p>Served by <a href="{% url 'myrestaurants:restaurant_detail' dish.restaurant.id %}">{{ dish.restaurant.name }}</a></p>
 
+<h2>Vote</h2>
+    <form action="{% url 'myrestaurants:recommend_dish' dish.id %}" method="post">
+        {% csrf_token %}
+        {% for choice in [1:5]" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+        {% endfor %}
+        <input type="submit" value="Vote" />
+    </form>
+
 {% endblock %}
 
 {% block footer %}
