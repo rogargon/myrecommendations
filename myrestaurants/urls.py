@@ -2,7 +2,9 @@ from django.conf.urls import patterns, url
 from django.views.generic import DetailView, ListView, UpdateView, CreateView
 from django.utils import timezone
 
-from myrestaurants.models import Restaurant, RestaurantForm, Dish, DishForm
+from myrestaurants.models import Restaurant, Dish
+from myrestaurants.forms import RestaurantForm, DishForm
+from myrestaurants.views import RestaurantCreate, DishCreate
 
 urlpatterns = patterns('',
     # ex: /myrestaurants/
@@ -30,10 +32,7 @@ urlpatterns = patterns('',
 
     # ex: /myrestaurants/restaurant/create/
     url(r'^restaurant/create/$',
-        CreateView.as_view(
-            model = Restaurant,
-            template_name = 'myrestaurants/restaurant_form.html',
-            form_class = RestaurantForm),
+        RestaurantCreate.as_view(),
         name='restaurant_create'),
 
     # ex: /myrestaurants/restaurant/1/dish/1/
@@ -53,9 +52,6 @@ urlpatterns = patterns('',
 
     # ex: /myrestaurants/restaurant/1/dish/create/
     url(r'^restaurant/(?P<pk>\d+)/dish/create/$',
-        CreateView.as_view(
-            model = Dish,
-            template_name = 'myrestaurants/dish_form.html',
-            form_class = DishForm),
+        DishCreate.as_view(),
         name='dish_create'),
 )

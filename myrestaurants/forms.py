@@ -9,4 +9,4 @@ class RestaurantForm(ModelForm):
 class DishForm(ModelForm):
     class Meta:
         model = Dish
-        exclude = ('user', 'date',)
+        exclude = ('restaurant', 'user', 'date',)
