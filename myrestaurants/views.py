@@ -1,23 +1,22 @@
 # Create your views here.
-import user
-
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView
+
 from django.views.generic.edit import CreateView
+from models import RestaurantReview
 
 from myrestaurants.models import Restaurant, Dish
 from myrestaurants.forms import RestaurantForm, DishForm
 
-class DishDetail(DetailView):
-    model = Dish
-    template_name = "myrestaurants/dish_detail.html"
-
-    def get_object(self):
-        self.object = super(DishDetail, self).get_object()
-        return self.object
+class RestaurantDetail(DetailView):
+    model = Restaurant
+    template_name = 'myrestaurants/restaurant_detail.html'
 
     def get_context_data(self, **kwargs):
-        context = super(DishDetail, self).get_context_data(**kwargs)
-        context['restaurant'] = self.object.restaurant
+        context = super(RestaurantDetail, self).get_context_data(**kwargs)
+        context['RATING_CHOICES'] = RestaurantReview.RATING_CHOICES
         return context
 
 class RestaurantCreate(CreateView):
@@ -42,3 +41,13 @@ class DishCreate(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(DishCreate, self).form_valid(form)
+
+def review(request, pk):
+    restaurant = get_object_or_404(Restaurant, pk=pk)
+    review = RestaurantReview(
+        rating=request.POST['rating'],
+        comment=request.POST['comment'],
+        user=request.user,
+        restaurant=restaurant)
+    review.save()
+    return HttpResponseRedirect(reverse('myrestaurants:restaurant_detail', args=(restaurant.id,)))

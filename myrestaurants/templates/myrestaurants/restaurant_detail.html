@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>
+<h1 xmlns="http://www.w3.org/1999/html">
     {{ restaurant.name }}
     {% if user == restaurant.user %}
         (<a href="{% url 'myrestaurants:restaurant_edit' restaurant.id %}">edit</a>)
@@ -31,6 +31,31 @@
         <li>Sorry, no dishes for this restaurant yet.</li>
     {% endfor %}
 </ul>
+
+<h2>Reviews</h2>
+<ul>
+    {% for review in restaurant.restaurantreview_set.all %}
+        <li>
+            <p>{{ review.rating }} star{{ review.rating|pluralize }}</p>
+            <p>{{ review.comment }}</p>
+            <p>Created by {{ review.user }} on {{ review.date }}</p>
+        </li>
+    {% endfor %}
+</ul>
+
+<h3>Add Review</h3>
+<form action="{% url 'myrestaurants:review_create' restaurant.id %}" method="post">
+    {% csrf_token %}
+    Message: <textarea name="comment" id="comment" rows="4"></textarea>
+    <p>Rating:</p>
+    <p>
+    {% for rate in RATING_CHOICES %}
+        <input type="radio" name="rating" id="rating{{ forloop.counter }}" value="{{ rate.0 }}" />
+        <label for="choice{{ forloop.counter }}">{{ rate.0 }} star{{ rate.0|pluralize }}</label><br />
+    {% endfor %}
+    </p>
+    <input type="submit" value="Review" />
+</form>
 
 {% endblock %}
 

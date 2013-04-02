@@ -5,6 +5,7 @@ from django.utils import timezone
 from myrestaurants.models import Restaurant, Dish
 from myrestaurants.forms import RestaurantForm, DishForm
 from myrestaurants.views import RestaurantCreate, DishCreate
+from views import RestaurantDetail
 
 urlpatterns = patterns('',
     # ex: /myrestaurants/
@@ -17,9 +18,7 @@ urlpatterns = patterns('',
 
     # ex: /myrestaurants/restaurant/1/
     url(r'^restaurant/(?P<pk>\d+)/$',
-        DetailView.as_view(
-            model = Restaurant,
-            template_name = 'myrestaurants/restaurant_detail.html'),
+        RestaurantDetail.as_view(),
         name='restaurant_detail'),
 
     # ex: /myrestaurants/restaurant/1/edit/
@@ -54,4 +53,10 @@ urlpatterns = patterns('',
     url(r'^restaurant/(?P<pk>\d+)/dish/create/$',
         DishCreate.as_view(),
         name='dish_create'),
+
+    # ex: /myrestaurants/restaurant/1/review/create/
+    url(r'^restaurant/(?P<pk>\d+)/review/create/$',
+    #    ReviewCreate.as_view(),
+        'myrestaurants.views.review',
+        name='review_create'),
 )

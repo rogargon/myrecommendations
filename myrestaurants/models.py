@@ -46,7 +46,11 @@ class Dish(models.Model):
         return reverse('myrestaurants:dish_detail', kwargs={'pkr': self.restaurant.pk, 'pk': self.pk})
 
 class Review(models.Model):
-    rating = models.PositiveSmallIntegerField(blank=False, null=False, default=2, choices=((1,'1'),(2,'2'),(3,'3')))
+    RATING_CHOICES = ((1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5'))
+    rating = models.PositiveSmallIntegerField('Ratings (stars)', blank=False, null=False, default=3, choices=RATING_CHOICES)
     comment = models.TextField()
     user = models.ForeignKey(User, null=True, default=User.objects.get(id=1))
     date = models.DateField(null=True, default=date.today)
+
+class RestaurantReview(Review):
+    restaurant = models.ForeignKey(Restaurant)
