@@ -16,12 +16,17 @@ urlpatterns = patterns('',
             template_name='myrestaurants/restaurant_list.html'),
         name='restaurant_list'),
 
-    # ex: /myrestaurants/restaurant/1/
-    url(r'^restaurant/(?P<pk>\d+)/$',
+    # ex: /myrestaurants/restaurants/1/
+    url(r'^restaurants/(?P<pk>\d+)/$',
         RestaurantDetail.as_view(),
         name='restaurant_detail'),
 
-    # ex: /myrestaurants/restaurant/1/edit/
+    # ex: /myrestaurants/restaurants/create/
+    url(r'^restaurants/create/$',
+        RestaurantCreate.as_view(),
+        name='restaurant_create'),
+
+    # ex: /myrestaurants/restaurants/1/edit/
     url(r'^restaurant/(?P<pk>\d+)/edit/$',
         UpdateView.as_view(
             model = Restaurant,
@@ -29,33 +34,28 @@ urlpatterns = patterns('',
             form_class = RestaurantForm),
         name='restaurant_edit'),
 
-    # ex: /myrestaurants/restaurant/create/
-    url(r'^restaurant/create/$',
-        RestaurantCreate.as_view(),
-        name='restaurant_create'),
-
-    # ex: /myrestaurants/restaurant/1/dish/1/
-    url(r'^restaurant/(?P<pkr>\d+)/dish/(?P<pk>\d+)/$',
+    # ex: /myrestaurants/restaurants/1/dishes/1/
+    url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/$',
         DetailView.as_view(
             model=Dish,
             template_name='myrestaurants/dish_detail.html'),
         name='dish_detail'),
 
-    # ex: /myrestaurants/restaurant/1/dish/1/edit/
-    url(r'^restaurant/(?P<pkr>\d+)/dish/(?P<pk>\d+)/edit/$',
+    # ex: /myrestaurants/restaurants/1/dishes/create/
+    url(r'^restaurants/(?P<pk>\d+)/dishes/create/$',
+        DishCreate.as_view(),
+        name='dish_create'),
+
+    # ex: /myrestaurants/restaurants/1/dishes/1/edit/
+    url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/edit/$',
         UpdateView.as_view(
             model = Dish,
             template_name = 'myrestaurants/dish_form.html',
             form_class = DishForm),
         name='dish_edit'),
 
-    # ex: /myrestaurants/restaurant/1/dish/create/
-    url(r'^restaurant/(?P<pk>\d+)/dish/create/$',
-        DishCreate.as_view(),
-        name='dish_create'),
-
-    # ex: /myrestaurants/restaurant/1/review/create/
-    url(r'^restaurant/(?P<pk>\d+)/review/create/$',
+    # ex: /myrestaurants/restaurant/1/reviews/create/
+    url(r'^restaurant/(?P<pk>\d+)/reviews/create/$',
     #    ReviewCreate.as_view(),
         'myrestaurants.views.review',
         name='review_create'),
