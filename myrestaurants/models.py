@@ -8,7 +8,7 @@ class Restaurant(models.Model):
     name = models.TextField()
     street = models.TextField(blank=True, null=True)
     number = models.IntegerField(blank=True, null=True)
-    city = models.TextField()
+    city = models.TextField(default="")
     zipCode = models.TextField(blank=True, null=True)
     stateOrProvince = models.TextField(blank=True, null=True)
     country = models.TextField(blank=True, null=True)
@@ -29,7 +29,7 @@ class Dish(models.Model):
     price = models.DecimalField('Euro amount', max_digits=8, decimal_places=2, blank=True, null=True)
     user = models.ForeignKey(User, default=User.objects.get(id=1))
     date = models.DateField(default=date.today)
-    restaurant = models.ForeignKey(Restaurant)
+    restaurant = models.ForeignKey(Restaurant, null=True)
 
     def __unicode__(self):
         return u"%s" % self.name
@@ -43,8 +43,8 @@ class Review(models.Model):
     user = models.ForeignKey(User, default=User.objects.get(id=1))
     date = models.DateField(default=date.today)
 
-    class Meta:
-        abstract = True
+    #class Meta:
+    #    abstract = True
 
 class RestaurantReview(Review):
     restaurant = models.ForeignKey(Restaurant)

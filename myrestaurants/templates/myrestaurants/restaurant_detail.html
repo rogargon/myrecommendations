@@ -9,14 +9,12 @@
     {% endif %}
 </h1>
 
-{% with restaurant.address as address %}
 <h2>Address:</h2>
 <p>
-    {{ address.street }}, {{ address.number }} <br/>
-    {{ address.zipcode }} {{ addres.city }} <br/>
-    {{ address.stateOrProvince }} ({{ address.country }})
+    {{ restaurant.street }}, {{ restaurant.number }} <br/>
+    {{ restaurant.zipcode }} {{ restaurant.city }} <br/>
+    {{ restaurant.stateOrProvince }} ({{ restaurant.country }})
 </p>
-{% endwith %}
 
 <h2>
     Dishes
