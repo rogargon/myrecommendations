@@ -10,7 +10,6 @@
 </h1>
 <p>{{ dish.description }}</p>
 <p>Served by <a href="{% url 'myrestaurants:restaurant_detail' dish.restaurant.id %}">{{ dish.restaurant.name }}</a></p>
-<h2>Rate</h2>
 
 {% endblock %}
 
