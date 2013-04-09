@@ -48,8 +48,8 @@
     <p>Rating:</p>
     <p>
     {% for rate in RATING_CHOICES %}
-        <input type="radio" name="rating" id="rating{{ forloop.counter }}" value="{{ rate.0 }}" />
-        <label for="choice{{ forloop.counter }}">{{ rate.0 }} star{{ rate.0|pluralize }}</label><br />
+        <input type="radio" name="rating" id="rating{{ forloop.counter }}" value="{{ rate.1 }}" />
+        <label for="choice{{ forloop.counter }}">{{ rate.1 }} star{{ rate.0|pluralize }}</label><br />
     {% endfor %}
     </p>
     <input type="submit" value="Review" />

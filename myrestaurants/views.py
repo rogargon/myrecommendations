@@ -3,12 +3,10 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView
-
 from django.views.generic.edit import CreateView
-from models import RestaurantReview
 
-from myrestaurants.models import Restaurant, Dish
-from myrestaurants.forms import RestaurantForm, DishForm
+from models import RestaurantReview, Restaurant, Dish
+from forms import RestaurantForm, DishForm
 
 class RestaurantDetail(DetailView):
     model = Restaurant
@@ -21,7 +19,7 @@ class RestaurantDetail(DetailView):
 
 class RestaurantCreate(CreateView):
     model = Restaurant
-    template_name = 'myrestaurants/restaurant_form.html'
+    template_name = 'myrestaurants/form.html'
     form_class = RestaurantForm
 
     def form_valid(self, form):
@@ -30,16 +28,17 @@ class RestaurantCreate(CreateView):
 
 class DishCreate(CreateView):
     model = Dish
-    template_name = 'myrestaurants/dish_form.html'
+    template_name = 'myrestaurants/form.html'
     form_class = DishForm
 
-    def get_initial(self):
-        initial = super(DishCreate, self).get_initial()
-        initial['restaurant'] = Restaurant.objects.get(id=self.kwargs['pk'])
-        return initial
+    # def get_initial(self):
+    #     initial = super(DishCreate, self).get_initial()
+    #     initial['restaurant'] = Restaurant.objects.get(id=self.kwargs['pk'])
+    #     return initial
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.restaurant = Restaurant.objects.get(id=self.kwargs['pk'])
         return super(DishCreate, self).form_valid(form)
 
 def review(request, pk):

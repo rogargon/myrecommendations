@@ -1,11 +1,10 @@
 from django.conf.urls import patterns, url
-from django.views.generic import DetailView, ListView, UpdateView, CreateView
 from django.utils import timezone
+from django.views.generic import DetailView, ListView, UpdateView
 
-from myrestaurants.models import Restaurant, Dish
-from myrestaurants.forms import RestaurantForm, DishForm
-from myrestaurants.views import RestaurantCreate, DishCreate
-from views import RestaurantDetail
+from models import Restaurant, Dish
+from forms import RestaurantForm, DishForm
+from views import RestaurantCreate, DishCreate, RestaurantDetail
 
 urlpatterns = patterns('',
     # ex: /myrestaurants/
@@ -30,7 +29,7 @@ urlpatterns = patterns('',
     url(r'^restaurant/(?P<pk>\d+)/edit/$',
         UpdateView.as_view(
             model = Restaurant,
-            template_name = 'myrestaurants/restaurant_form.html',
+            template_name = 'myrestaurants/form.html',
             form_class = RestaurantForm),
         name='restaurant_edit'),
 
@@ -50,13 +49,12 @@ urlpatterns = patterns('',
     url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/edit/$',
         UpdateView.as_view(
             model = Dish,
-            template_name = 'myrestaurants/dish_form.html',
+            template_name = 'myrestaurants/form.html',
             form_class = DishForm),
         name='dish_edit'),
 
     # ex: /myrestaurants/restaurant/1/reviews/create/
     url(r'^restaurant/(?P<pk>\d+)/reviews/create/$',
-    #    ReviewCreate.as_view(),
         'myrestaurants.views.review',
         name='review_create'),
 )
