@@ -27,6 +27,7 @@ class Dish(models.Model):
     name = models.TextField()
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField('Euro amount', max_digits=8, decimal_places=2, blank=True, null=True)
+    image = models.ImageField(upload_to="myrestaurants", blank=True, null=True)
     user = models.ForeignKey(User, default=User.objects.get(id=1))
     date = models.DateField(default=date.today)
     restaurant = models.ForeignKey(Restaurant, null=True)
