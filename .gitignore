@@ -1,4 +1,5 @@
 *.iml
+media
 .idea/*
 
 sqlite.db
