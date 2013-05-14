@@ -1,12 +1,18 @@
 # Create your views here.
-from django.core.urlresolvers import reverse
+from django.core import urlresolvers
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
 
+from rest_framework import generics
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
 from models import RestaurantReview, Restaurant, Dish
 from forms import RestaurantForm, DishForm
+from serializers import RestaurantSerializer, DishSerializer, RestaurantReviewSerializer
 
 class RestaurantDetail(DetailView):
     model = Restaurant
@@ -49,4 +55,54 @@ def review(request, pk):
         user=request.user,
         restaurant=restaurant)
     review.save()
-    return HttpResponseRedirect(reverse('myrestaurants:restaurant_detail', args=(restaurant.id,)))
+    return HttpResponseRedirect(urlresolvers.reverse('myrestaurants:restaurant_detail', args=(restaurant.id,)))
+
+
+@api_view(('GET',))
+def api_root(request, format=None):
+    return Response({
+        'restaurants': reverse('myrestaurants:restaurant-list', request=request, format=format),
+        'dishes': reverse('myrestaurants:dish-list', request=request, format=format)
+    })
+
+class APIRestaurantList(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of users.
+    """
+    model = Restaurant
+    serializer_class = RestaurantSerializer
+
+class APIRestaurantDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single user.
+    """
+    model = Restaurant
+    serializer_class = RestaurantSerializer
+
+class APIDishList(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of groups.
+    """
+    model = Dish
+    serializer_class = DishSerializer
+
+class APIDishDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single group.
+    """
+    model = Dish
+    serializer_class = DishSerializer
+
+class APIRestaurantReviewList(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of users.
+    """
+    model = RestaurantReview
+    serializer_class = RestaurantReviewSerializer
+
+class APIRestaurantReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single user.
+    """
+    model = RestaurantReview
+    serializer_class = RestaurantReviewSerializer

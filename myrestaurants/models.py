@@ -13,7 +13,7 @@ class Restaurant(models.Model):
     stateOrProvince = models.TextField(blank=True, null=True)
     country = models.TextField(blank=True, null=True)
     telephone = models.TextField(blank=True, null=True)
-    url = models.URLField(blank=True, null=True)
+    web = models.URLField(blank=True, null=True)
     user = models.ForeignKey(User, default=User.objects.get(id=1))
     date = models.DateField(default=date.today)
 
@@ -30,7 +30,7 @@ class Dish(models.Model):
     image = models.ImageField(upload_to="myrestaurants", blank=True, null=True)
     user = models.ForeignKey(User, default=User.objects.get(id=1))
     date = models.DateField(default=date.today)
-    restaurant = models.ForeignKey(Restaurant, null=True)
+    restaurant = models.ForeignKey(Restaurant, null=True, related_name='dishes')
 
     def __unicode__(self):
         return u"%s" % self.name
