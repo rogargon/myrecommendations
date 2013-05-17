@@ -30,7 +30,7 @@ class Dish(models.Model):
     image = models.ImageField(upload_to="myrestaurants", blank=True, null=True)
     user = models.ForeignKey(User, default=User.objects.get(id=1))
     date = models.DateField(default=date.today)
-    restaurant = models.ForeignKey(Restaurant, null=True, related_name='dishes')
+    restaurant = models.ForeignKey(Restaurant, null=True)
 
     def __unicode__(self):
         return u"%s" % self.name
