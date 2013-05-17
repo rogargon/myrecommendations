@@ -1,18 +1,31 @@
 # Create your views here.
+from django.contrib.auth.decorators import login_required
 from django.core import urlresolvers
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
-from rest_framework import generics
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
+from rest_framework import generics, permissions
 
 from models import RestaurantReview, Restaurant, Dish
 from forms import RestaurantForm, DishForm
 from serializers import RestaurantSerializer, DishSerializer, RestaurantReviewSerializer
+
+class LoginRequiredMixin(object):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+
+class CheckIsOwnerMixin(object):
+    def get_object(self, *args, **kwargs):
+        obj = super(CheckIsOwnerMixin, self).get_object(*args, **kwargs)
+        if not obj.user == self.request.user:
+            raise PermissionDenied
+        return obj
 
 class RestaurantDetail(DetailView):
     model = Restaurant
@@ -23,7 +36,7 @@ class RestaurantDetail(DetailView):
         context['RATING_CHOICES'] = RestaurantReview.RATING_CHOICES
         return context
 
-class RestaurantCreate(CreateView):
+class RestaurantCreate(LoginRequiredMixin, CreateView):
     model = Restaurant
     template_name = 'myrestaurants/form.html'
     form_class = RestaurantForm
@@ -32,21 +45,27 @@ class RestaurantCreate(CreateView):
         form.instance.user = self.request.user
         return super(RestaurantCreate, self).form_valid(form)
 
-class DishCreate(CreateView):
+class RestaurantUpdate(LoginRequiredMixin, CheckIsOwnerMixin, UpdateView):
+    model = Restaurant
+    template_name = 'myrestaurants/form.html'
+    form_class = RestaurantForm
+
+class DishCreate(LoginRequiredMixin, CreateView):
     model = Dish
     template_name = 'myrestaurants/form.html'
     form_class = DishForm
-
-    # def get_initial(self):
-    #     initial = super(DishCreate, self).get_initial()
-    #     initial['restaurant'] = Restaurant.objects.get(id=self.kwargs['pk'])
-    #     return initial
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.restaurant = Restaurant.objects.get(id=self.kwargs['pk'])
         return super(DishCreate, self).form_valid(form)
 
+class DishUpdate(LoginRequiredMixin, CheckIsOwnerMixin, UpdateView):
+    model = Dish
+    template_name = 'myrestaurants/form.html'
+    form_class = DishForm
+
+@login_required()
 def review(request, pk):
     restaurant = get_object_or_404(Restaurant, pk=pk)
     review = RestaurantReview(
@@ -57,52 +76,45 @@ def review(request, pk):
     review.save()
     return HttpResponseRedirect(urlresolvers.reverse('myrestaurants:restaurant_detail', args=(restaurant.id,)))
 
+### RESTful API views ###
 
-@api_view(('GET',))
-def api_root(request, format=None):
-    return Response({
-        'restaurants': reverse('myrestaurants:restaurant-list', request=request, format=format),
-        'dishes': reverse('myrestaurants:dish-list', request=request, format=format)
-    })
+class IsOwnerOrReadOnly(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Instance must have an attribute named `owner`.
+        return obj.user == request.user
 
 class APIRestaurantList(generics.ListCreateAPIView):
-    """
-    API endpoint that represents a list of users.
-    """
+    permission_classes = (IsOwnerOrReadOnly,)
     model = Restaurant
     serializer_class = RestaurantSerializer
 
 class APIRestaurantDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single user.
-    """
+    permission_classes = (IsOwnerOrReadOnly,)
     model = Restaurant
     serializer_class = RestaurantSerializer
 
 class APIDishList(generics.ListCreateAPIView):
-    """
-    API endpoint that represents a list of groups.
-    """
+    permission_classes = (IsOwnerOrReadOnly,)
     model = Dish
     serializer_class = DishSerializer
 
 class APIDishDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single group.
-    """
+    permission_classes = (IsOwnerOrReadOnly,)
     model = Dish
     serializer_class = DishSerializer
 
 class APIRestaurantReviewList(generics.ListCreateAPIView):
-    """
-    API endpoint that represents a list of users.
-    """
+    permission_classes = (IsOwnerOrReadOnly,)
     model = RestaurantReview
     serializer_class = RestaurantReviewSerializer
 
 class APIRestaurantReviewDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single user.
-    """
+    permission_classes = (IsOwnerOrReadOnly,)
     model = RestaurantReview
     serializer_class = RestaurantReviewSerializer

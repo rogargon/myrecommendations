@@ -11,7 +11,8 @@ urlpatterns = patterns('',
     # url(r'^myrecommendations/', include('myrecommendations.foo.urls')),
 
     url(r'^myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
-    url(r'^login/$', 'django.contrib.auth.views.login'),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
 
 
     # Uncomment the admin/doc line below to enable admin documentation:

@@ -14,9 +14,9 @@
 <div id="header">
     {% block header %}
         {% if user.username %}
-            <p>User {{ user.username }}</p>
+            <p>User {{ user.username }} (<a href="/accounts/logout/?next=/myrestaurants/">logout</a>)</p>
         {% else %}
-            <p><a href="/login/">Sign in</a></p>
+            <p><a href="/accounts/login/?next=/myrestaurants/">Sign in</a></p>
         {% endif %}
     {% endblock %}
 </div>
@@ -25,7 +25,7 @@
 <div id="sidebar">
     {% block sidebar %}
         <ul>
-            <li><a href="/myrestaurants">Home</a></li>
+            <li><a href="/myrestaurants/">Home</a></li>
         </ul>
     {% endblock %}
 </div>

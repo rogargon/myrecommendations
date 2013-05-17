@@ -1,4 +1,5 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import patterns, url
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.views.generic import DetailView, ListView, UpdateView
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -7,7 +8,7 @@ from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
 from views import RestaurantCreate, DishCreate, RestaurantDetail, \
     APIDishDetail, APIDishList, APIRestaurantDetail, APIRestaurantList, \
-    APIRestaurantReviewDetail, APIRestaurantReviewList
+    APIRestaurantReviewDetail, APIRestaurantReviewList, RestaurantUpdate, DishUpdate
 
 urlpatterns = patterns('',
     # ex: /myrestaurants/
@@ -30,10 +31,7 @@ urlpatterns = patterns('',
 
     # ex: /myrestaurants/restaurants/1/edit/
     url(r'^restaurants/(?P<pk>\d+)/edit/$',
-        UpdateView.as_view(
-            model = Restaurant,
-            template_name = 'myrestaurants/form.html',
-            form_class = RestaurantForm),
+        RestaurantUpdate.as_view(),
         name='restaurant_edit'),
 
     # ex: /myrestaurants/restaurants/1/dishes/1/
@@ -50,10 +48,7 @@ urlpatterns = patterns('',
 
     # ex: /myrestaurants/restaurants/1/dishes/1/edit/
     url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/edit/$',
-        UpdateView.as_view(
-            model = Dish,
-            template_name = 'myrestaurants/form.html',
-            form_class = DishForm),
+        DishUpdate.as_view(),
         name='dish_edit'),
 
     # ex: /myrestaurants/restaurants/1/reviews/create/
@@ -64,14 +59,13 @@ urlpatterns = patterns('',
 
 #RESTful API
 urlpatterns += patterns('',
-    url(r'^api/$', 'api_root'),
     url(r'^api/restaurants/$', APIRestaurantList.as_view(), name='restaurant-list'),
     url(r'^api/restaurants/(?P<pk>\d+)/$', APIRestaurantDetail.as_view(), name='restaurant-detail'),
-    url(r'^api/dishes/$', APIDishList.as_view(), name='dish-list'),
+    url(r'^api/dishes/$', login_required(APIDishList.as_view()), name='dish-list'),
     url(r'^api/dishes/(?P<pk>\d+)/$', APIDishDetail.as_view(), name='dish-detail'),
     url(r'^api/restaurantreviews/$', APIRestaurantReviewList.as_view(), name='restaurantreview-list'),
     url(r'^api/restaurantreviews/(?P<pk>\d+)/$', APIRestaurantReviewDetail.as_view(), name='restaurantreview-detail'),
 )
 
 # Format suffixes
-urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api' ,'json',])
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api' ,'json', 'xml'])
