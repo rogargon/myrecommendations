@@ -15,7 +15,6 @@ from forms import RestaurantForm, DishForm
 from serializers import RestaurantSerializer, DishSerializer, RestaurantReviewSerializer
 
 class LoginRequiredMixin(object):
-
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
@@ -45,11 +44,6 @@ class RestaurantCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super(RestaurantCreate, self).form_valid(form)
 
-class RestaurantUpdate(LoginRequiredMixin, CheckIsOwnerMixin, UpdateView):
-    model = Restaurant
-    template_name = 'myrestaurants/form.html'
-    form_class = RestaurantForm
-
 class DishCreate(LoginRequiredMixin, CreateView):
     model = Dish
     template_name = 'myrestaurants/form.html'
@@ -60,10 +54,8 @@ class DishCreate(LoginRequiredMixin, CreateView):
         form.instance.restaurant = Restaurant.objects.get(id=self.kwargs['pk'])
         return super(DishCreate, self).form_valid(form)
 
-class DishUpdate(LoginRequiredMixin, CheckIsOwnerMixin, UpdateView):
-    model = Dish
+class LoginRequiredCheckIsOwnerUpdateView(LoginRequiredMixin, CheckIsOwnerMixin, UpdateView):
     template_name = 'myrestaurants/form.html'
-    form_class = DishForm
 
 @login_required()
 def review(request, pk):

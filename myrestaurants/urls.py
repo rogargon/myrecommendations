@@ -8,7 +8,7 @@ from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
 from views import RestaurantCreate, DishCreate, RestaurantDetail, \
     APIDishDetail, APIDishList, APIRestaurantDetail, APIRestaurantList, \
-    APIRestaurantReviewDetail, APIRestaurantReviewList, RestaurantUpdate, DishUpdate
+    APIRestaurantReviewDetail, APIRestaurantReviewList, LoginRequiredCheckIsOwnerUpdateView
 
 urlpatterns = patterns('',
     # ex: /myrestaurants/
@@ -31,7 +31,7 @@ urlpatterns = patterns('',
 
     # ex: /myrestaurants/restaurants/1/edit/
     url(r'^restaurants/(?P<pk>\d+)/edit/$',
-        RestaurantUpdate.as_view(),
+        LoginRequiredCheckIsOwnerUpdateView.as_view(model=Restaurant, form_class=RestaurantForm),
         name='restaurant_edit'),
 
     # ex: /myrestaurants/restaurants/1/dishes/1/
@@ -48,7 +48,7 @@ urlpatterns = patterns('',
 
     # ex: /myrestaurants/restaurants/1/dishes/1/edit/
     url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/edit/$',
-        DishUpdate.as_view(),
+        LoginRequiredCheckIsOwnerUpdateView.as_view(model=Dish, form_class=DishForm),
         name='dish_edit'),
 
     # ex: /myrestaurants/restaurants/1/reviews/create/
