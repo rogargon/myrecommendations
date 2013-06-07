@@ -1,9 +1,12 @@
 {% extends "myrestaurants/base.html" %}
 
+{% block title %}MyRestaurants - {{ restaurant.name }}{% endblock %}
+
 {% block content %}
 
-<h1 xmlns="http://www.w3.org/1999/html">
-    {{ restaurant.name }}
+<span vocab="http://schema.org/" typeof="Restaurant">
+<h1>
+    <span property="name">{{ restaurant.name }}</span>
     {% if user == restaurant.user %}
         (<a href="{% url 'myrestaurants:restaurant_edit' restaurant.id %}">edit</a>)
     {% endif %}
@@ -31,15 +34,33 @@
 </ul>
 
 <h2>Reviews</h2>
-<ul>
+{% if restaurant.restaurantreview_set.all|length > 0 %}
+<span rel="aggregateRating">
+    <p typeof="AggregateRating">
+        Average rating <span property="ratingValue">{{ restaurant.averageRating|stringformat:".1f" }}</span>
+        {% with restaurant.restaurantreview_set.all|length as reviewCount %}
+        from <span property="reviewCount">{{ reviewCount }}</span> review{{ reviewCount|pluralize }}
+        {% endwith %}
+    </p>
+</span>
+<ul rel="review">
     {% for review in restaurant.restaurantreview_set.all %}
-        <li>
-            <p>{{ review.rating }} star{{ review.rating|pluralize }}</p>
-            <p>{{ review.comment }}</p>
-            <p>Created by {{ review.user }} on {{ review.date }}</p>
+        <li typeof="Review">
+            <p rel="reviewRating" typeof="Rating">
+                <span property="worstRating" content="{{ RATING_CHOICES.0.0 }}"></span>
+                <span property="ratingValue">{{ review.rating }}</span> star{{ review.rating|pluralize }}
+                {% with RATING_CHOICES|last as best %}
+                <span property="bestRating" content="{{ best.0 }}"></span>
+                {% endwith %}
+            </p>
+            <p property="description">{{ review.comment }}</p>
+            <p>Created by <span property="author">{{ review.user }}</span> on
+                <span property="publishDate">{{ review.date}}</span></p>
         </li>
     {% endfor %}
 </ul>
+</span>
+{% endif %}
 
 <h3>Add Review</h3>
 <form action="{% url 'myrestaurants:review_create' restaurant.id %}" method="post">

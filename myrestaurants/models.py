@@ -21,6 +21,12 @@ class Restaurant(models.Model):
         return u"%s" % self.name
     def get_absolute_url(self):
         return reverse('myrestaurants:restaurant_detail', kwargs={'pk': self.pk})
+    def averageRating(self):
+        ratingSum = 0.0
+        for review in self.restaurantreview_set.all():
+            ratingSum += review.rating
+        reviewCount = self.restaurantreview_set.count()
+        return ratingSum / reviewCount
 
 
 class Dish(models.Model):
@@ -44,8 +50,8 @@ class Review(models.Model):
     user = models.ForeignKey(User, default=User.objects.get(id=1))
     date = models.DateField(default=date.today)
 
-    #class Meta:
-    #    abstract = True
+    class Meta:
+        abstract = True
 
 class RestaurantReview(Review):
     restaurant = models.ForeignKey(Restaurant)
