@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from datetime import date
 
+def get_default_user():
+    return User.objects.get(pk=1)
+
 class Restaurant(models.Model):
     name = models.TextField()
     street = models.TextField(blank=True, null=True)
@@ -14,7 +17,7 @@ class Restaurant(models.Model):
     country = models.TextField(blank=True, null=True)
     telephone = models.TextField(blank=True, null=True)
     web = models.URLField(blank=True, null=True)
-    user = models.ForeignKey(User, default=User.objects.get(id=1))
+    user = models.ForeignKey(User, default=get_default_user)
     date = models.DateField(default=date.today)
 
     def __unicode__(self):
@@ -34,9 +37,9 @@ class Dish(models.Model):
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField('Euro amount', max_digits=8, decimal_places=2, blank=True, null=True)
     image = models.ImageField(upload_to="myrestaurants", blank=True, null=True)
-    user = models.ForeignKey(User, default=User.objects.get(id=1))
+    user = models.ForeignKey(User, default=get_default_user)
     date = models.DateField(default=date.today)
-    restaurant = models.ForeignKey(Restaurant, null=True)
+    restaurant = models.ForeignKey(Restaurant, null=True, related_name='dishes')
 
     def __unicode__(self):
         return u"%s" % self.name
@@ -47,7 +50,7 @@ class Review(models.Model):
     RATING_CHOICES = ((1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5'))
     rating = models.PositiveSmallIntegerField('Ratings (stars)', blank=False, default=3, choices=RATING_CHOICES)
     comment = models.TextField(blank=True, null=True)
-    user = models.ForeignKey(User, default=User.objects.get(id=1))
+    user = models.ForeignKey(User, default=get_default_user)
     date = models.DateField(default=date.today)
 
     class Meta:
