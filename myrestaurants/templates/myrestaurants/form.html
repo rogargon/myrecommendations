@@ -14,12 +14,13 @@
             $("#id_city").autocomplete({
                 source: function( request, response ) {
                     $.ajax({
-                        url: "http://ws.geonames.org/searchJSON",
+                        url: "http://api.geonames.org/searchJSON",
                         dataType: "jsonp",
                         data: {
                             featureClass: "P",
                             maxRows: 10,
-                            name_startsWith: request.term
+                            name_startsWith: request.term,
+                            username: "demo"
                         },
                         success: function( data ) {
                             response( $.map( data.geonames, function( item ) {
