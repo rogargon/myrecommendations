@@ -6,12 +6,12 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
-from views import RestaurantCreate, DishCreate, RestaurantDetail, \
+from views import RestaurantCreate, DishCreate, RestaurantDetail, LoginRequiredCheckIsOwnerUpdateView, \
     APIDishDetail, APIDishList, APIRestaurantDetail, APIRestaurantList, \
-    APIRestaurantReviewDetail, APIRestaurantReviewList, LoginRequiredCheckIsOwnerUpdateView
+    APIRestaurantReviewDetail, APIRestaurantReviewList
 
 urlpatterns = patterns('',
-    # ex: /myrestaurants/
+    # List latest 5 restaurants: /myrestaurants/
     url(r'^$',
         ListView.as_view(
             queryset=Restaurant.objects.filter(date__lte=timezone.now()).order_by('date')[:5],
@@ -19,39 +19,39 @@ urlpatterns = patterns('',
             template_name='myrestaurants/restaurant_list.html'),
         name='restaurant_list'),
 
-    # ex: /myrestaurants/restaurants/1/
+    # Restaurant details, ex.: /myrestaurants/restaurants/1/
     url(r'^restaurants/(?P<pk>\d+)/$',
         RestaurantDetail.as_view(),
         name='restaurant_detail'),
 
-    # ex: /myrestaurants/restaurants/create/
+    # Create a restaurant: /myrestaurants/restaurants/create/
     url(r'^restaurants/create/$',
         RestaurantCreate.as_view(),
         name='restaurant_create'),
 
-    # ex: /myrestaurants/restaurants/1/edit/
+    # Edit restaurant details, ex: /myrestaurants/restaurants/1/edit/
     url(r'^restaurants/(?P<pk>\d+)/edit/$',
         LoginRequiredCheckIsOwnerUpdateView.as_view(model=Restaurant, form_class=RestaurantForm),
         name='restaurant_edit'),
 
-    # ex: /myrestaurants/restaurants/1/dishes/1/
+    # Restaurant dish details, ex: /myrestaurants/restaurants/1/dishes/1/
     url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/$',
         DetailView.as_view(
             model=Dish,
             template_name='myrestaurants/dish_detail.html'),
         name='dish_detail'),
 
-    # ex: /myrestaurants/restaurants/1/dishes/create/
+    # Create a restaurant dish, ex: /myrestaurants/restaurants/1/dishes/create/
     url(r'^restaurants/(?P<pk>\d+)/dishes/create/$',
         DishCreate.as_view(),
         name='dish_create'),
 
-    # ex: /myrestaurants/restaurants/1/dishes/1/edit/
+    # Edit restaurant dish details, ex: /myrestaurants/restaurants/1/dishes/1/edit/
     url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/edit/$',
         LoginRequiredCheckIsOwnerUpdateView.as_view(model=Dish, form_class=DishForm),
         name='dish_edit'),
 
-    # ex: /myrestaurants/restaurants/1/reviews/create/
+    # Create a restaurant review using function, ex: /myrestaurants/restaurants/1/reviews/create/
     url(r'^restaurants/(?P<pk>\d+)/reviews/create/$',
         'myrestaurants.views.review',
         name='review_create'),

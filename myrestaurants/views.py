@@ -60,12 +60,12 @@ class LoginRequiredCheckIsOwnerUpdateView(LoginRequiredMixin, CheckIsOwnerMixin,
 @login_required()
 def review(request, pk):
     restaurant = get_object_or_404(Restaurant, pk=pk)
-    review = RestaurantReview(
+    new_review = RestaurantReview(
         rating=request.POST['rating'],
         comment=request.POST['comment'],
         user=request.user,
         restaurant=restaurant)
-    review.save()
+    new_review.save()
     return HttpResponseRedirect(urlresolvers.reverse('myrestaurants:restaurant_detail', args=(restaurant.id,)))
 
 ### RESTful API views ###
