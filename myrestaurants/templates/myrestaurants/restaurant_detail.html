@@ -26,7 +26,7 @@
     {% endif %}
 </h2>
 <ul>
-    {% for dish in restaurant.dish_set.all %}
+    {% for dish in restaurant.dishes.all %}
         <li><a href="{% url 'myrestaurants:dish_detail' restaurant.id dish.id %}">{{ dish.name }}</a></li>
     {% empty %}
         <li>Sorry, no dishes for this restaurant yet.</li>
