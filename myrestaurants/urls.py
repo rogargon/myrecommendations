@@ -1,14 +1,10 @@
 from django.conf.urls import patterns, url
-from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.views.generic import DetailView, ListView, UpdateView
-from rest_framework.urlpatterns import format_suffix_patterns
 
 from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
-from views import RestaurantCreate, DishCreate, RestaurantDetail, LoginRequiredCheckIsOwnerUpdateView, \
-    APIDishDetail, APIDishList, APIRestaurantDetail, APIRestaurantList, \
-    APIRestaurantReviewDetail, APIRestaurantReviewList
+from views import RestaurantCreate, DishCreate, RestaurantDetail
 
 urlpatterns = patterns('',
     # List latest 5 restaurants: /myrestaurants/
@@ -31,7 +27,10 @@ urlpatterns = patterns('',
 
     # Edit restaurant details, ex: /myrestaurants/restaurants/1/edit/
     url(r'^restaurants/(?P<pk>\d+)/edit/$',
-        LoginRequiredCheckIsOwnerUpdateView.as_view(model=Restaurant, form_class=RestaurantForm),
+        UpdateView.as_view(
+            model=Restaurant,
+            form_class=RestaurantForm,
+            template_name='myrestaurants/form.html'),
         name='restaurant_edit'),
 
     # Restaurant dish details, ex: /myrestaurants/restaurants/1/dishes/1/
@@ -48,7 +47,10 @@ urlpatterns = patterns('',
 
     # Edit restaurant dish details, ex: /myrestaurants/restaurants/1/dishes/1/edit/
     url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/edit/$',
-        LoginRequiredCheckIsOwnerUpdateView.as_view(model=Dish, form_class=DishForm),
+        UpdateView.as_view(
+            model=Dish,
+            form_class=DishForm,
+            template_name='myrestaurants/form.html'),
         name='dish_edit'),
 
     # Create a restaurant review using function, ex: /myrestaurants/restaurants/1/reviews/create/
@@ -56,16 +58,3 @@ urlpatterns = patterns('',
         'myrestaurants.views.review',
         name='review_create'),
 )
-
-#RESTful API
-urlpatterns += patterns('',
-    url(r'^api/restaurants/$', APIRestaurantList.as_view(), name='restaurant-list'),
-    url(r'^api/restaurants/(?P<pk>\d+)/$', APIRestaurantDetail.as_view(), name='restaurant-detail'),
-    url(r'^api/dishes/$', login_required(APIDishList.as_view()), name='dish-list'),
-    url(r'^api/dishes/(?P<pk>\d+)/$', APIDishDetail.as_view(), name='dish-detail'),
-    url(r'^api/restaurantreviews/$', APIRestaurantReviewList.as_view(), name='restaurantreview-list'),
-    url(r'^api/restaurantreviews/(?P<pk>\d+)/$', APIRestaurantReviewDetail.as_view(), name='restaurantreview-detail'),
-)
-
-# Format suffixes
-urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api' ,'json', 'xml'])

@@ -1,6 +1,5 @@
 *.iml
 media
-migrations-mysql
 .idea/*
 
 sqlite.db
