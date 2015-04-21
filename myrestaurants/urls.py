@@ -1,24 +1,28 @@
 from django.conf.urls import patterns, url
-from django.utils import timezone
 from django.views.generic import DetailView, ListView, UpdateView
 
 from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
-from views import RestaurantCreate, DishCreate, RestaurantDetail
+from views import RestaurantCreate, DishCreate, RestaurantDetail, RestaurantList
 
 urlpatterns = patterns('',
     # List latest 5 restaurants: /myrestaurants/
     url(r'^$',
-        ListView.as_view(
-            queryset=Restaurant.objects.filter(date__lte=timezone.now()).order_by('date')[:5],
-            context_object_name='latest_restaurant_list',
-            template_name='myrestaurants/restaurant_list.html'),
+        RestaurantList.as_view(),
         name='restaurant_list'),
+    # List restaurants: /myrestaurants/restaurants.json
+    url(r'^restaurants\.(?P<extension>(json|xml))$',
+        RestaurantList.as_view(),
+        name='restaurant_list_conneg'),
 
     # Restaurant details, ex.: /myrestaurants/restaurants/1/
     url(r'^restaurants/(?P<pk>\d+)/$',
         RestaurantDetail.as_view(),
         name='restaurant_detail'),
+    # Restaurant details, ex.: /myrestaurants/restaurants/1.json
+    url(r'^restaurants/(?P<pk>\d+)\.(?P<extension>(json|xml))$',
+        RestaurantDetail.as_view(),
+        name='restaurant_detail_conneg'),
 
     # Create a restaurant: /myrestaurants/restaurants/create/
     url(r'^restaurants/create/$',

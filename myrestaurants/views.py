@@ -1,15 +1,48 @@
 # Create your views here.
+from django.core import serializers
+
+from django.utils import timezone
 
 from django.core import urlresolvers
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
+from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import CreateView
 
 from models import RestaurantReview, Restaurant, Dish
 from forms import RestaurantForm, DishForm
 
-class RestaurantDetail(DetailView):
+class ConnegResponseMixin(TemplateResponseMixin):
+
+    def render_json_object_response(self, objects, **kwargs):
+        json_data = serializers.serialize(u"json", objects, **kwargs)
+        return HttpResponse(json_data, content_type=u"application/json")
+
+    def render_xml_object_response(self, objects, **kwargs):
+        xml_data = serializers.serialize(u"xml", objects, **kwargs)
+        return HttpResponse(xml_data, content_type=u"application/xml")
+
+    def render_to_response(self, context, **kwargs):
+        if 'extension' in self.kwargs:
+            try:
+                objects = [self.object]
+            except AttributeError:
+                objects = self.object_list
+            if self.kwargs['extension'] == 'json':
+                return self.render_json_object_response(objects=objects)
+            elif self.kwargs['extension'] == 'xml':
+                return self.render_xml_object_response(objects=objects)
+        else:
+            return super(ConnegResponseMixin, self).render_to_response(context)
+
+class RestaurantList(ListView, ConnegResponseMixin):
+    model = Restaurant
+    queryset = Restaurant.objects.filter(date__lte=timezone.now()).order_by('date')[:5]
+    context_object_name = 'latest_restaurant_list'
+    template_name = 'myrestaurants/restaurant_list.html'
+
+class RestaurantDetail(DetailView, ConnegResponseMixin):
     model = Restaurant
     template_name = 'myrestaurants/restaurant_detail.html'
 
