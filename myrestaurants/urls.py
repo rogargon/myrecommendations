@@ -3,9 +3,12 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import UpdateView
 from django.views.generic.base import RedirectView
 
+from rest_framework.urlpatterns import format_suffix_patterns
+
 from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
-from views import RestaurantCreate, DishCreate, RestaurantList, RestaurantDetail, DishDetail, DishList, review
+from views import RestaurantCreate, DishCreate, RestaurantList, RestaurantDetail, DishDetail, DishList, review, \
+    APIDishDetail, APIDishList, APIRestaurantDetail, APIRestaurantList, APIRestaurantReviewDetail, APIRestaurantReviewList
 
 urlpatterns = [
     # Home page
@@ -63,4 +66,16 @@ urlpatterns = [
     url(r'^restaurants/(?P<pk>\d+)/reviews/create/$',
         review,
         name='review_create'),
+
+    #RESTful API
+	url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+	url(r'^api/restaurants/$', APIRestaurantList.as_view(), name='restaurant-list'),
+	url(r'^api/restaurants/(?P<pk>\d+)/$', APIRestaurantDetail.as_view(), name='restaurant-detail'),
+	url(r'^api/dishes/$', login_required(APIDishList.as_view()), name='dish-list'),
+	url(r'^api/dishes/(?P<pk>\d+)/$', APIDishDetail.as_view(), name='dish-detail'),
+	url(r'^api/restaurantreviews/$', APIRestaurantReviewList.as_view(), name='restaurantreview-list'),
+	url(r'^api/restaurantreviews/(?P<pk>\d+)/$', APIRestaurantReviewDetail.as_view(), name='restaurantreview-detail'),
 ]
+
+# Format suffixes
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api','json', 'xml'])
