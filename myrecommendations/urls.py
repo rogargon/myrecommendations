@@ -1,26 +1,28 @@
-from django.conf.urls import patterns, include, url
-from django.conf import settings
+"""myrecommendations URL Configuration
 
-# Uncomment the next two lines to enable the admin:
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/1.9/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.conf.urls import url, include
+    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
+"""
+from django.conf.urls import url, include
 from django.contrib import admin
-admin.autodiscover()
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'myrecommendations.views.home', name='home'),
-    # url(r'^myrecommendations/', include('myrecommendations.foo.urls')),
-
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
     url(r'^myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
+]
 
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-)
+from django.conf import settings
+from django.conf.urls import patterns
 
 if settings.DEBUG:
     urlpatterns += patterns('',

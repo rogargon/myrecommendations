@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from myrestaurants.models import Restaurant, Dish
+from models import Restaurant, Dish
 
 class RestaurantForm(ModelForm):
     class Meta:
@@ -9,4 +9,4 @@ class RestaurantForm(ModelForm):
 class DishForm(ModelForm):
     class Meta:
         model = Dish
-        exclude = ('restaurant', 'user', 'date',)
+        exclude = ('user', 'date', 'restaurant',)
