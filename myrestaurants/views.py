@@ -1,6 +1,5 @@
-from django.core import serializers
-
 from django.utils import timezone
+from django.core import serializers
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
@@ -31,8 +30,7 @@ class ConnegResponseMixin(TemplateResponseMixin):
                 return self.render_json_object_response(objects=objects)
             elif self.kwargs['extension'] == 'xml':
                 return self.render_xml_object_response(objects=objects)
-        else:
-            return super(ConnegResponseMixin, self).render_to_response(context)
+        return super(ConnegResponseMixin, self).render_to_response(context)
 
 class RestaurantList(ListView, ConnegResponseMixin):
     model = Restaurant
@@ -57,6 +55,16 @@ class RestaurantCreate(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(RestaurantCreate, self).form_valid(form)
+
+class DishList(ListView, ConnegResponseMixin):
+    model = Dish
+
+    def get_queryset(self):
+        return Dish.objects.filter(restaurant=self.kwargs['pk'])
+
+class DishDetail(DetailView, ConnegResponseMixin):
+    model = Dish
+    template_name = 'myrestaurants/dish_detail.html'
 
 class DishCreate(CreateView):
     model = Dish

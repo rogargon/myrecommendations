@@ -1,27 +1,27 @@
 from django.conf.urls import url
-from django.views.generic import DetailView, UpdateView
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import UpdateView
+from django.views.generic.base import RedirectView
+
 from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
-from views import RestaurantCreate, DishCreate, RestaurantList, RestaurantDetail
+from views import RestaurantCreate, DishCreate, RestaurantList, RestaurantDetail, DishDetail, DishList
 
 urlpatterns = [
-    # List latest 5 restaurants: /myrestaurants/
+    # Home page
     url(r'^$',
+        RedirectView.as_view(url=reverse_lazy('myrestaurants:restaurant_list', kwargs={'extension': 'html'})),
+        name='home_page'),
+
+    # List restaurants: /myrestaurants/restaurants.json
+    url(r'^restaurants\.(?P<extension>(json|xml|html))$',
         RestaurantList.as_view(),
         name='restaurant_list'),
-    # List restaurants: /myrestaurants/restaurants.json
-    url(r'^restaurants\.(?P<extension>(json|xml))$',
-        RestaurantList.as_view(),
-        name='restaurant_list_conneg'),
 
-    # Restaurant details, ex.: /myrestaurants/restaurants/1/
-    url(r'^restaurants/(?P<pk>\d+)/$',
+    # Restaurant details, ex.: /myrestaurants/restaurants/1.json
+    url(r'^restaurants/(?P<pk>\d+)\.(?P<extension>(json|xml|html))$',
         RestaurantDetail.as_view(),
         name='restaurant_detail'),
-    # Restaurant details, ex.: /myrestaurants/restaurants/1.json
-    url(r'^restaurants/(?P<pk>\d+)\.(?P<extension>(json|xml))$',
-        RestaurantDetail.as_view(),
-        name='restaurant_detail_conneg'),
 
     # Create a restaurant: /myrestaurants/restaurants/create/
     url(r'^restaurants/create/$',
@@ -36,11 +36,14 @@ urlpatterns = [
             form_class=RestaurantForm),
         name='restaurant_edit'),
 
-    # Restaurant dish details, ex: /myrestaurants/restaurants/1/dishes/1/
-    url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/$',
-        DetailView.as_view(
-            model=Dish,
-            template_name='myrestaurants/dish_detail.html'),
+    # Restaurant dishes list, ex.: /myrestaurants/restaurants/1/dishes.json
+    url(r'^restaurants/(?P<pk>\d+)/dishes\.(?P<extension>(json|xml))$',
+        DishList.as_view(),
+        name='dish_list'),
+
+    # Restaurant dish details, ex.: /myrestaurants/restaurants/1/dishes/1.json
+    url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)\.(?P<extension>(json|xml|html))$',
+        DishDetail.as_view(),
         name='dish_detail'),
 
     # Create a restaurant dish, ex: /myrestaurants/restaurants/1/dishes/create/

@@ -6,7 +6,7 @@
 </h1>
 <ul>
     {% for restaurant in latest_restaurant_list %}
-        <li><a href="{% url 'myrestaurants:restaurant_detail' restaurant.id %}">
+        <li><a href="{% url 'myrestaurants:restaurant_detail' restaurant.id 'html' %}">
             {{ restaurant.name }}</a></li>
     {% empty %}<li>Sorry, no restaurants registered yet.</li>
     {% endfor %}
