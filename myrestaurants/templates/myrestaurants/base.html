@@ -8,8 +8,10 @@
 <body>
 <div id="header">
     {% block header %}
-        {% if user.username %}<p>User {{ user.username }}</p>
-        {% else %}<p><a href="/login/">Sign in</a></p>{% endif %}
+        {% if user.username %}
+            <p>User: {{ user.username }} | <a href="{% url 'logout' %}?next={{request.path}}">logout</a></p>
+        {% else %}
+            <p><a href="{% url 'login' %}?next={{request.path}}">login</a></p>{% endif %}
     {% endblock %}
 </div>
 <div id="sidebar">
