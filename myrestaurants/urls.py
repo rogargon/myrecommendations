@@ -1,11 +1,11 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.utils import timezone
 from django.views.generic import DetailView, ListView, UpdateView
 from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
 from views import RestaurantCreate, DishCreate, RestaurantDetail
 
-urlpatterns = patterns('',
+urlpatterns = [
     # List latest 5 restaurants: /myrestaurants/
     url(r'^$',
         ListView.as_view(
@@ -56,4 +56,4 @@ urlpatterns = patterns('',
     url(r'^restaurants/(?P<pk>\d+)/reviews/create/$',
         'myrestaurants.views.review',
         name='review_create'),
-)
+]
