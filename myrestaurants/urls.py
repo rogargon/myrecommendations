@@ -5,21 +5,21 @@ from django.views.generic.base import RedirectView
 
 from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
-from views import RestaurantCreate, DishCreate, RestaurantList, RestaurantDetail, DishDetail, DishList
+from views import RestaurantCreate, DishCreate, RestaurantList, RestaurantDetail, DishDetail, DishList, review
 
 urlpatterns = [
     # Home page
     url(r'^$',
-        RedirectView.as_view(url=reverse_lazy('myrestaurants:restaurant_list', kwargs={'extension': 'html'})),
+        RedirectView.as_view(url=reverse_lazy('myrestaurants:restaurant_list')),
         name='home_page'),
 
     # List restaurants: /myrestaurants/restaurants.json
-    url(r'^restaurants\.(?P<extension>(json|xml|html))$',
+    url(r'^restaurants(\.(?P<extension>(json|xml)))?$',
         RestaurantList.as_view(),
         name='restaurant_list'),
 
     # Restaurant details, ex.: /myrestaurants/restaurants/1.json
-    url(r'^restaurants/(?P<pk>\d+)\.(?P<extension>(json|xml|html))$',
+    url(r'^restaurants/(?P<pk>\d+)(\.(?P<extension>(json|xml)))?$',
         RestaurantDetail.as_view(),
         name='restaurant_detail'),
 
@@ -42,7 +42,7 @@ urlpatterns = [
         name='dish_list'),
 
     # Restaurant dish details, ex.: /myrestaurants/restaurants/1/dishes/1.json
-    url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)\.(?P<extension>(json|xml|html))$',
+    url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)(\.(?P<extension>(json|xml)))?$',
         DishDetail.as_view(),
         name='dish_detail'),
 
@@ -61,6 +61,6 @@ urlpatterns = [
 
     # Create a restaurant review using function, ex: /myrestaurants/restaurants/1/reviews/create/
     url(r'^restaurants/(?P<pk>\d+)/reviews/create/$',
-        'myrestaurants.views.review',
+        review,
         name='review_create'),
 ]

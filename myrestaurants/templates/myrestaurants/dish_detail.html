@@ -12,7 +12,7 @@
 {% if dish.image %}
     <p><img src="{{ dish.image.url }}"/></p>
 {% endif %}
-<p>Served by <a href="{% url 'myrestaurants:restaurant_detail' dish.restaurant.id 'html' %}">{{ dish.restaurant.name }}</a></p>
+<p>Served by <a href="{% url 'myrestaurants:restaurant_detail' dish.restaurant.id %}">{{ dish.restaurant.name }}</a></p>
 
 {% endblock %}
 
