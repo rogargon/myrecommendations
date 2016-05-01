@@ -5,32 +5,33 @@ from models import Restaurant, Dish, RestaurantReview
 
 
 class RestaurantSerializer(HyperlinkedModelSerializer):
-	url = HyperlinkedIdentityField(view_name='myrestaurants:restaurant-detail')
-	dishes = HyperlinkedRelatedField(many=True, read_only=True, view_name='myrestaurants:dish-detail')
-	restaurantreview_set = HyperlinkedRelatedField(many=True, read_only=True, view_name='myrestaurants:restaurantreview-detail')
-	user = CharField(read_only=True)
+    uri = HyperlinkedIdentityField(view_name='myrestaurants:restaurant-detail')
+    dishes = HyperlinkedRelatedField(many=True, read_only=True, view_name='myrestaurants:dish-detail')
+    restaurantreview_set = HyperlinkedRelatedField(many=True, read_only=True,
+                                                   view_name='myrestaurants:restaurantreview-detail')
+    user = CharField(read_only=True)
 
-	class Meta:
-		model = Restaurant
-		fields = ('url', 'name', 'street', 'number', 'city', 'zipCode', 'stateOrProvince',
-				  'country', 'telephone', 'web', 'user', 'date', 'dishes', 'restaurantreview_set')
+    class Meta:
+        model = Restaurant
+        fields = ('uri', 'name', 'street', 'number', 'city', 'zipCode', 'stateOrProvince',
+                  'country', 'telephone', 'url', 'user', 'date', 'dishes', 'restaurantreview_set')
 
 
 class DishSerializer(HyperlinkedModelSerializer):
-	url = HyperlinkedIdentityField(view_name='myrestaurants:dish-detail')
-	restaurant = HyperlinkedRelatedField(view_name='myrestaurants:restaurant-detail', read_only=True)
-	user = CharField(read_only=True)
+    uri = HyperlinkedIdentityField(view_name='myrestaurants:dish-detail')
+    restaurant = HyperlinkedRelatedField(view_name='myrestaurants:restaurant-detail', read_only=True)
+    user = CharField(read_only=True)
 
-	class Meta:
-		model = Dish
-		fields = ('url', 'name', 'description', 'price', 'image', 'user', 'date', 'restaurant')
+    class Meta:
+        model = Dish
+        fields = ('uri', 'name', 'description', 'price', 'image', 'user', 'date', 'restaurant')
 
 
 class RestaurantReviewSerializer(HyperlinkedModelSerializer):
-	url = HyperlinkedIdentityField(view_name='myrestaurants:restaurantreview-detail')
-	restaurant = HyperlinkedRelatedField(view_name='myrestaurants:restaurant-detail', read_only=True)
-	user = CharField(read_only=True)
+    uri = HyperlinkedIdentityField(view_name='myrestaurants:restaurantreview-detail')
+    restaurant = HyperlinkedRelatedField(view_name='myrestaurants:restaurant-detail', read_only=True)
+    user = CharField(read_only=True)
 
-	class Meta:
-		model = RestaurantReview
-		fields = ('url', 'rating', 'comment', 'user', 'date', 'restaurant')
+    class Meta:
+        model = RestaurantReview
+        fields = ('uri', 'rating', 'comment', 'user', 'date', 'restaurant')

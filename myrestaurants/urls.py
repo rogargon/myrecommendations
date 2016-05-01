@@ -1,4 +1,5 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import UpdateView
 from django.views.generic.base import RedirectView
@@ -67,14 +68,22 @@ urlpatterns = [
         review,
         name='review_create'),
 
-    #RESTful API
-	url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
-	url(r'^api/restaurants/$', APIRestaurantList.as_view(), name='restaurant-list'),
-	url(r'^api/restaurants/(?P<pk>\d+)/$', APIRestaurantDetail.as_view(), name='restaurant-detail'),
-	url(r'^api/dishes/$', login_required(APIDishList.as_view()), name='dish-list'),
-	url(r'^api/dishes/(?P<pk>\d+)/$', APIDishDetail.as_view(), name='dish-detail'),
-	url(r'^api/restaurantreviews/$', APIRestaurantReviewList.as_view(), name='restaurantreview-list'),
-	url(r'^api/restaurantreviews/(?P<pk>\d+)/$', APIRestaurantReviewDetail.as_view(), name='restaurantreview-detail'),
+    # RESTful API
+
+    url(r'^api/auth/',
+        include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/restaurants/$',
+        APIRestaurantList.as_view(), name='restaurant-list'),
+    url(r'^api/restaurants/(?P<pk>\d+)/$',
+        APIRestaurantDetail.as_view(), name='restaurant-detail'),
+    url(r'^api/dishes/$',
+        login_required(APIDishList.as_view()), name='dish-list'),
+    url(r'^api/dishes/(?P<pk>\d+)/$',
+        APIDishDetail.as_view(), name='dish-detail'),
+    url(r'^api/restaurantreviews/$',
+        APIRestaurantReviewList.as_view(), name='restaurantreview-list'),
+    url(r'^api/restaurantreviews/(?P<pk>\d+)/$',
+        APIRestaurantReviewDetail.as_view(), name='restaurantreview-detail'),
 ]
 
 # Format suffixes
