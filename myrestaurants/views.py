@@ -1,11 +1,14 @@
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.core import serializers
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import TemplateResponseMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
 from rest_framework import generics, permissions
 
@@ -35,6 +38,21 @@ class ConnegResponseMixin(TemplateResponseMixin):
                 return self.render_xml_object_response(objects=objects)
         return super(ConnegResponseMixin, self).render_to_response(context)
 
+class LoginRequiredMixin(object):
+    @method_decorator(login_required())
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+
+class CheckIsOwnerMixin(object):
+    def get_object(self, *args, **kwargs):
+        obj = super(CheckIsOwnerMixin, self).get_object(*args, **kwargs)
+        if not obj.user == self.request.user:
+            raise PermissionDenied
+        return obj
+
+class LoginRequiredCheckIsOwnerUpdateView(LoginRequiredMixin, CheckIsOwnerMixin, UpdateView):
+    template_name = 'myrestaurants/form.html'
+
 class RestaurantList(ListView, ConnegResponseMixin):
     model = Restaurant
     queryset = Restaurant.objects.filter(date__lte=timezone.now()).order_by('date')[:5]
@@ -50,7 +68,7 @@ class RestaurantDetail(DetailView, ConnegResponseMixin):
         context['RATING_CHOICES'] = RestaurantReview.RATING_CHOICES
         return context
 
-class RestaurantCreate(CreateView):
+class RestaurantCreate(LoginRequiredMixin, CreateView):
     model = Restaurant
     template_name = 'myrestaurants/form.html'
     form_class = RestaurantForm
@@ -69,7 +87,7 @@ class DishDetail(DetailView, ConnegResponseMixin):
     model = Dish
     template_name = 'myrestaurants/dish_detail.html'
 
-class DishCreate(CreateView):
+class DishCreate(LoginRequiredMixin, CreateView):
     model = Dish
     template_name = 'myrestaurants/form.html'
     form_class = DishForm
@@ -79,6 +97,7 @@ class DishCreate(CreateView):
         form.instance.restaurant = Restaurant.objects.get(id=self.kwargs['pk'])
         return super(DishCreate, self).form_valid(form)
 
+@login_required()
 def review(request, pk):
     restaurant = get_object_or_404(Restaurant, pk=pk)
     review = RestaurantReview(
@@ -134,5 +153,4 @@ class APIRestaurantReviewList(generics.ListCreateAPIView):
 class APIRestaurantReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrReadOnly,)
     model = RestaurantReview
-    queryset = RestaurantReview.objects.all()
     serializer_class = RestaurantReviewSerializer

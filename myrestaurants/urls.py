@@ -1,7 +1,6 @@
 from django.conf.urls import url, include
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import UpdateView
 from django.views.generic.base import RedirectView
 
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -9,7 +8,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
 from views import RestaurantCreate, DishCreate, RestaurantList, RestaurantDetail, DishDetail, DishList, review, \
-    APIDishDetail, APIDishList, APIRestaurantDetail, APIRestaurantList, APIRestaurantReviewDetail, APIRestaurantReviewList
+    APIDishDetail, APIDishList, APIRestaurantDetail, APIRestaurantList, APIRestaurantReviewDetail, \
+    APIRestaurantReviewList, LoginRequiredCheckIsOwnerUpdateView
 
 urlpatterns = [
     # Home page
@@ -34,9 +34,8 @@ urlpatterns = [
 
     # Edit restaurant details, ex.: /myrestaurants/restaurants/1/edit/
     url(r'^restaurants/(?P<pk>\d+)/edit/$',
-        UpdateView.as_view(
+        LoginRequiredCheckIsOwnerUpdateView.as_view(
             model=Restaurant,
-            template_name='myrestaurants/form.html',
             form_class=RestaurantForm),
         name='restaurant_edit'),
 
@@ -57,9 +56,8 @@ urlpatterns = [
 
     # Edit restaurant dish details, ex: /myrestaurants/restaurants/1/dishes/1/edit/
     url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/edit/$',
-        UpdateView.as_view(
+        LoginRequiredCheckIsOwnerUpdateView.as_view(
             model=Dish,
-            template_name='myrestaurants/form.html',
             form_class=DishForm),
         name='dish_edit'),
 
