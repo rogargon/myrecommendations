@@ -11,6 +11,7 @@ from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import CreateView, UpdateView
 
 from rest_framework import generics, permissions
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from models import RestaurantReview, Restaurant, Dish
 from forms import RestaurantForm, DishForm
@@ -110,7 +111,7 @@ def review(request, pk):
 
 ### RESTful API views ###
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
+class IsOwnerOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
 
     def has_object_permission(self, request, view, obj):
         # Read permissions are allowed to any request,
@@ -121,7 +122,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.user == request.user
 
 class APIRestaurantList(generics.ListCreateAPIView):
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     model = Restaurant
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
@@ -133,7 +134,7 @@ class APIRestaurantDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = RestaurantSerializer
 
 class APIDishList(generics.ListCreateAPIView):
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     model = Dish
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
@@ -145,7 +146,7 @@ class APIDishDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DishSerializer
 
 class APIRestaurantReviewList(generics.ListCreateAPIView):
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     model = RestaurantReview
     queryset = RestaurantReview.objects.all()
     serializer_class = RestaurantReviewSerializer
