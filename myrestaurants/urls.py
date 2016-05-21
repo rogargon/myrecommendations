@@ -65,11 +65,10 @@ urlpatterns = [
     url(r'^restaurants/(?P<pk>\d+)/reviews/create/$',
         review,
         name='review_create'),
+]
 
+urlpatterns += [
     # RESTful API
-
-    url(r'^api/auth/',
-        include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/restaurants/$',
         APIRestaurantList.as_view(), name='restaurant-list'),
     url(r'^api/restaurants/(?P<pk>\d+)/$',
@@ -85,4 +84,4 @@ urlpatterns = [
 ]
 
 # Format suffixes
-urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api','json', 'xml'])
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api', 'json', 'xml'])
