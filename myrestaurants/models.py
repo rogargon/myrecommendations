@@ -22,6 +22,11 @@ class Restaurant(models.Model):
         return u"%s" % self.name
     def get_absolute_url(self):
         return reverse('myrestaurants:restaurant_detail', kwargs={'pk': self.pk})
+    def averageRating(self):
+        ratingSum = sum([float(review.rating) for review in self.restaurantreview_set.all()])
+        reviewCount = self.restaurantreview_set.count()
+        return ratingSum / reviewCount
+
 
 class Dish(models.Model):
     name = models.TextField()
