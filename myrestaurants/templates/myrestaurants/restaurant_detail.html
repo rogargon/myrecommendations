@@ -53,7 +53,7 @@
             </p>
             <p property="description">{{ review.comment }}</p>
             <p>Created by <span property="author">{{ review.user }}</span> on
-                <span property="datePublished">{{ review.date }}</span></p>
+                <span property="datePublished" content="{{ review.date|date:'Y-m-d' }}">{{ review.date }}</span></p>
         </li>
     {% endfor %}
 </ul>
