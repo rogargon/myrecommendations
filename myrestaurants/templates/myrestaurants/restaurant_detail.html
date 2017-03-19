@@ -42,7 +42,7 @@
     Message: <textarea name="comment" id="comment" rows="4"></textarea>
     <p>Rating:</p>
     <p>{% for rate in RATING_CHOICES %}
-    <input type="radio" name="rating" id="rating{{ forloop.counter }}" value="{{ rate.1 }}" />
+    <input type="radio" name="rating" id="rating{{ forloop.counter }}" value="{{ rate.0 }}" />
     <label for="choice{{ forloop.counter }}">{{ rate.1 }} star{{ rate.0|pluralize }}</label>
     <br/>{% endfor %}
     </p>
