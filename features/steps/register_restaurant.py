@@ -1,6 +1,7 @@
 from behave import *
 import operator
 from django.db.models import Q
+from django.urls.base import reverse
 
 use_step_matcher("parse")
 
@@ -37,3 +38,13 @@ def step_impl(context, username):
     from myrestaurants.models import Restaurant
     restaurant = Restaurant.objects.filter(reduce(operator.and_, q_list)).get()
     assert context.browser.url == context.get_url(restaurant)
+
+@when('I edit the current restaurant')
+def step_impl(context):
+    context.browser.find_link_by_text('edit').click()
+    # TODO: Test also using direct edit view link
+    # context.browser.visit(context.get_url('myrestaurants:restaurant_edit', restaurant.pk))
+    form = context.browser.find_by_tag('form').first
+    for heading in context.table.headings:
+        context.browser.fill(heading, context.table[0][heading])
+    form.find_by_value('Submit').first.click()
