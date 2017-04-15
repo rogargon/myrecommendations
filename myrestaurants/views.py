@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -37,10 +36,12 @@ class DishCreate(CreateView):
 
 def review(request, pk):
     restaurant = get_object_or_404(Restaurant, pk=pk)
-    review = RestaurantReview(
+    if RestaurantReview.objects.filter(restaurant=restaurant, user=request.user).exists():
+        RestaurantReview.objects.get(restaurant=restaurant, user=request.user).delete()
+    new_review = RestaurantReview(
         rating=request.POST['rating'],
         comment=request.POST['comment'],
         user=request.user,
         restaurant=restaurant)
-    review.save()
+    new_review.save()
     return HttpResponseRedirect(reverse('myrestaurants:restaurant_detail', args=(restaurant.id,)))

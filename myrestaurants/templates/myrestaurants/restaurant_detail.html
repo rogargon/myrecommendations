@@ -31,7 +31,7 @@
     {% for review in restaurant.restaurantreview_set.all %}
         <li>
             <p>{{ review.rating }} star{{ review.rating|pluralize }}</p>
-            <p>{{ review.comment }}</p>
+            <p>{% if review.comment %}{{ review.comment }}{% endif %}</p>
             <p>Created by {{ review.user }} on {{ review.date }}</p>
         </li>
     {% endfor %}

@@ -59,3 +59,6 @@ class Review(models.Model):
 
 class RestaurantReview(Review):
     restaurant = models.ForeignKey(Restaurant)
+
+    class Meta:
+        unique_together = ("restaurant", "user")
