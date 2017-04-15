@@ -9,7 +9,7 @@ urlpatterns = [
     # List latest 5 restaurants: /myrestaurants/
     url(r'^$',
         ListView.as_view(
-            queryset=Restaurant.objects.filter(date__lte=timezone.now()).order_by('date')[:5],
+            queryset=Restaurant.objects.filter(date__lte=timezone.now()).order_by('-date')[:5],
             context_object_name='latest_restaurant_list',
             template_name='myrestaurants/restaurant_list.html'),
         name='restaurant_list'),

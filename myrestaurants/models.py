@@ -9,7 +9,7 @@ class Restaurant(models.Model):
     name = models.TextField()
     street = models.TextField(blank=True, null=True)
     number = models.IntegerField(blank=True, null=True)
-    city = models.TextField(default="")
+    city = models.TextField(blank=True, null=True)
     zipCode = models.TextField(blank=True, null=True)
     stateOrProvince = models.TextField(blank=True, null=True)
     country = models.TextField(blank=True, null=True)
