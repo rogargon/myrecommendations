@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 
 from models import RestaurantReview, Restaurant
@@ -6,9 +7,12 @@ from models import RestaurantReview, Restaurant
 class RestaurantReviewTestCase(TestCase):
     def setUp(self):
         trendy = Restaurant.objects.create(name="Trendy Restaurant")
-        RestaurantReview.objects.create(rating=3, comment="Average...", restaurant=trendy)
-        RestaurantReview.objects.create(rating=5, comment="Excellent!", restaurant=trendy)
-        RestaurantReview.objects.create(rating=1, comment="Really bad!", restaurant=trendy)
+        user1 = User.objects.create(username="user1")
+        user2 = User.objects.create(username="user2")
+        user3 = User.objects.create(username="user3")
+        RestaurantReview.objects.create(rating=3, comment="Average...", restaurant=trendy, user=user1)
+        RestaurantReview.objects.create(rating=5, comment="Excellent!", restaurant=trendy, user=user2)
+        RestaurantReview.objects.create(rating=1, comment="Really bad!", restaurant=trendy, user=user3)
         Restaurant.objects.create(name="Unknown Restaurant")
 
     def test_average_3reviews(self):
