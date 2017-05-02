@@ -80,3 +80,88 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 ```
+
+Finally, to keep track of the requirements of this project, for the moment mainly Django, we can execute
+the command:
+
+```bash
+$ pip freeze > requirements.txt
+```
+
+This way we will get in the file *requirements.txt* all the required packages to execute the project:
+
+```python
+Django==1.10.6
+```
+
+Agile Behaviour Driven Development (BDD)
+========================================
+
+Now, we have the initial Django project and application that we will start filling with functionality.
+
+The aim of this application is to help users keep track of the restaurants they have visitied, 
+the dishes they have tasted there and to provide restaurant reviews for other users.
+
+Consequently, and following a BDD approach, first we define the intended **features**:
+
+* Register Restaurant
+* Register Dish
+* List Recent Restaurants
+* View Restaurant
+* View Dish
+* Review Restaurant
+* Edit Restaurant
+* Edit Dish
+
+For the moment, additional features like removing restaurants and dishes have not been considered, 
+though they can be added in future iterations.
+
+Next, we will start detailing each feature. For each one, a new file is generated in a *features/* folder. 
+Each file provides details about the feature value, involved stakeholders and feature details following the template:
+
+**In order to** <achieve some business value>, 
+**As a** <stakeholder type>, 
+**I want** <some new system feature> 
+
+The result is the following list of feature files with their corresponding content in the *features/* folder:
+
+- *register_restaurant.feature*
+  **Feature**: Register Restaurant
+    **In order to** keep track of the restaurants I visit
+    **As a** user
+    **I want** to register a restaurant together with its location and contact details
+- *register_dish.feature*
+  **Feature**: Register Dish
+    **In order to** keep track of the dishes I eat
+    **As a** user
+    **I want** to register a dish in the corresponding restaurant together with its details
+- *list_restaurants.feature*
+  **Feature**: List Restaurants
+    **In order to** keep myself up to date about registered restaurants
+    **As a** user
+    **I want** to list the last 10 registered restaurants
+- *view_restaurant.feature*
+  **Feature**: View Restaurant
+    **In order to** know about a restaurant
+    **As a** user
+    **I want** to view the restaurant details including all its dishes and reviews
+- *view_dish.feature*
+  **Feature**: View Dish
+    **In order to** know about a dish
+    **As a** user
+    **I want** to view the registered dish details
+- *review_restaurant.feature*
+  **Feature**: Register Review
+    **In order to** share my opinion about a restaurant
+    **As a** user
+    **I want** to register a review with a rating and an optional comment about the restaurant
+- *edit_restaurant.feature*
+  **Feature**: Edit Restaurant
+    **In order to** keep updated my previous registers about restaurants
+    **As a** user
+    **I want** to edit a restaurant register I created
+- *edit_dish.feature*
+  **Feature**: Edit Dish
+    **In order to** keep updated my previous registers about dishes
+    **As a** user
+    **I want** to edit a dish register I created
