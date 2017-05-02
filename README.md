@@ -165,3 +165,105 @@ The result is the following list of feature files with their corresponding conte
     **In order to** keep updated my previous registers about dishes
     **As a** user
     **I want** to edit a dish register I created
+
+## Tools ##
+
+To facilitate the description of the feature scenarios, 
+while connecting them to Python code that tests if the scenarios are satisfied by the application, 
+we will use the Gherkin syntax and the Behave.
+
+To install Behave:
+
+```shell
+$ pip install behave
+```
+
+Moreover, to make it possible to guide a browser from the test, and thus check if the application 
+follows the expected behaviour from a end-user perspective, we will also use Splinter. 
+It can be installed with the following command:
+
+```shell
+$ pip install splinter
+```
+
+These dependencies are also detailed, with explicit versions for each package that have been tested 
+to work together, in the *requirements.txt* file available from the root folder of the myrecommendations project:
+
+```python
+Django==1.10.6
+behave==1.2.5
+splinter==0.7.5
+```
+
+Finally, for end-to-end test, it is necessary to have a browser to test from client side. With Splinter, 
+different browsers can be configured for testing, for instance Firefox or Chrome. 
+However, the most convenient way is to use a headless browsers (that does not require a user interface) like PhantomJS.
+
+PhantomJS is available from http://phantomjs.org/download.html
+
+You can also install it using different package managers. For instance with **apt** in Linux:
+
+```bash
+$ apt-get update
+$ apt-get install phantomjs
+```
+
+Or **brew** in OSX:
+
+```shell
+$ brew update
+$ brew install phantomjs
+```
+
+## Environment ##
+
+After installing all the required tools for BDD, we also need to configure the testing environment. 
+In this case, the Django application myrestaurant.
+
+We do so in a file in the *features/* folder called *environment.py*:
+
+```python
+import os
+import django
+from behave.runner import Context
+from django.shortcuts import resolve_url
+from django.test.runner import DiscoverRunner
+from django.test.testcases import LiveServerTestCase
+from splinter.browser import Browser
+
+os.environ["DJANGO_SETTINGS_MODULE"] = "myrecommendations.settings"
+
+class ExtendedContext(Context):
+    def get_url(self, to=None, *args, **kwargs):
+        return self.test.live_server_url + (
+            resolve_url(to, *args, **kwargs) if to else '')
+
+def before_all(context):
+    django.setup()
+    context.test_runner = DiscoverRunner()
+    context.test_runner.setup_test_environment()
+    context.browser = Browser('phantomjs')
+
+def before_scenario(context, scenario):
+    context.old_db_config = context.test_runner.setup_databases()
+    object.__setattr__(context, '__class__', ExtendedContext)
+    context.test = LiveServerTestCase
+    context.test.setUpClass()
+
+def after_scenario(context, scenario):
+    context.test.tearDownClass()
+    del context.test
+    context.test_runner.teardown_databases(context.old_db_config)
+
+def after_all(context):
+    context.test_runner.teardown_test_environment()
+    context.browser.quit()
+    context.browser = None
+```
+
+This file defines the Django settings to load and test, the context to be passed to each testing step, and then what to:
+
+* **Before all tests**: setting Django, preparing it for testing and a browser session based on PhantomJS to act as the user.
+* **Before each scenario**: the Django database is initialized, together with the context to be passed to each scenario step implementation with all the data about the current application status.
+* **After each scenario**: the Django database is destroyed so the next scenario will start with a clean one. This way each scenario is independent from previous ones and interferences are avoided.
+* **After all tests**: the testing environment is destroyed together with the browser used for testing.
