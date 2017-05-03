@@ -119,52 +119,52 @@ though they can be added in future iterations.
 Next, we will start detailing each feature. For each one, a new file is generated in a *features/* folder. 
 Each file provides details about the feature value, involved stakeholders and feature details following the template:
 
-**In order to** <achieve some business value>, 
-**As a** <stakeholder type>, 
-**I want** <some new system feature> 
+**In order to** [achieve some business value], \
+**As a** [stakeholder type], \
+**I want** [some new system feature]. 
 
 The result is the following list of feature files with their corresponding content in the *features/* folder:
 
-- *register_restaurant.feature*
-  **Feature**: Register Restaurant
-    **In order to** keep track of the restaurants I visit
-    **As a** user
-    **I want** to register a restaurant together with its location and contact details
-- *register_dish.feature*
-  **Feature**: Register Dish
-    **In order to** keep track of the dishes I eat
-    **As a** user
-    **I want** to register a dish in the corresponding restaurant together with its details
-- *list_restaurants.feature*
-  **Feature**: List Restaurants
-    **In order to** keep myself up to date about registered restaurants
-    **As a** user
-    **I want** to list the last 10 registered restaurants
-- *view_restaurant.feature*
-  **Feature**: View Restaurant
-    **In order to** know about a restaurant
-    **As a** user
-    **I want** to view the restaurant details including all its dishes and reviews
-- *view_dish.feature*
-  **Feature**: View Dish
-    **In order to** know about a dish
-    **As a** user
-    **I want** to view the registered dish details
-- *review_restaurant.feature*
-  **Feature**: Register Review
-    **In order to** share my opinion about a restaurant
-    **As a** user
-    **I want** to register a review with a rating and an optional comment about the restaurant
-- *edit_restaurant.feature*
-  **Feature**: Edit Restaurant
-    **In order to** keep updated my previous registers about restaurants
-    **As a** user
-    **I want** to edit a restaurant register I created
-- *edit_dish.feature*
-  **Feature**: Edit Dish
-    **In order to** keep updated my previous registers about dishes
-    **As a** user
-    **I want** to edit a dish register I created
+- *register_restaurant.feature* \
+  **Feature**: Register Restaurant \
+    **In order to** keep track of the restaurants I visit,, \
+    **As a** user \
+    **I want** to register a restaurant together with its location and contact details.
+- *register_dish.feature* \
+  **Feature**: Register Dish \
+    **In order to** keep track of the dishes I eat, \
+    **As a** user, \
+    **I want** to register a dish in the corresponding restaurant together with its details.
+- *list_restaurants.feature* \
+  **Feature**: List Restaurants \
+    **In order to** keep myself up to date about registered restaurants, \
+    **As a** user, \
+    **I want** to list the last 10 registered restaurants.
+- *view_restaurant.feature* \
+  **Feature**: View Restaurant \
+    **In order to** know about a restaurant, \
+    **As a** user, \
+    **I want** to view the restaurant details including all its dishes and reviews.
+- *view_dish.feature* \
+  **Feature**: View Dish \
+    **In order to** know about a dish, \
+    **As a** user, \
+    **I want** to view the registered dish details.
+- *review_restaurant.feature* \
+  **Feature**: Register Review \
+    **In order to** share my opinion about a restaurant, \
+    **As a** user, \
+    **I want** to register a review with a rating and an optional comment about the restaurant.
+- *edit_restaurant.feature* \
+  **Feature**: Edit Restaurant \
+    **In order to** keep updated my previous registers about restaurants, \
+    **As a** user, \
+    **I want** to edit a restaurant register I created.
+- *edit_dish.feature* \
+  **Feature**: Edit Dish \
+    **In order to** keep updated my previous registers about dishes, \
+    **As a** user, \
+    **I want** to edit a dish register I created.
 
 ## Tools ##
 
@@ -462,3 +462,281 @@ while the last three are still pending:
   0 scenarios passed, 1 failed, 0 skipped
   2 steps passed, 0 failed, 0 skipped, 3 undefined
 ```
+
+The undefined steps are related with the Register Restaurant feature and are implemented in
+*features/steps/register_restaurant.py*:
+
+```python
+from behave import *
+import operator
+from django.db.models import Q
+
+use_step_matcher("parse")
+
+@when(u'I register restaurant')
+def step_impl(context):
+    for row in context.table:
+        context.browser.visit(context.get_url('myrestaurants:restaurant_create'))
+        form = context.browser.find_by_tag('form').first
+        for heading in row.headings:
+            context.browser.fill(heading, row[heading])
+        form.find_by_value('Submit').first.click()
+
+@then(u'I\'m viewing the details page for restaurant')
+def step_impl(context):
+    q_list = [Q((attribute, context.table.rows[0][attribute])) for attribute in context.table.headings]
+    from myrestaurants.models import Restaurant
+    restaurant = Restaurant.objects.filter(reduce(operator.and_, q_list)).get()
+    assert context.browser.url == context.get_url(restaurant)
+
+@then(u'There are {count:n} restaurants')
+def step_impl(context, count):
+    from myrestaurants.models import Restaurant
+    assert count == Restaurant.objects.count()
+```
+
+The first step, for each table row provided as step input, browses to the myrestaurants restaurant_create view and
+fills the displayed form inputs with the corresponding row data identified by the table headings. For instance, if the
+name of the restaurant to be created is provided, the corresponding input named 'name' is filled the the corresponding
+table cell. Finally, after filling all provided form inputs, it is submitted.
+
+The second step implementation filters the registered restaurants by combinining all the criteria provided in the 
+step input table. Then, it checks that the browser is currently displaying the details page for that particular restaurant.
+
+The third *register_restaurant.py* step implementation checks that there are currently registered the provided amount
+of restaurants.
+
+If we try to run this steps using behave, they will fail because none of the requested views is implemented yet,
+neither the Restaurant model or the forms to register a restaurant.
+
+First of all, we will implement the model. For the moment, given the requirements in the Register Restaurant feature,
+we just need a text field for the name. Consequently, we can add in *myrestaurants/models.py*:
+
+```python
+    class Restaurant(models.Model):
+        name = models.TextField()
+```
+
+We can then update the database to accomodate this new entity by running:
+
+```bash
+$ python manage.py makemigrations myrestaurants
+```
+
+The result is that the first migation of the data model for the myrestaurants application is created:
+
+```
+Migrations for 'myrestaurants':
+  myrestaurants/migrations/0001_initial.py:
+    - Create model Restaurant
+```
+
+It can be then applied to create the tables in the database that will accomodate instance of the Restaurant model:
+
+```bash
+$ python manage.py migrate
+```
+
+Now we can implement the 'myrestaurants:restaurant_create' view where the browser navigates to in the first step
+implemented in *register_restaurant.py*. It is defined in *myrestaurants/urls.py* and linked to the URL '/register'
+in '/myrestaurants':
+
+```python
+from django.conf.urls import url
+from django.views.generic.edit import CreateView
+
+from forms import RestaurantForm
+from models import Restaurant
+
+urlpatterns = [
+    # Register a restaurant, from: /myrestaurants/register/
+    url(r'^register/$',
+        CreateView.as_view(
+            model=Restaurant,
+            template_name='form.html',
+            form_class=RestaurantForm),
+        name='restaurant_create'),
+]
+```
+
+To publish the URLs and views defined in *myrestaurants/urls.py* and make them accessible from the project,
+they should be included from the global URLs file *myrecommendations/urls.py*:
+
+```python
+from django.conf.urls import url, include
+from django.contrib import admin
+from django.contrib.auth.views import login, logout
+
+urlpatterns = [
+    url(r'^myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
+    url(r'^login/', login, name='login'),
+    url(r'^logout/', logout, name='logout'),
+    url(r'^admin/', admin.site.urls),
+]
+```
+
+This way, the views defined for the myrestaurants application will be available from '/myrestaurants/...'
+and their names in the 'myrestaurants' namespace.
+
+The current view is a Django Model View for the creation of new model entities, a **CreateView**. It is associated
+to Restaurant, because it will create instances of this model, and also requires a form to be displayed and a
+template where the form will be shown.
+
+Django provides the class ModelForm to automatically implement forms to create and update model entities.
+To create restaurants, we require a RestaurantForm subclass of ModelForm like the one defined in 
+*myrestaurants/forms.py*:
+
+```python
+from django.forms import ModelForm
+from models import Restaurant
+
+class RestaurantForm(ModelForm):
+    class Meta:
+        model = Restaurant
+        exclude = ()
+```
+
+Model forms generate appropriate form inputs with validation for all the model fields that are not explicitly
+excluded. Currently, it will generate just a test input for the 'name' field.
+
+Forms are displayed using a template that renders them. We will thus start defining the templates for the
+myrestaurants application in *myrestaurants/templates*.
+
+The first one is a base template that defines the common structure for all application templates,
+*myrestaurants/templates/base.html*:
+ 
+ ```djangotemplate
+<html>
+<head>
+    <title>{% block title %}MyRestaurants by MyRecommentdations{% endblock %}</title>
+</head>
+<body>
+
+<div id="header">
+    {% block header %}
+        {% if user.is_authenticated %}
+            <p>User: {{ user.username }} | <a href="{% url 'logout' %}?next={{request.path}}">logout</a></p>
+        {% else %}
+            <p><a href="{% url 'login' %}?next={{request.path}}">login</a></p>
+        {% endif %}
+    {% endblock %}
+</div>
+
+<div id="sidebar">
+    {% block sidebar %}
+        <ul>
+            <li><a href="/myrestaurants/">Home</a></li>
+        </ul>
+    {% endblock %}
+</div>
+
+<div id="content">
+    {% block content %}
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% endblock %}
+</div>
+
+<div id="footer">
+    {% block footer %}{% endblock %}
+</div>
+
+</body>
+</html>
+```
+
+This base template defines the global HTML structure and names subsections of it, called **block**, that can 
+be replaced by more specific templates.
+
+The *myrestaurants/templates/form.html* template is a template extending the base one that displays a form in
+the content block:
+
+```djangotemplate
+{% extends "base.html" %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit"/>
+</form>
+{% endblock %}
+```
+
+With this, we have implemented everything needed to suport the 'I register a restaurant' step. If we execute 
+**behave**, 3 steps now pass and the following error message is the output for the failing step:
+
+```text
+ImproperlyConfigured: No URL to redirect to.  Either provide a url or define a get_absolute_url method on the Model.
+```
+
+This is because Django doesn't know what to after the restaurant is created. The default behaviour is to redirect
+the user to the view displaying the newly created model entity and the way to determine that URL is by calling
+the 'get_absolute_url' method for the model. We will thus add in *myrestaurants/model.py*:
+
+```python
+from django.db import models
+from django.urls.base import reverse
+
+class Restaurant(models.Model):
+    name = models.TextField()
+
+    def get_absolute_url(self):
+        return reverse('myrestaurants:restaurant_detail', kwargs={'pk': self.pk})
+```
+
+We don't fix a URL but return the URL associated to the view responsible for showing the details of a restaurant.
+The URL is built using the identifier of the entity to be displayed, which is passed as a kwargs parameter.
+
+Now, we need to define this view in *myrestaurants/urls.py* by adding a new URL pattern:
+
+```python
+    ...,
+    # Restaurant details, from: /myrestaurants/1/
+    url(r'^(?P<pk>\d+)/$',
+        DetailView.as_view(
+            model=Restaurant,
+            template_name='restaurant_detail.html'),
+        name='restaurant_detail'),
+]
+```
+
+This one corresponds to a Django class view named **DetailView**, responsible for displaying instances of the 
+associated model using the provided template.
+
+The template also extends the base one and for the moment just displays the associate restaurant instance
+provided by the DetailView to the template *myrestaurants/templates/restaurant_detail.html*:
+
+```djangotemplate
+{% extends "base.html" %}
+{% block content %}
+<h1>
+    {{ restaurant.name }}
+</h1>
+{% endblock %}
+```
+
+This concludes the implementation of the first scenario of *features/register_restaurant.feature*.
+If we run **behave** again, we will get that all steps in the scenario have passed:
+
+```text
+  Scenario: Register just restaurant name                 # features/register_restaurant.feature:9
+    Given Exists a user "user" with password "password"   # features/steps/authentication.py:6 0.313s
+    Given I login as user "user" with password "password" # features/steps/authentication.py:12 0.859s
+    When I register restaurant                            # features/steps/register_restaurant.py:8 0.382s
+      | name       |
+      | The Tavern |
+    Then I'm viewing the details page for restaurant      # features/steps/register_restaurant.py:18 0.013s
+      | name       |
+      | The Tavern |
+    And There are 1 restaurants                           # features/steps/register_restaurant.py:26 0.001s
+
+1 feature passed, 0 failed, 7 skipped
+1 scenario passed, 0 failed, 0 skipped
+5 steps passed, 0 failed, 0 skipped, 0 undefined
+```
+
+The objective is now to continue defining additional scenarios for Register Restaurant feature that
+specify, for instance, the rest of the model fields the stakeholders expect to be capable of defining to
+capture the restaurant details they want to register.
