@@ -4,7 +4,7 @@ MyRecommendations
 Recommendation applications developed using Django, including for the moment just:
 - MyRestaurants
 
-Developed following a Behaviour Driven Development approach.
+The project is developed following an Agile Behaviour Driven Development approach.
 
 The source code for this project is available from:
 [https://github.com/rogargon/myrecommendations-bdd](https://github.com/rogargon/myrecommendations-bdd)
@@ -13,10 +13,7 @@ The source code for this project is available from:
 Starting the MyRecommendations Project
 ======================================
 
-After installing [Python and Django](https://docs.djangoproject.com/en/1.10/topics/install/), 
-the recommended approach is using [virtualenv](https://virtualenv.pypa.io/en/stable/), 
-it is possible to create a new Django project from the command line, as also documented in the 
-[Django Tutorial part 1](https://docs.djangoproject.com/en/1.10/intro/tutorial01/). 
+After installing [Python and Django](https://docs.djangoproject.com/en/1.10/topics/install/), the recommended approach is using [virtualenv](https://virtualenv.pypa.io/en/stable/), it is possible to create a new Django project from the command line, as also documented in the [Django Tutorial part 1](https://docs.djangoproject.com/en/1.10/intro/tutorial01/). 
 
 In our case the project is called 'myrecommendations':
 
@@ -26,8 +23,7 @@ $ django-admin.py startproject myrecommendations
 $ cd myrecommendations
 ```
 
-In *myrecommendations/settings.py*, review your database settings. 
-For instance, for an SQLite database, they should be:
+In *myrecommendations/settings.py*, review your database settings. For instance, for an SQLite database, they should be:
 
 ```python
 DATABASES = {
@@ -38,17 +34,16 @@ DATABASES = {
 }
 ```
 
-Finally, let Django take control of the database:
+Then, let Django take control of the database:
 
 ```bash
 $ python manage.py migrate
 
 ```
 
-The 'migrate' command looks at INSTALLED_APPS defined in 'settings.py' and creates
-all required database tables according to the database settings.
+The 'migrate' command looks at INSTALLED_APPS defined in 'settings.py' and creates all required database tables according to the database settings.
 
-Finally, create the admin user:
+To conclude project creation, define the admin user:
 
 ```bash
 $ python manage.py createsuperuser
@@ -58,9 +53,7 @@ $ python manage.py createsuperuser
 Creating the MyRestaurants Application
 ======================================
 
-Now that the project is ready, it is time to define project applications. 
-In the case of this tutorial there is just one application, called 'myrestaurants'. 
-To create it, type the following command from the root folder of the project:
+Now that the project is ready, it is time to define project applications. In the case of this tutorial there is just one application, called 'myrestaurants'. To create it, type the following command from the root folder of the project:
 
 ```bash
 $ python manage.py startapp myrestaurants
@@ -81,8 +74,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-Finally, to keep track of the requirements of this project, for the moment mainly Django, we can execute
-the command:
+Finally, to keep track of the requirements of this project, for the moment mainly Django, we can execute the command:
 
 ```bash
 $ pip freeze > requirements.txt
@@ -99,8 +91,7 @@ Agile Behaviour Driven Development (BDD)
 
 Now, we have the initial Django project and application that we will start filling with functionality.
 
-The aim of this application is to help users keep track of the restaurants they have visitied, 
-the dishes they have tasted there and to provide restaurant reviews for other users.
+The aim of this application is to help users keep track of the restaurants they have visitied, the dishes they have tasted there and to provide restaurant reviews for other users.
 
 Consequently, and following a BDD approach, first we define the intended **features**:
 
@@ -113,11 +104,9 @@ Consequently, and following a BDD approach, first we define the intended **featu
 * Edit Restaurant
 * Edit Dish
 
-For the moment, additional features like removing restaurants and dishes have not been considered, 
-though they can be added in future iterations.
+For the moment, additional features like removing restaurants and dishes have not been considered, though they can be added in future iterations.
 
-Next, we will start detailing each feature. For each one, a new file is generated in a *features/* folder. 
-Each file provides details about the feature value, involved stakeholders and feature details following the template:
+Next, we will start detailing each feature. For each one, a new file is generated in a *features/* folder. Each file provides details about the feature value, involved stakeholders and feature details following the template:
 
 **In order to** [achieve some business value], \
 **As a** [stakeholder type], \
@@ -168,9 +157,7 @@ The result is the following list of feature files with their corresponding conte
 
 ## Tools ##
 
-To facilitate the description of the feature scenarios, 
-while connecting them to Python code that tests if the scenarios are satisfied by the application, 
-we will use the Gherkin syntax and the Behave.
+To facilitate the description of the feature scenarios, while connecting them to Python code that tests if the scenarios are satisfied by the application, we will use the Gherkin syntax and the Behave. 
 
 To install Behave:
 
@@ -178,16 +165,13 @@ To install Behave:
 $ pip install behave
 ```
 
-Moreover, to make it possible to guide a browser from the test, and thus check if the application 
-follows the expected behaviour from a end-user perspective, we will also use Splinter. 
-It can be installed with the following command:
+Moreover, to make it possible to guide a browser from the test, and thus check if the application follows the expected behaviour from a end-user perspective, we will also use Splinter. It can be installed with the following command:
 
 ```shell
 $ pip install splinter
 ```
 
-These dependencies are also detailed, with explicit versions for each package that have been tested 
-to work together, in the *requirements.txt* file available from the root folder of the myrecommendations project:
+These dependencies are also detailed, with explicit versions for each package that have been tested to work together, in the *requirements.txt* file available from the root folder of the myrecommendations project:
 
 ```python
 Django==1.10.6
@@ -195,11 +179,9 @@ behave==1.2.5
 splinter==0.7.5
 ```
 
-Finally, for end-to-end test, it is necessary to have a browser to test from client side. With Splinter, 
-different browsers can be configured for testing, for instance Firefox or Chrome. 
-However, the most convenient way is to use a headless browsers (that does not require a user interface) like PhantomJS.
+Finally, for end-to-end test, it is necessary to have a browser to test from client side. With Splinter, different browsers can be configured for testing, for instance Firefox or Chrome. However, the most convenient way is to use a headless browsers (that does not require a user interface) like PhantomJS.
 
-PhantomJS is available from http://phantomjs.org/download.html
+PhantomJS is available from [http://phantomjs.org/download.html]()
 
 You can also install it using different package managers. For instance with **apt** in Linux:
 
@@ -217,8 +199,7 @@ $ brew install phantomjs
 
 ## Environment ##
 
-After installing all the required tools for BDD, we also need to configure the testing environment. 
-In this case, the Django application myrestaurant.
+After installing all the required tools for BDD, we also need to configure the testing environment. In this case, the Django application myrestaurant.
 
 We do so in a file in the *features/* folder called *environment.py*:
 
@@ -271,19 +252,15 @@ This file defines the Django settings to load and test, the context to be passed
 Development of the MyRestaurants Features
 =========================================
 
-Now, it is time to start implementing the identified features. 
-In Agile Behaviour Driven Development, the idea is to prioritise features based on their value for the stakeholders: 
-product owners, users, clients, customers, developers, etc.
-Following a BDD approach, we will specify first the intended behaviours through the 
-different scenarios we might encounter for each feature. 
+Now, it is time to start implementing the identified features. In Agile Behaviour Driven Development, the idea is to prioritise features based on their value for the stakeholders: product owners, users, clients, customers, developers, etc.
 
-Then, we will start implementing the different steps that constitute each scenario and the application code 
-to make it show the expected behaviour.
+Following a BDD approach, we will specify first the intended behaviours through the different scenarios we might encounter for each feature. 
+
+Then, we will start implementing the different steps that constitute each scenario and the application code to make it show the expected behaviour.
 
 ## Feature: Register Restaurant ##
 
-The most important feature is Register Restaurant as this is the starting point to fill the application with data and 
-satisfy their need of registering the restaurants they have visited.
+The most important feature is Register Restaurant as this is the starting point to fill the application with data and satisfy their need of registering the restaurants they have visited.
 
 The feature file *register_restaurant.feature* currently looks like:
 
@@ -294,14 +271,9 @@ Feature: Register Restaurant
   I want to register a restaurant together with its location and contact details
 ```
 
-We will start detailing it by adding scenarios with the help of the stakeholders. 
-Scenarios describe specific situations of use of a feature. 
-Scenarios are described in terms of pre-conditions (Givens), 
-events related with the specified feature (Whens) and outcomes (Thens).
+We will start detailing it by adding scenarios with the help of the stakeholders. Scenarios describe specific situations of use of a feature. Scenarios are described in terms of pre-conditions (Givens), events related with the specified feature (Whens) and outcomes (Thens).
 
-For instance, the scenario when a user registers a restaurant proving just the minimal required data, 
-the restaurant name, and taking into account that the user should exist and login before, 
-while contain the following steps:
+For instance, the scenario when a user registers a restaurant proving just the minimal required data, the restaurant name, and taking into account that the user should exist and login before, while contain the following steps:
 
 ```gherkin
   Background: There is a registered user
@@ -318,9 +290,7 @@ while contain the following steps:
     And There are 1 restaurants
 ```
 
-After defining the scenario, we can start the BDD process which implies that we start coding when a test fails. 
-To trigger the BDD test we should type from the Python environment where Behave has been installed. 
-From the project root:
+After defining the scenario, we can start the BDD process which implies that we start coding when a test fails. To trigger the BDD test we should type from the Python environment where Behave has been installed. From the project root:
 
 ```shell
 $ behave
@@ -328,7 +298,7 @@ $ behave
 
 As a result, we will get in the console the templates to implement all the scenario steps that are not implemented yet:
 
-```shell
+```text
 You can implement step definitions for undefined steps with these snippets:
 
 @given(u'Exists a user "user" with password "password"')
@@ -353,8 +323,10 @@ def step_impl(context):
 ```
 
 We will use separate step implementation files for each feature. 
-The ones related with authentication and user management, as they are shared by almost all features, 
-will also be implemented in a separate Python file, *authentication.py* in the *features/steps/* folder:
+
+### Authentication Steps ###
+
+The ones related with authentication and user management, as they are shared by almost all features, will also be implemented in a separate Python file, *authentication.py* in the *features/steps/* folder:
 
 ```python
 from behave import *
@@ -375,18 +347,13 @@ def step_impl(context, username, password):
     form.find_by_value('login').first.click()
 ```
 
-Both steps are parameterized so we can use the steps to login users with any username and password, 
-as long as we have previously created them and the password matches.
+Both steps are parameterized so we can use the steps to login users with any username and password, as long as we have previously created them and the password matches.
 
-The first steps simply creates a new object based on the existing Django User class using the provided 
-username and password, and a fixed e-mail.
+The first steps simply creates a new object based on the existing Django User class using the provided username and password, and a fixed e-mail.
 
-The second step implements the user behaviour for login. The browser, created in *environment.py* and passed 
-to the step through the context parameter, is used to browse to the login view, fill the login form inputs 
-named 'username' and 'password' with the corresponding values and finally click the 'login' button.
+The second step implements the user behaviour for login. The browser, created in *environment.py* and passed to the step through the context parameter, is used to browse to the login view, fill the login form inputs named 'username' and 'password' with the corresponding values and finally click the 'login' button.
 
-To support this behaviour, we first link the login, and also logout, views from django.contrib.auth.views
-in the project urls file, *myrecommendations/urls.py*:
+To support this behaviour, we first link the login, and also logout, views from django.contrib.auth.views in the project urls file, *myrecommendations/urls.py*:
 
 ```python
 from django.conf.urls import url
@@ -400,10 +367,7 @@ urlpatterns = [
 ]
 ```
 
-And create the login form template as expected by the Django login view by default in *registration/login.html*.
-However, to make it possible for Django to find templates, we first create a *templates* folder in the project root 
-and another in the myrestaurants application, *myrestaurants/templates*. We then register them as default templates
-folders in *myrecommendations/settings.py* defining 'DIRS' in TEMPLATES as detailed next:
+And create the login form template as expected by the Django login view by default in *registration/login.html*. However, to make it possible for Django to find templates, we first create a *templates* folder in the project root and another in the myrestaurants application, *myrestaurants/templates*. We then register them as default templates folders in *myrecommendations/settings.py* defining 'DIRS' in TEMPLATES as detailed next:
 
 ```python
 TEMPLATES = [
@@ -442,9 +406,7 @@ Then, we can define the login form in *templates/registration/login.html*:
 </html>
 ```
 
-With this we will have implemented the first two steps in the *register_restaurant.feature* first scenario.
-If we run **behave** again, we will get the following output, which shows that the first two step are implemented
-while the last three are still pending:
+With this we will have implemented the first two steps in the *register_restaurant.feature* first scenario. If we run **behave** again, we will get the following output, which shows that the first two step are implemented while the last three are still pending:
 
 ```text
   Scenario: Register just restaurant name                 # features/register_restaurant.feature:9
@@ -463,8 +425,9 @@ while the last three are still pending:
   2 steps passed, 0 failed, 0 skipped, 3 undefined
 ```
 
-The undefined steps are related with the Register Restaurant feature and are implemented in
-*features/steps/register_restaurant.py*:
+### Register Restaurant Step ###
+
+The undefined steps are related with the Register Restaurant feature and are implemented in *features/steps/register_restaurant.py*:
 
 ```python
 from behave import *
@@ -495,26 +458,19 @@ def step_impl(context, count):
     assert count == Restaurant.objects.count()
 ```
 
-The first step, for each table row provided as step input, browses to the myrestaurants restaurant_create view and
-fills the displayed form inputs with the corresponding row data identified by the table headings. For instance, if the
-name of the restaurant to be created is provided, the corresponding input named 'name' is filled the the corresponding
-table cell. Finally, after filling all provided form inputs, it is submitted.
+The first step, for each table row provided as step input, browses to the myrestaurants restaurant_create view and fills the displayed form inputs with the corresponding row data identified by the table headings. For instance, if the name of the restaurant to be created is provided, the corresponding input named 'name' is filled the the corresponding table cell. Finally, after filling all provided form inputs, it is submitted.
 
-The second step implementation filters the registered restaurants by combinining all the criteria provided in the 
-step input table. Then, it checks that the browser is currently displaying the details page for that particular restaurant.
+The second step implementation filters the registered restaurants by combinining all the criteria provided in the step input table. Then, it checks that the browser is currently displaying the details page for that particular restaurant.
 
-The third *register_restaurant.py* step implementation checks that there are currently registered the provided amount
-of restaurants.
+The third *register_restaurant.py* step implementation checks that there are currently registered the provided amount of restaurants.
 
-If we try to run this steps using behave, they will fail because none of the requested views is implemented yet,
-neither the Restaurant model or the forms to register a restaurant.
+If we try to run this steps using behave, they will fail because none of the requested views is implemented yet, neither the Restaurant model or the forms to register a restaurant.
 
-First of all, we will implement the model. For the moment, given the requirements in the Register Restaurant feature,
-we just need a text field for the name. Consequently, we can add in *myrestaurants/models.py*:
+First of all, we will implement the model. For the moment, given the requirements in the Register Restaurant feature, we just need a text field for the name. Consequently, we can add in *myrestaurants/models.py*:
 
 ```python
-    class Restaurant(models.Model):
-        name = models.TextField()
+class Restaurant(models.Model):
+	name = models.TextField()
 ```
 
 We can then update the database to accomodate this new entity by running:
@@ -537,9 +493,7 @@ It can be then applied to create the tables in the database that will accomodate
 $ python manage.py migrate
 ```
 
-Now we can implement the 'myrestaurants:restaurant_create' view where the browser navigates to in the first step
-implemented in *register_restaurant.py*. It is defined in *myrestaurants/urls.py* and linked to the URL '/register'
-in '/myrestaurants':
+Now we can implement the 'myrestaurants:restaurant_create' view where the browser navigates to in the first step implemented in *register_restaurant.py*. It is defined in *myrestaurants/urls.py* and linked to the URL '/register' in '/myrestaurants':
 
 ```python
 from django.conf.urls import url
@@ -559,8 +513,7 @@ urlpatterns = [
 ]
 ```
 
-To publish the URLs and views defined in *myrestaurants/urls.py* and make them accessible from the project,
-they should be included from the global URLs file *myrecommendations/urls.py*:
+To publish the URLs and views defined in *myrestaurants/urls.py* and make them accessible from the project, they should be included from the global URLs file *myrecommendations/urls.py*:
 
 ```python
 from django.conf.urls import url, include
@@ -575,16 +528,11 @@ urlpatterns = [
 ]
 ```
 
-This way, the views defined for the myrestaurants application will be available from '/myrestaurants/...'
-and their names in the 'myrestaurants' namespace.
+This way, the views defined for the myrestaurants application will be available from '/myrestaurants/...' and their names in the 'myrestaurants' namespace.
 
-The current view is a Django Model View for the creation of new model entities, a **CreateView**. It is associated
-to Restaurant, because it will create instances of this model, and also requires a form to be displayed and a
-template where the form will be shown.
+The current view is a Django Model View for the creation of new model entities, a **CreateView**. It is associated to Restaurant, because it will create instances of this model, and also requires a form to be displayed and a template where the form will be shown.
 
-Django provides the class ModelForm to automatically implement forms to create and update model entities.
-To create restaurants, we require a RestaurantForm subclass of ModelForm like the one defined in 
-*myrestaurants/forms.py*:
+Django provides the class ModelForm to automatically implement forms to create and update model entities. To create restaurants, we require a RestaurantForm subclass of ModelForm like the one defined in *myrestaurants/forms.py*:
 
 ```python
 from django.forms import ModelForm
@@ -596,22 +544,18 @@ class RestaurantForm(ModelForm):
         exclude = ()
 ```
 
-Model forms generate appropriate form inputs with validation for all the model fields that are not explicitly
-excluded. Currently, it will generate just a test input for the 'name' field.
+Model forms generate appropriate form inputs with validation for all the model fields that are not explicitly excluded. Currently, it will generate just a test input for the 'name' field.
 
-Forms are displayed using a template that renders them. We will thus start defining the templates for the
-myrestaurants application in *myrestaurants/templates*.
+Forms are displayed using a template that renders them. We will thus start defining the templates for the myrestaurants application in *myrestaurants/templates*.
 
-The first one is a base template that defines the common structure for all application templates,
-*myrestaurants/templates/base.html*:
- 
- ```djangotemplate
+The first one is a base template that defines the common structure for all application templates, *myrestaurants/templates/base.html*:
+
+ ```html
 <html>
 <head>
     <title>{% block title %}MyRestaurants by MyRecommentdations{% endblock %}</title>
 </head>
 <body>
-
 <div id="header">
     {% block header %}
         {% if user.is_authenticated %}
@@ -621,7 +565,6 @@ The first one is a base template that defines the common structure for all appli
         {% endif %}
     {% endblock %}
 </div>
-
 <div id="sidebar">
     {% block sidebar %}
         <ul>
@@ -629,28 +572,23 @@ The first one is a base template that defines the common structure for all appli
         </ul>
     {% endblock %}
 </div>
-
 <div id="content">
     {% block content %}
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     {% endblock %}
 </div>
-
 <div id="footer">
     {% block footer %}{% endblock %}
 </div>
-
 </body>
 </html>
-```
+ ```
 
-This base template defines the global HTML structure and names subsections of it, called **block**, that can 
-be replaced by more specific templates.
+This base template defines the global HTML structure and names subsections of it, called **block**, that can  be replaced by more specific templates.
 
-The *myrestaurants/templates/form.html* template is a template extending the base one that displays a form in
-the content block:
+The *myrestaurants/templates/form.html* template is a template extending the base one that displays a form in the content block:
 
-```djangotemplate
+```html
 {% extends "base.html" %}
 
 {% block content %}
@@ -664,16 +602,15 @@ the content block:
 {% endblock %}
 ```
 
-With this, we have implemented everything needed to suport the 'I register a restaurant' step. If we execute 
-**behave**, 3 steps now pass and the following error message is the output for the failing step:
+With this, we have implemented everything needed to suport the 'I register a restaurant' step. If we execute **behave**, 3 steps now pass and the following error message is the output for the failing step:
 
 ```text
 ImproperlyConfigured: No URL to redirect to.  Either provide a url or define a get_absolute_url method on the Model.
 ```
 
-This is because Django doesn't know what to after the restaurant is created. The default behaviour is to redirect
-the user to the view displaying the newly created model entity and the way to determine that URL is by calling
-the 'get_absolute_url' method for the model. We will thus add in *myrestaurants/model.py*:
+### Restaurant Details Step ###
+
+This is because Django doesn't know what to after the restaurant is created. The default behaviour is to redirect the user to the view displaying the newly created model entity and the way to determine that URL is by calling the 'get_absolute_url' method for the model. We will thus add in *myrestaurants/model.py*:
 
 ```python
 from django.db import models
@@ -686,8 +623,7 @@ class Restaurant(models.Model):
         return reverse('myrestaurants:restaurant_detail', kwargs={'pk': self.pk})
 ```
 
-We don't fix a URL but return the URL associated to the view responsible for showing the details of a restaurant.
-The URL is built using the identifier of the entity to be displayed, which is passed as a kwargs parameter.
+We don't fix a URL but return the URL associated to the view responsible for showing the details of a restaurant. The URL is built using the identifier of the entity to be displayed, which is passed as a kwargs parameter.
 
 Now, we need to define this view in *myrestaurants/urls.py* by adding a new URL pattern:
 
@@ -702,13 +638,11 @@ Now, we need to define this view in *myrestaurants/urls.py* by adding a new URL 
 ]
 ```
 
-This one corresponds to a Django class view named **DetailView**, responsible for displaying instances of the 
-associated model using the provided template.
+This one corresponds to a Django class view named **DetailView**, responsible for displaying instances of the associated model using the provided template.
 
-The template also extends the base one and for the moment just displays the associate restaurant instance
-provided by the DetailView to the template *myrestaurants/templates/restaurant_detail.html*:
+The template also extends the base one and for the moment just displays the associate restaurant instance provided by the DetailView to the template *myrestaurants/templates/restaurant_detail.html*:
 
-```djangotemplate
+```html
 {% extends "base.html" %}
 {% block content %}
 <h1>
@@ -717,8 +651,7 @@ provided by the DetailView to the template *myrestaurants/templates/restaurant_d
 {% endblock %}
 ```
 
-This concludes the implementation of the first scenario of *features/register_restaurant.feature*.
-If we run **behave** again, we will get that all steps in the scenario have passed:
+This concludes the implementation of the first scenario of *features/register_restaurant.feature*. If we run **behave** again, we will get that all steps in the scenario have passed:
 
 ```text
   Scenario: Register just restaurant name                 # features/register_restaurant.feature:9
@@ -737,6 +670,8 @@ If we run **behave** again, we will get that all steps in the scenario have pass
 5 steps passed, 0 failed, 0 skipped, 0 undefined
 ```
 
-The objective is now to continue defining additional scenarios for Register Restaurant feature that
-specify, for instance, the rest of the model fields the stakeholders expect to be capable of defining to
-capture the restaurant details they want to register.
+The objective is now to continue defining additional scenarios for Register Restaurant feature that specify, for instance, the rest of the model fields the stakeholders expect to be capable of defining to capture the restaurant details they want to register.
+
+# Finished MyRestaurants Application #
+
+The code for the finished application is available from: [https://github.com/rogargon/myrecommendations](https://github.com/rogargon/myrecommendations)
