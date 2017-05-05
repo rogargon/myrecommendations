@@ -1,0 +1,24 @@
+language: python
+python:
+  - "2.7"
+env:
+  - DJANGO=1.10.6
+
+branches:
+  only:
+  - master
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - python manage.py test
+  - behave
+
+deploy:
+  provider: heroku
+  strategy: git
+  app:
+    master: myrecommendations
+  api_key:
+    secure: AxLmo6u+IsNxqL0Gs9RxLetzxGQrQdS//Rv+pIOIWyYH+dW/NvICJOj0IEc5QyalyNa6DESi8FnoPyRHYI3mcHsnwt2f9KjUPEhCJgDTk7oOU8g2vnRJ8CohwIIbnXHEeFAIL0m5mnnx59nWMO6a7n6/xixtZDKaqvNtpUm9+zY=

@@ -1,4 +1,7 @@
+
 # MyRecommendations
+
+[![Build Status](https://travis-ci.org/rogargon/myrecommendations.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations)
 
 Recommendation applications developed using Django, including for the moment just:
 
@@ -6,6 +9,9 @@ Recommendation applications developed using Django, including for the moment jus
 
 The source code for this project is available from:
 [https://github.com/rogargon/myrecommendations](https://github.com/rogargon/myrecommendations)
+
+The project includes **unit testing** and **End-To-End tests** using Behave and PhantomJS. **CI/CD** (Continuous Integration and Continuous Deployment) using Travis-CI and Heroku. Deployed at: 
+[http://myrecommendations.herokuapp.com/myrestaurants]()
 
 # Starting the MyRecommendations Project
 
@@ -90,7 +96,7 @@ This way we will get in the file *requirements.txt* all the required packages to
 Django==1.10.6
 ```
 
-Create your Data Model
+MyRestaurants Data Model
 -----------------------------------
 
 To define the 'myrestaurants' data model composed of **Restaurant**, **Dish**, **Review** and **RestaurantReview**, add the following code to the file *myrestaurants/models.py*:
@@ -181,7 +187,7 @@ $ python manage.py runserver
 And check that you can administrate the new models from:
 [http://localhost:8000/admin]()
 
-Design your URLs 
+Designing MyRestaurants URLs 
 --------------------------
 
 From the project root directory, edit *myrecommendations/urls.py* and add to the list of **urlpatterns** those for the application:
@@ -309,8 +315,8 @@ def review(request, pk):
     return HttpResponseRedirect(reverse('myrestaurants:restaurant_detail', args=(restaurant.id,)))
 ```
 
-Create your Application Templates
----------------------------------
+Application Templates
+----------------------
 
 First, create a *base.html* template in *myrestaurants/templates/myrestaurants*:
 
@@ -319,7 +325,7 @@ First, create a *base.html* template in *myrestaurants/templates/myrestaurants*:
 <html>
 <head>
 <link rel="stylesheet" href="{% static "style/base.css" %}" />
-<title>{% block title %}MyRestaurants by MyRecommentdations.org{% endblock %}</title>
+<title>{% block title %}MyRestaurants by MyRecommendations{% endblock %}</title>
 </head>
 <body>
 <div id="header">
@@ -429,7 +435,7 @@ Created by {{ restaurant.user }} on {{ restaurant.date }}
 {% endblock %}
 ```
 
-Create Forms
+Model Forms
 ------------
 
 The model forms defined in the new file *forms.py* make it possible to generate forms from the *Restaurant* and *Dish* models to create and edit them:

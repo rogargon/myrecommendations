@@ -6,14 +6,14 @@ from models import RestaurantReview, Restaurant
 
 class RestaurantReviewTestCase(TestCase):
     def setUp(self):
-        trendy = Restaurant.objects.create(name="Trendy Restaurant")
         user1 = User.objects.create(username="user1")
         user2 = User.objects.create(username="user2")
         user3 = User.objects.create(username="user3")
+        trendy = Restaurant.objects.create(name="Trendy Restaurant", user=user1)
         RestaurantReview.objects.create(rating=3, comment="Average...", restaurant=trendy, user=user1)
         RestaurantReview.objects.create(rating=5, comment="Excellent!", restaurant=trendy, user=user2)
         RestaurantReview.objects.create(rating=1, comment="Really bad!", restaurant=trendy, user=user3)
-        Restaurant.objects.create(name="Unknown Restaurant")
+        Restaurant.objects.create(name="Unknown Restaurant", user=user1)
 
     def test_average_3reviews(self):
         """The average review for a restaurant with 3 reviews is properly computed"""
