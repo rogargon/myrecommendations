@@ -1,3 +1,6 @@
 *.iml
 .idea/*
 .venv/*
+*.pyc
+*.log
+staticfiles

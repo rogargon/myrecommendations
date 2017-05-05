@@ -26,7 +26,8 @@ urlpatterns = [
     url(r'^accounts/logout/$', logout, name='logout'),
 ]
 
-if settings.DEBUG:
-    urlpatterns += [
-        url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT, })
-    ]
+#if settings.DEBUG:
+# Used even in production though not recommended: https://devcenter.heroku.com/articles/s3-upload-python
+urlpatterns += [
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT, })
+]

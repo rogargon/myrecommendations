@@ -2,3 +2,7 @@ Django==1.10.6
 Pillow==4.0.0
 behave==1.2.5
 splinter==0.7.5
+gunicorn==19.7.1
+whitenoise==3.3.0
+dj-database-url==0.4.2
+psycopg2==2.7.1
