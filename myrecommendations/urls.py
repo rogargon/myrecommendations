@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
     url(r'^accounts/login/$', login, name='login'),
     url(r'^accounts/logout/$', logout, name='logout'),
+    url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
 #if settings.DEBUG:
