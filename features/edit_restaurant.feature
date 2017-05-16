@@ -12,8 +12,7 @@ Feature: Edit Restaurant
 
   Scenario: Edit owned restaurant registry country
     Given I login as user "user1" with password "password"
-    When I view the details for restaurant "The Tavern"
-    And I edit the current restaurant
+    When I edit the restaurant with name "The Tavern"
       | country         |
       | England         |
     Then I'm viewing the details page for restaurant by "user1"
@@ -26,7 +25,18 @@ Feature: Edit Restaurant
     When I view the details for restaurant "The Tavern"
     Then There is no "edit" link available
 
-  Scenario: Try to edit restaurant but not the owner
+  Scenario: Try to edit restaurant but not the owner no edit button
     Given I login as user "user2" with password "password"
     When I view the details for restaurant "The Tavern"
     Then There is no "edit" link available
+
+  Scenario: Force edit restaurant but not the owner permission exception
+    Given I login as user "user2" with password "password"
+    When I edit the restaurant with name "The Tavern"
+      | country         |
+      | England         |
+    Then Server responds with page containing "403 Forbidden"
+    When I view the details for restaurant "The Tavern"
+    Then I'm viewing the details page for restaurant by "user1"
+      | name            | city            | country         |
+      | The Tavern      | London          | USA             |

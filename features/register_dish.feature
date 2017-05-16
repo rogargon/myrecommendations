@@ -24,5 +24,5 @@ Feature: Register Dish
     When I register dish at restaurant "The Tavern"
       | name            |
       | Fish and Chips  |
-    Then Server responds with page containing "Server Error (500)"
+    Then I'm redirected to the login form
     And There are 0 dishes

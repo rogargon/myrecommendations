@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.views.generic import DetailView, ListView, UpdateView
 from models import Restaurant, Dish
 from forms import RestaurantForm, DishForm
-from views import RestaurantCreate, DishCreate, RestaurantDetail, review, \
+from views import RestaurantCreate, DishCreate, RestaurantDetail, review, LoginRequiredCheckIsOwnerUpdateView, \
     APIDishDetail, APIDishList, APIRestaurantDetail, APIRestaurantList, APIRestaurantReviewDetail, APIRestaurantReviewList
 
 urlpatterns = [
@@ -38,9 +38,8 @@ urlpatterns = [
 
     # Edit restaurant details, ex.: /myrestaurants/restaurants/1/edit/
     url(r'^restaurants/(?P<pk>\d+)/edit/$',
-        UpdateView.as_view(
+        LoginRequiredCheckIsOwnerUpdateView.as_view(
             model=Restaurant,
-            template_name='myrestaurants/form.html',
             form_class=RestaurantForm),
         name='restaurant_edit'),
 
@@ -51,9 +50,8 @@ urlpatterns = [
 
     # Edit restaurant dish details, ex.: /myrestaurants/restaurants/1/dishes/1/edit/
     url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/edit/$',
-        UpdateView.as_view(
+        LoginRequiredCheckIsOwnerUpdateView.as_view(
             model=Dish,
-            template_name='myrestaurants/form.html',
             form_class=DishForm),
         name='dish_edit'),
 

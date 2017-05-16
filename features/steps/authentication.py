@@ -32,3 +32,8 @@ def step_impl(context, link_text):
 @then('There is no "{link_text}" link available')
 def step_impl(context, link_text):
     assert context.browser.is_element_not_present_by_xpath('//a[text()="'+link_text+'"]')
+
+
+@then("I'm redirected to the login form")
+def step_impl(context):
+    assert context.browser.url.startswith(context.get_url('login'))

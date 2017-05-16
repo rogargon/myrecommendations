@@ -22,12 +22,12 @@ def step_impl(context, restaurant_name):
     from myrestaurants.models import Restaurant
     restaurant = Restaurant.objects.get(name=restaurant_name)
     for row in context.table:
-        context.browser.visit(context.get_url(restaurant))
-        context.browser.find_link_by_text('add').click()
-        form = context.browser.find_by_tag('form').first
-        for heading in row.headings:
-            context.browser.fill(heading, row[heading])
-        form.find_by_value('Submit').first.click()
+        context.browser.visit(context.get_url('myrestaurants:dish_create', restaurant.pk))
+        if context.browser.url == context.get_url('myrestaurants:dish_create', restaurant.pk):
+            form = context.browser.find_by_tag('form').first
+            for heading in row.headings:
+                context.browser.fill(heading, row[heading])
+            form.find_by_value('Submit').first.click()
 
 @then('I\'m viewing the details page for dish at restaurant "{restaurant_name}" by "{username}"')
 def step_impl(context, restaurant_name, username):

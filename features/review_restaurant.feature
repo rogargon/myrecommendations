@@ -28,7 +28,7 @@ Feature: Register Review
     When I register a review at restaurant "The Tavern"
       | rating          | comment       |
       | 4               | Quite good    |
-    Then Server responds with page containing "Server Error (500)"
+    Then I'm redirected to the login form
     And There are 0 reviews
 
   Scenario: User reviews same restaurant replaces previous review

@@ -20,10 +20,11 @@ def step_impl(context, username):
 def step_impl(context):
     for row in context.table:
         context.browser.visit(context.get_url('myrestaurants:restaurant_create'))
-        form = context.browser.find_by_tag('form').first
-        for heading in row.headings:
-            context.browser.fill(heading, row[heading])
-        form.find_by_value('Submit').first.click()
+        if context.browser.url == context.get_url('myrestaurants:restaurant_create'):
+            form = context.browser.find_by_tag('form').first
+            for heading in row.headings:
+                context.browser.fill(heading, row[heading])
+            form.find_by_value('Submit').first.click()
 
 @then('There are {count:n} restaurants')
 def step_impl(context, count):
@@ -39,12 +40,14 @@ def step_impl(context, username):
     restaurant = Restaurant.objects.filter(reduce(operator.and_, q_list)).get()
     assert context.browser.url == context.get_url(restaurant)
 
-@when('I edit the current restaurant')
-def step_impl(context):
-    context.browser.find_link_by_text('edit').click()
-    # TODO: Test also using direct edit view link
-    # context.browser.visit(context.get_url('myrestaurants:restaurant_edit', restaurant.pk))
-    form = context.browser.find_by_tag('form').first
-    for heading in context.table.headings:
-        context.browser.fill(heading, context.table[0][heading])
-    form.find_by_value('Submit').first.click()
+@when('I edit the restaurant with name "{name}"')
+def step_impl(context, name):
+    from myrestaurants.models import Restaurant
+    restaurant = Restaurant.objects.get(name=name)
+    context.browser.visit(context.get_url('myrestaurants:restaurant_edit', restaurant.pk))
+    if context.browser.url == context.get_url('myrestaurants:restaurant_edit', restaurant.pk)\
+            and context.browser.find_by_tag('form'):
+        form = context.browser.find_by_tag('form').first
+        for heading in context.table.headings:
+            context.browser.fill(heading, context.table[0][heading])
+        form.find_by_value('Submit').first.click()

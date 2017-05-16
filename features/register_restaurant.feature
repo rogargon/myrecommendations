@@ -31,5 +31,5 @@ Feature: Register Restaurant
     When I register restaurant
       | name        |
       | The Tavern  |
-    Then Server responds with page containing "Server Error (500)"
+    Then I'm redirected to the login form
     And There are 0 restaurants
