@@ -104,6 +104,10 @@ class APIDishList(generics.ListCreateAPIView):
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
 
+    def perform_create(self, serializer):
+        restaurant = Restaurant.objects.get(pk=self.request.data['restaurant'])
+        serializer.save(user=self.request.user, restaurant=restaurant)
+
 class APIDishDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrReadOnly,)
     model = Dish
@@ -115,6 +119,10 @@ class APIRestaurantReviewList(generics.ListCreateAPIView):
     model = RestaurantReview
     queryset = RestaurantReview.objects.all()
     serializer_class = RestaurantReviewSerializer
+
+    def perform_create(self, serializer):
+        restaurant = Restaurant.objects.get(pk=self.request.data['restaurant'])
+        serializer.save(user=self.request.user, restaurant=restaurant)
 
 class APIRestaurantReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrReadOnly,)
