@@ -62,6 +62,7 @@ To conclude project creation, define the admin user:
 ```bash
 $ python manage.py createsuperuser
 ```
+
 # Creating the MyRestaurants Application
 
 Now that the project is ready, it is time to define project applications. In the case of this tutorial there is just one application, called 'myrestaurants'. To create it, type the following command from the root folder of the project:
@@ -197,8 +198,8 @@ from django.conf.urls import url, **include**
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'\^admin/', admin.site.urls),
-    url(r'\^myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
+    url(r'^admin/', admin.site.urls),
+    url(r'^myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
 ]
 ```
 
@@ -214,39 +215,39 @@ from views import RestaurantCreate, DishCreate, RestaurantDetail
 
 urlpatterns = [
 # List latest 10 restaurants: /myrestaurants/
-    url(r'\^\$', 
+    url(r'^$',
         ListView.as_view(
             queryset=Restaurant.objects.filter(date__lte=timezone.now()).order_by('-date')[:10],
             context_object_name='latest_restaurant_list',
             template_name='myrestaurants/restaurant_list.html'),
         name='restaurant_list'),
 # Restaurant details, ex.: /myrestaurants/restaurants/1/
-    url(r'\^restaurants/(?P<pk>\d+)/\$',
+    url(r'^restaurants/(?P<pk>\d+)/$',
         RestaurantDetail.as_view(),
         name='restaurant_detail'),
 # Restaurant dish details, ex: /myrestaurants/restaurants/1/dishes/1/
-    url(r'\^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/\$',
+    url(r'^restaurants/(?P<pkr>\d+)/dishes/(?P<pk>\d+)/$',
         DetailView.as_view(
         	model=Dish,
         	plate_name='myrestaurants/dish_detail.html'),
         name='dish_detail'),
 # Create a restaurant, /myrestaurants/restaurants/create/
-    url(r'\^restaurants/create/\$',
+    url(r'^restaurants/create/$',
         RestaurantCreate.as_view(),
         name='restaurant_create'),
 # Edit restaurant details, ex.: /myrestaurants/restaurants/1/edit/
-    url(r'\^restaurants/(?P<pk>\d+)/edit/\$',
+    url(r'^restaurants/(?P<pk>\d+)/edit/$',
         UpdateView.as_view(
         	model = Restaurant,
         	template_name = 'myrestaurants/form.html',
         	form_class = RestaurantForm),
         name='restaurant_edit'),
 # Create a restaurant dish, ex.: /myrestaurants/restaurants/1/dishes/create/
-    url(r'\^restaurants/(?P<pk>\\d+)/dishes/create/\$',
+    url(r'^restaurants/(?P<pk>\\d+)/dishes/create/$',
     	DishCreate.as_view(),
         name='dish_create'),
 # Edit restaurant dish details, ex.: /myrestaurants/restaurants/1/dishes/1/edit/
-    url(r'\^restaurants/(?P<pkr>\\d+)/dishes/(?P<pk>\\d+)/edit/\$',
+    url(r'^restaurants/(?P<pkr>\\d+)/dishes/(?P<pk>\\d+)/edit/$',
     	UpdateView.as_view(
     		model = Dish,
     		template_name = 'myrestaurants/form.html',
@@ -254,7 +255,7 @@ urlpatterns = [
     	name='dish_edit'),
 # Create a restaurant review, ex.: /myrestaurants/restaurants/1/reviews/create/
 # Unlike the previous patterns, this one is implemented using a method view instead of a class view
-    url(r'\^restaurants/(?P<pk>\\d+)/reviews/create/\$',
+    url(r'^restaurants/(?P<pk>\\d+)/reviews/create/$',
     	'myrestaurants.views.review',
     	name='review_create'),
 ]
@@ -528,8 +529,8 @@ And in myrecommendations/urls.py, add at the end:
 from django.conf import settings
 
 if settings.DEBUG:
-    urlpatterns += patterns('', 
-    	url(r'\^media/(?P<path>.\*)\$', 'django.views.static.serve', 
+    urlpatterns += patterns('',
+    	url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
     		{'document_root': settings.MEDIA_ROOT, }),
 )
 ```
