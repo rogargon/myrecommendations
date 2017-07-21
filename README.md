@@ -194,7 +194,7 @@ Designing MyRestaurants URLs
 From the project root directory, edit *myrecommendations/urls.py* and add to the list of **urlpatterns** those for the application:
 
 ```python
-from django.conf.urls import url, **include**
+from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
@@ -206,7 +206,7 @@ urlpatterns = [
 In the *myrestaurants* application folder create *urls.py* with the following code:
 
 ```python
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.utils import timezone
 from django.views.generic import DetailView, ListView, UpdateView
 from models import Restaurant, Dish
