@@ -1,7 +1,7 @@
-Django==1.10.6
+Django==1.11.11
 Pillow==4.0.0
-behave==1.2.5
-splinter==0.7.5
+behave==1.2.6
+splinter==0.7.7
 gunicorn==19.7.1
 whitenoise==3.3.0
 dj-database-url==0.4.2

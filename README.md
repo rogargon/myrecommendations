@@ -15,7 +15,7 @@ The project includes **unit testing** and **End-To-End tests** using Behave and 
 
 # Starting the MyRecommendations Project
 
-After installing [Python and Django](https://docs.djangoproject.com/en/1.10/topics/install/), the recommended approach is using [virtualenv](https://virtualenv.pypa.io/en/stable/), it is possible to create a new Django project from the command line, as also documented in the [Django Tutorial part 1](https://docs.djangoproject.com/en/1.10/intro/tutorial01/). 
+After installing [Python and Django](https://docs.djangoproject.com/en/1.11/topics/install/), the recommended approach is using [virtualenv](https://virtualenv.pypa.io/en/stable/), it is possible to create a new Django project from the command line, as also documented in the [Django Tutorial part 1](https://docs.djangoproject.com/en/1.11/intro/tutorial01/). 
 
 In our case the project is called 'myrecommendations':
 
@@ -94,7 +94,7 @@ $ pip freeze > requirements.txt
 This way we will get in the file *requirements.txt* all the required packages to execute the project:
 
 ```python
-Django==1.10.6
+Django==1.11.11
 ```
 
 MyRestaurants Data Model
