@@ -13,7 +13,7 @@ The source code for this project is available from:
 Starting the MyRecommendations Project
 ======================================
 
-After installing [Python and Django](https://docs.djangoproject.com/en/1.10/topics/install/), the recommended approach is using [virtualenv](https://virtualenv.pypa.io/en/stable/), it is possible to create a new Django project from the command line, as also documented in the [Django Tutorial part 1](https://docs.djangoproject.com/en/1.10/intro/tutorial01/). 
+After installing [Python and Django](https://docs.djangoproject.com/en/1.11/topics/install/), the recommended approach is using [virtualenv](https://virtualenv.pypa.io/en/stable/), it is possible to create a new Django project from the command line, as also documented in the [Django Tutorial part 1](https://docs.djangoproject.com/en/1.11/intro/tutorial01/). 
 
 In our case the project is called 'myrecommendations':
 
@@ -60,7 +60,7 @@ $ python manage.py startapp myrestaurants
 
 ```
 
-Then, add 'myrestaurants' to the INSTALLED_APPS list in myrecommendations/settings.py
+Then, add 'myrestaurants' to the INSTALLED_APPS list in *myrecommendations/settings.py*:
 
 ```python
 INSTALLED_APPS = [
@@ -83,7 +83,7 @@ $ pip freeze > requirements.txt
 This way we will get in the file *requirements.txt* all the required packages to execute the project:
 
 ```python
-Django==1.10.6
+Django==1.11.11
 ```
 
 Agile Behaviour Driven Development (BDD)
@@ -116,7 +116,7 @@ The result is the following list of feature files with their corresponding conte
 
 - *register_restaurant.feature* \
   **Feature**: Register Restaurant \
-    **In order to** keep track of the restaurants I visit,, \
+    **In order to** keep track of the restaurants I visit, \
     **As a** user \
     **I want** to register a restaurant together with its location and contact details.
 - *register_dish.feature* \
@@ -157,7 +157,7 @@ The result is the following list of feature files with their corresponding conte
 
 ## Tools ##
 
-To facilitate the description of the feature scenarios, while connecting them to Python code that tests if the scenarios are satisfied by the application, we will use the Gherkin syntax and the Behave. 
+To facilitate the description of the feature scenarios, while connecting them to Python code that tests if the scenarios are satisfied by the application, we will use the Gherkin syntax and the Behave tool. 
 
 To install Behave:
 
@@ -174,27 +174,27 @@ $ pip install splinter
 These dependencies are also detailed, with explicit versions for each package that have been tested to work together, in the *requirements.txt* file available from the root folder of the myrecommendations project:
 
 ```python
-Django==1.10.6
-behave==1.2.5
-splinter==0.7.5
+Django==1.11.11
+behave==1.2.6
+splinter==0.7.7
 ```
 
-Finally, for end-to-end test, it is necessary to have a browser to test from client side. With Splinter, different browsers can be configured for testing, for instance Firefox or Chrome. However, the most convenient way is to use a headless browsers (that does not require a user interface) like PhantomJS.
+Finally, for end-to-end test, it is necessary to have a browser to test from client side. With Splinter, different browsers can be configured for testing, for instance Chrome, the most common one. 
 
-PhantomJS is available from [http://phantomjs.org/download.html]()
+Assuming Chrome is already installed in your computer, the only requirement to use it for automated testing is the ChromeDriver, available for Windows, Linux and Mac from [https://sites.google.com/a/chromium.org/chromedriver/downloads]()
 
 You can also install it using different package managers. For instance with **apt** in Linux:
 
 ```bash
 $ apt-get update
-$ apt-get install phantomjs
+$ apt-get install chromedriver
 ```
 
 Or **brew** in OSX:
 
 ```shell
 $ brew update
-$ brew install phantomjs
+$ brew install chromedriver
 ```
 
 ## Environment ##
@@ -260,7 +260,7 @@ Then, we will start implementing the different steps that constitute each scenar
 
 ## Feature: Register Restaurant ##
 
-The most important feature is Register Restaurant as this is the starting point to fill the application with data and satisfy their need of registering the restaurants they have visited.
+The most important feature is Register Restaurant as this is the starting point to fill the application with data and satisfy the need of registering the restaurants users have visited.
 
 The feature file *register_restaurant.feature* currently looks like:
 
