@@ -546,9 +546,9 @@ class RestaurantForm(ModelForm):
 
 Model forms generate appropriate form inputs with validation for all the model fields that are not explicitly excluded. Currently, it will generate just a test input for the 'name' field.
 
-Forms are displayed using a template that renders them. We will thus start defining the templates for the myrestaurants application in *myrestaurants/templates*.
+Forms are displayed using a template that renders them. We will thus start defining the templates for the myrestaurants application in *myrestaurants/templates/myrestaurants*.
 
-The first one is a base template that defines the common structure for all application templates, *myrestaurants/templates/base.html*:
+The first one is a base template that defines the common structure for all application templates, *myrestaurants/templates/myrestaurants/base.html*:
 
  ```html
 <html>
@@ -586,7 +586,7 @@ The first one is a base template that defines the common structure for all appli
 
 This base template defines the global HTML structure and names subsections of it, called **block**, that can  be replaced by more specific templates.
 
-The *myrestaurants/templates/form.html* template is a template extending the base one that displays a form in the content block:
+The *myrestaurants/templates/myrestaurants/form.html* template is a template extending the base one that displays a form in the content block:
 
 ```html
 {% extends "base.html" %}
@@ -640,7 +640,7 @@ Now, we need to define this view in *myrestaurants/urls.py* by adding a new URL 
 
 This one corresponds to a Django class view named **DetailView**, responsible for displaying instances of the associated model using the provided template.
 
-The template also extends the base one and for the moment just displays the associate restaurant instance provided by the DetailView to the template *myrestaurants/templates/restaurant_detail.html*:
+The template also extends the base one and for the moment just displays the associate restaurant instance provided by the DetailView to the template *myrestaurants/templates/myrestaurants/restaurant_detail.html*:
 
 ```html
 {% extends "base.html" %}
@@ -674,4 +674,4 @@ The objective is now to continue defining additional scenarios for Register Rest
 
 # Finished MyRestaurants Application #
 
-The code for the finished application is available from: [https://github.com/rogargon/myrecommendations](https://github.com/rogargon/myrecommendations)
+The same has been done for the rest of the features. They are available from the [features/](features) folder and have been completely implemented to fulfill the requested functionality, as shown by the fact that all the Behave tests are passing.

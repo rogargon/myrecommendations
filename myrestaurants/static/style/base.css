@@ -1,0 +1,27 @@
+#header
+{
+    margin: 0;
+    padding: 10px;
+    text-align: right;
+}
+#content
+{
+    margin-left: 190px;
+    padding: 10px;
+}
+#sidebar
+{
+    float: left;
+    width: 190px;
+}
+#footer
+{
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+}
+textarea, input[type=number], input[type=url]
+{
+    height: 1.25em;
+    width: 25em;
+}

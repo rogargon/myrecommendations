@@ -1,0 +1,21 @@
+{% extends "myrestaurants/base.html" %}
+
+{% block content %}
+
+<h1>
+    {{ dish.name }}
+    {% if user == dish.user %}
+        (<a href="{% url 'myrestaurants:dish_edit' dish.restaurant.id dish.id %}">edit</a>)
+    {% endif %}
+</h1>
+<p>{{ dish.description }}</p>
+{% if dish.image %}
+    <p><img src="{{ dish.image.url }}"/></p>
+{% endif %}
+<p>Served by <a href="{% url 'myrestaurants:restaurant_detail' dish.restaurant.id %}">{{ dish.restaurant.name }}</a></p>
+
+{% endblock %}
+
+{% block footer %}
+    Created by {{ dish.user }} on {{ dish.date }}
+{% endblock %}

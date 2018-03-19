@@ -1,0 +1,14 @@
+{% extends "myrestaurants/base.html" %}
+{% block content %}
+<h1>
+    Restaurants
+    {% if user.is_authenticated %}(<a href="{% url 'myrestaurants:restaurant_create' %}">add</a>){% endif %}
+</h1>
+<ul>
+    {% for restaurant in latest_restaurant_list %}
+        <li><a href="{% url 'myrestaurants:restaurant_detail' restaurant.id %}">
+            {{ restaurant.name }}</a></li>
+    {% empty %}<li>Sorry, no restaurants registered yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
