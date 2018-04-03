@@ -675,3 +675,97 @@ The objective is now to continue defining additional scenarios for Register Rest
 # Finished MyRestaurants Application #
 
 The same has been done for the rest of the features. They are available from the [features/](features) folder and have been completely implemented to fulfill the requested functionality, as shown by the fact that all the Behave tests are passing.
+
+Image Field
+===========
+
+The image field is a kind of field in the data model that allows associating images to model entities and storing them. 
+
+First of all, it is necessary to install the Python image library Pillow. Follow:
+[http://pillow.readthedocs.org/en/latest/installation.html](http://pillow.readthedocs.org/en/latest/installation.html)
+
+Then, in myrecommendations/settings.py add:
+
+```python
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+```
+
+And in myrecommendations/urls.py, add at the end:
+
+```python
+
+from django.conf import settings
+from django.views.static import serve
+
+if settings.DEBUG:
+    urlpatterns += [
+        url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT, })
+    ]
+```
+
+Finally, in myrestaurants/models.py add an **ImageField** to the **Dish** class to store images of the dishes:
+
+```python
+	image = models.ImageField(upload_to="myrestaurants", blank=True, null=True)
+```
+
+This field can be then used from the templates to display images, for instance to the *dish_detail.html* template to be added in myrestaurants/templates/myrestaurants:
+
+```djangotemplate
+{% extends "myrestaurants/base.html" %}
+
+{% block content %}
+
+<h1>
+	{{ dish.name }}
+	{% if user == dish.user %}
+		(<a href="{% url 'myrestaurants:dish_edit' dish.restaurant.id dish.id %}">edit</a>)
+	{% endif %}
+</h1>
+
+<p>{{ dish.description }}</p>
+
+{% if dish.image %}
+	<p><img src="{{ dish.image.url }}"/></p>
+{% endif %}
+
+<p>Served by 
+	<a href="{% url 'myrestaurants:restaurant_detail' dish.restaurant.id %}">
+		{{ dish.restaurant.name}}
+	</a>
+</p>
+
+{% endblock %}
+
+{% block footer %}
+	Created by {{ dish.user }} on {{ dish.date }}
+{% endblock %}
+```
+
+It is also important, when editing the image field using forms, to add the appropriate encoding to be used when uploading the image. To do that, edit *form.html* and include the appropriate *enctype* attribute:
+
+```html
+{% extends "myrestaurants/base.html" %}
+
+{% block content %}
+
+<form method="post" enctype="multipart/form-data" action="">
+	{% csrf_token %}
+	<table>
+		{{ form.as_table }}
+	</table>
+	<input type="submit" value="Submit"/>
+</form>
+
+{% endblock %}
+```
+
+And remember, if you modify the class Dish to add the new image field *image*, you will need to migrate the database to upload the relevant tables so they include the new field:
+
+```bash
+$ python manage.py makemigrations myrestaurants
+
+$ python manage.py migrate
+```
+Otherwise, you will need to remove the database file and start from scratch.

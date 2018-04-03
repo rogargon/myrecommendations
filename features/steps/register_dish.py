@@ -1,6 +1,11 @@
 from behave import *
 import operator
 from django.db.models import Q
+import os
+
+from django.db.models.fields.files import ImageFieldFile
+
+from myrecommendations.settings import MEDIA_ROOT, BASE_DIR
 
 use_step_matcher("parse")
 
@@ -26,7 +31,11 @@ def step_impl(context, restaurant_name):
         if context.browser.url == context.get_url('myrestaurants:dish_create', restaurant.pk):
             form = context.browser.find_by_tag('form').first
             for heading in row.headings:
-                context.browser.fill(heading, row[heading])
+                if heading == 'image':
+                    filePath = os.path.join(BASE_DIR, row[heading])
+                    context.browser.fill(heading, filePath)
+                else:
+                    context.browser.fill(heading, row[heading])
             form.find_by_value('Submit').first.click()
 
 @then('I\'m viewing the details page for dish at restaurant "{restaurant_name}" by "{username}"')
@@ -39,6 +48,8 @@ def step_impl(context, restaurant_name, username):
     from myrestaurants.models import Dish
     dish = Dish.objects.filter(reduce(operator.and_, q_list)).get()
     assert context.browser.url == context.get_url(dish)
+    if dish.image:
+        dish.image.delete()
 
 @then('There are {count:n} dishes')
 def step_impl(context, count):

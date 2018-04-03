@@ -19,6 +19,16 @@ Feature: Register Dish
       | Fish and Chips  |
     And There are 1 dishes
 
+  Scenario: Register dish with picture
+    Given I login as user "user" with password "password"
+    When I register dish at restaurant "The Tavern"
+      | name            | image                    |
+      | Fish and Chips  | features/random.png      |
+    Then I'm viewing the details page for dish at restaurant "The Tavern" by "user"
+      | name            | image                    |
+      | Fish and Chips  | myrestaurants/random.png |
+    And There are 1 dishes
+
   Scenario: Try to register dish but not logged in
     Given I'm not logged in
     When I register dish at restaurant "The Tavern"
