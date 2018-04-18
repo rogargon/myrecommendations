@@ -7,8 +7,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
-from models import RestaurantReview, Restaurant, Dish
-from forms import RestaurantForm, DishForm
+from myrestaurants.models import RestaurantReview, Restaurant, Dish
+from myrestaurants.forms import RestaurantForm, DishForm
 
 # Security Mixins
 

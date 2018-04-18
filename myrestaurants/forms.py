@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from models import Restaurant, Dish
+from myrestaurants.models import Restaurant, Dish
 
 class RestaurantForm(ModelForm):
     class Meta:
