@@ -1,0 +1,27 @@
+language: python
+python:
+  - '2.7'
+env:
+  - DJANGO=1.11.11
+sudo: required
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install chromium-chromedriver
+before_script:
+  - 'export PATH=$PATH:/usr/lib/chromium-browser/'
+branches:
+  only:
+    - master
+install:
+  - pip install -r requirements.txt
+script:
+  - python manage.py test
+  - behave
+deploy:
+  provider: heroku
+  strategy: git
+  app:
+    master: myrecommendations-bdd
+  # travis-encrypt -r rogargon/myrecommendations-bdd $(heroku auth:token) --add deploy.api_key
+  api_key:
+    secure: Jwj0urByJArFmivdRMzkqiBR8qsPqzkrj0+uxYxHxAot/PGzI4ODRIJt0oTeTfiQq22Af3FVVVTFqtkk9FhObUnNu1QiZrJXbWx88lYc5VzK1CclHs862dnCVK8x7TSC6seufQNrJVXq931WqlXj32SV4OYt1ee3QLu+cLhOBmvicO1RCsaiqLNob7awnWuUB+9CF8JDX1nVGx7aX33HMNhOQ2OnSY/5UnpikKBHJtqAbAEG506ED6mq2IcXSTU5ffY+Kjxx56Tcs7A/IdzE29EQvRe/sezfFkRVclC6B+5Qm3HAjoacEXBQahryZjbLXYmuIRb3Y+NQ+QSTEpIq1g2RfZezA+vcIkChkf2lTFYqjnbTpNoksvFwlDC/g0UULR7hpBS/mp3m1MUhMUv94otS+pfcJFPB+aeeksov6LfcP6BOCgGXXY0recAwbBThcYl//c90LBs0JFqPSKY6OyJMQFrz80L6CtJev/wYXM0WVFW17H7Edqjqi43WNEzNiKpVI2OTdWyH/nS5cb8DIG47RAqhN/lLOp8ZQ3TnWtjP6ctnFbwyp51uimWXpE1KNCx8L5/m6bV1CL7chljrvCll3SeAVq02iL4Zpmq8SG+i6UoKY1qmOu2k+NUfixz7qPQ9Z83jOaPw6C1SXrwd1J5B9eCKl4wREsw2jkGVEDc=
