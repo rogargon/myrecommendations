@@ -5,6 +5,8 @@ from myrestaurants.models import Restaurant, Dish
 from myrestaurants.forms import RestaurantForm, DishForm
 from myrestaurants.views import RestaurantCreate, DishCreate, RestaurantDetail, review, LoginRequiredCheckIsOwnerUpdateView
 
+app_name = "myrestaurants"
+
 urlpatterns = [
     # List latest 5 restaurants: /myrestaurants/
     url(r'^$',
