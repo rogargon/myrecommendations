@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+Django = "==1.11.11"
+behave = "==1.2.6"
+splinter = "==0.7.7"
+Pillow = "==5.0.0"
+gunicorn = "*"
+django-heroku = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
