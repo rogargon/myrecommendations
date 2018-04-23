@@ -12,32 +12,50 @@
 
 <body>
 
-<div id="header">
-    {% block header %}
+{% block header %}
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand" href="#">MyRestaurants</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Restaurants <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
         {% if user.is_authenticated %}
-            <p>User: {{ user.username }} | <a href="{% url 'logout' %}?next={{request.path}}">logout</a></p>
+            <li class="nav-item">
+                <a class="nav-link" href="#">{{ user.username }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}?next={{request.path}}">Logout</a>
+            </li>
         {% else %}
-            <p><a href="{% url 'login' %}?next={{request.path}}">login</a></p>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}?next={{request.path}}">Login</a>
+            </li>
         {% endif %}
-    {% endblock %}
-</div>
+    </ul>
+  </div>
+</nav>
 
-<div id="sidebar">
-    {% block sidebar %}
-        <ul>
-            <li><a href="/myrestaurants/">Home</a></li>
-        </ul>
-    {% endblock %}
-</div>
+{% endblock %}
 
-<div id="content">
+<main id="content" class="container mt-3">
     {% block content %}
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     {% endblock %}
-</div>
+</main>
 
 <div id="footer">
-    {% block footer %}{% endblock %}
+    {% block footer %}
+        <footer class="container">
+            <p>© Roberto García 2017-2018</p>
+        </footer>
+    {% endblock %}
 </div>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
