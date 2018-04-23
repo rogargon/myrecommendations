@@ -1,14 +1,46 @@
 {% extends "myrestaurants/base.html" %}
+
 {% block content %}
-<h1>
-    Restaurants
-    {% if user.is_authenticated %}(<a href="{% url 'myrestaurants:restaurant_create' %}">add</a>){% endif %}
-</h1>
-<ul>
-    {% for restaurant in latest_restaurant_list %}
-        <li><a href="{% url 'myrestaurants:restaurant_detail' restaurant.id %}">
-            {{ restaurant.name }}</a></li>
-    {% empty %}<li>Sorry, no restaurants registered yet.</li>
-    {% endfor %}
-</ul>
+
+<h4>Restaurants</h4>
+
+<div class="row justify-content-between">
+  <div class="col-10 mb-3">
+      <p>Restaurants recently added to MyRestaurants:</p>
+  </div>
+  <div class="col mb-3">
+      {% if user.is_authenticated %}
+        <a class="btn btn-primary pull-right" href="{% url 'myrestaurants:restaurant_create' %}">Add</a>
+      {% endif %}
+  </div>
+</div>
+
+{% for restaurant in latest_restaurant_list %}
+    <div class="card mb-1">
+      <div class="card-block row m-1">
+        <h4 class="card-title col-md-12 p-1"><a href="{% url 'myrestaurants:restaurant_detail' restaurant.id %}">{{ restaurant.name }}</a></h4>
+        <div class="col-md-4 p-1">
+          <h6 class="card-subtitle text-muted">Where?</h6>
+          <p class="card-text">
+              {{ restaurant.street }} {{ restaurant.number }}, {{ restaurant.city }} ({{ restaurant.country }})
+          </p>
+        </div>
+        <div class="col-md-4 p-1">
+          <h6 class="card-subtitle text-muted">Dishes</h6>
+          <p class="card-text">{{ restaurant.dishes.count }}</p>
+        </div>
+        <div class="col-md-4 p-1">
+          <h6 class="card-subtitle text-muted">Rating</h6>
+          <p class="card-text">{{ restaurant.averageRating|stringformat:".1f" }}
+              {% with restaurant.restaurantreview_set.count as reviewCount %}
+                  ({{ reviewCount }} review{{ reviewCount|pluralize }})
+              {% endwith %}
+          </p>
+        </div>
+      </div>
+    </div>
+{% empty %}
+    <p>Sorry, no restaurants registered yet.</p>
+{% endfor %}
+
 {% endblock %}
