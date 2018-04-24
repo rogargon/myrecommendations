@@ -6,10 +6,12 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
+from django.views.generic import RedirectView
 from django.views.static import serve
 from django.conf import settings
 
 urlpatterns = [
+    url(r'^$', RedirectView.as_view(pattern_name='myrestaurants:restaurant_list'), name='home'),
     url(r'^admin/', admin.site.urls),
     url(r'^myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
     url(r'^accounts/login/$', login, name='login'),
