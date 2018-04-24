@@ -9,6 +9,7 @@ The project is developed following an Agile Behaviour Driven Development approac
 The source code for this project is available from:
 [https://github.com/rogargon/myrecommendations-bdd](https://github.com/rogargon/myrecommendations-bdd)
 
+[![Build Status](https://travis-ci.org/rogargon/myrecommendations-bdd.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations-bdd)
 
 Starting the MyRecommendations Project
 ======================================
