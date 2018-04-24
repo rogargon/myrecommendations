@@ -1,5 +1,6 @@
 {% extends "myrestaurants/base.html" %}
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
@@ -48,10 +49,8 @@
 
     <form method="post" enctype="multipart/form-data" action="">
         {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Submit"/>
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Submit</button>
     </form>
 
 {% endblock %}
