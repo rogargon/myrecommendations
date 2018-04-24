@@ -6,3 +6,4 @@ psycopg2==2.7.3.1
 dj-database-url
 gunicorn
 whitenoise
+django-crispy-forms
