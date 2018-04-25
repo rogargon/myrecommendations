@@ -25,3 +25,44 @@ body {
 .octicon-heart {
   color: red;
 }
+
+.rating {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: text-top;
+  font-family: monospace;
+  color: orange;
+}
+
+.rating-input {
+  float: right;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0 0 0 -16px;
+  opacity: 0;
+}
+
+.rating-star {
+  cursor: pointer;
+  position: relative;
+  float: right;
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.rating-star::after {
+    content: '\2606';
+}
+
+.rating:hover .rating-star:hover::after,
+.rating:hover .rating-star:hover ~ .rating-star::after,
+.rating-input:checked ~ .rating-star::after {
+    content: '\2605';
+}
+
+.rating-star::after,
+.rating:hover .rating-star::after {
+  content: '\2606';
+}
