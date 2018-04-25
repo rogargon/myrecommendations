@@ -4,7 +4,7 @@ import dj_database_url
 # IMPORTANT: to enable these settings in Heroku, set the corresponding environment variable using:
 # $> heroku config:set DJANGO_SETTINGS_MODULE=myrecommendations.settings_heroku
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['myrecommendations-bdd.herokuapp.com']
 
