@@ -1,25 +1,23 @@
-    {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
+{% extends "myrestaurants/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
 
-    <h2> MyRecommendations Login </h2>
+{% block content %}
 
-    <form method="post" action="{% url 'login' %}">
-        <table>
-            <tr>
-                <td>{{ form.username.label_tag }}</td>
-                <td>{{ form.username }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.password.label_tag }}</td>
-                <td>{{ form.password }}</td>
-            </tr>
-            <tr>
-                <td><input type="hidden" name="next" value="{{ next }}"/></td>
-            </tr>
-        </table>
+<h4> MyRestaurants Login </h4>
 
-        <input type="submit" value="login" />
+<form method="post" action="{% url 'login' %}">
 
-        {% csrf_token %}
-    </form>
+    <input type="hidden" name="next" value="{{ next }}"/>
+
+    {{ form|crispy }}
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Login</button>
+        <a class="btn btn-danger" href="{{ next }}">Cancel</a>
+    </div>
+
+    {% csrf_token %}
+</form>
+
+{% endblock %}
