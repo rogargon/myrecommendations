@@ -36,7 +36,7 @@ def step_impl(context, restaurant_name):
                     context.browser.fill(heading, filePath)
                 else:
                     context.browser.fill(heading, row[heading])
-            form.find_by_value('Submit').first.click()
+            form.find_by_css('button.btn-success').first.click()
 
 @then('I\'m viewing the details page for dish at restaurant "{restaurant_name}" by "{username}"')
 def step_impl(context, restaurant_name, username):
@@ -58,10 +58,10 @@ def step_impl(context, count):
 
 @when('I edit the current dish')
 def step_impl(context):
-    context.browser.find_link_by_text('edit').click()
+    context.browser.find_link_by_text('Edit').click()
     # TODO: Test also using direct edit view link
     # context.browser.visit(context.get_url('myrestaurants:dish_edit', dish.pk))
     form = context.browser.find_by_tag('form').first
     for heading in context.table.headings:
         context.browser.fill(heading, context.table[0][heading])
-    form.find_by_value('Submit').first.click()
+    form.find_by_css('button.btn-success').first.click()

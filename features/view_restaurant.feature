@@ -29,10 +29,10 @@ Feature: View Restaurant
     Then I'm viewing restaurants details including
       | name            | city          | country       |
       | Famous          | London        | England       |
-    And There is "edit" link available
+    And There is "Edit" link available
     And I'm viewing a restaurant reviews list containing
       | rating          | comment       | user          |
-      | 4               | Quite good    | user1         |
+      | 4               | Quite good  | user1         |
       | 2               |               | user2         |
     And The list contains 2 reviews
     And I'm viewing a restaurant dishes list containing

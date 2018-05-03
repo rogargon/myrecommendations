@@ -25,7 +25,7 @@ def step_impl(context):
             form = context.browser.find_by_tag('form').first
             for heading in row.headings:
                 context.browser.fill(heading, row[heading])
-            form.find_by_value('Submit').first.click()
+            form.find_by_css('button.btn-success').first.click()
 
 @then('There are {count:n} restaurants')
 def step_impl(context, count):
@@ -51,4 +51,4 @@ def step_impl(context, name):
         form = context.browser.find_by_tag('form').first
         for heading in context.table.headings:
             context.browser.fill(heading, context.table[0][heading])
-        form.find_by_value('Submit').first.click()
+        context.browser.find_by_css('button.btn-success').first.click()

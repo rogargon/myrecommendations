@@ -13,13 +13,13 @@ def step_impl(context, username, password):
     form = context.browser.find_by_tag('form').first
     context.browser.fill('username', username)
     context.browser.fill('password', password)
-    form.find_by_value('login').first.click()
-    assert context.browser.is_text_present('User: ' + username)
+    form.find_by_css('button.btn-success').first.click()
+    assert context.browser.is_text_present(username)
 
 @given('I\'m not logged in')
 def step_impl(context):
     context.browser.visit(context.get_url('logout')+'?next=/myrestaurants/')
-    assert context.browser.is_text_present('login')
+    assert context.browser.is_text_present('Login')
 
 @then('Server responds with page containing "{message}"')
 def step_impl(context, message):

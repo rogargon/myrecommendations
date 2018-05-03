@@ -46,7 +46,9 @@
             <div class="row">
                 <div class="col-sm-9">
                     {% for dish in restaurant.dishes.all %}
-                        <p><a href="{% url 'myrestaurants:dish_detail' restaurant.id dish.id %}">{{ dish.name }}</a></p>
+                        <p><a class="dish-link" href="{% url 'myrestaurants:dish_detail' restaurant.id dish.id %}">
+                            {{ dish.name }}
+                        </a></p>
                     {% empty %}<p>Sorry, no dishes for this restaurant yet</p>
                     {% endfor %}
                 </div>
@@ -93,13 +95,13 @@
         <div class="col-md">
             <h5>Reviews</h5>
             {% for review in restaurant.restaurantreview_set.all %}
-                <blockquote class="blockquote">
+                <blockquote class="blockquote review">
                     <small>
                         <span class="rating">
                           {% for star in RATING_CHOICES %}{% if forloop.counter <= review.rating %}&starf;{% else %}&star;{% endif %}{% endfor %}
                         </span>
                         {% if review.comment %}
-                            <strong class="mb-0">&ldquo;{{ review.comment }}&rdquo;</strong>{% endif %}
+                            &rdquo;<strong class="mb-0">{{ review.comment }}</strong>&rdquo;{% endif %}
                         <footer class="blockquote-footer text-center">{{ review.user }}, {{ review.date }}</footer>
                     </small>
                 </blockquote>
