@@ -27,9 +27,9 @@ Feature: Edit Dish
   Scenario: Try to edit dish but not logged in
     Given I'm not logged in
     When I view the details for dish "Fish and Chips"
-    Then There is no "edit" link available
+    Then There is no "Edit" link available
 
   Scenario: Try to edit dish but not the owner
     Given I login as user "user1" with password "password"
     When I view the details for dish "Fish and Chips"
-    Then There is no "edit" link available
+    Then There is no "Edit" link available

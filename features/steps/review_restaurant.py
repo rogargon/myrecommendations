@@ -24,7 +24,7 @@ def step_impl(context, restaurant_name):
         form = context.browser.find_by_tag('form').first
         context.browser.choose('rating', row['rating'])
         context.browser.fill('comment', row['comment'])
-        form.find_by_value('Review').first.click()
+        form.find_by_tag('button').first.click()
 
 @then('There are {count:n} reviews')
 def step_impl(context, count):

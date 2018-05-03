@@ -22,7 +22,7 @@ Feature: View Dish
     Then I'm viewing dish details including
       | name            | price           |
       | Fish and Chips  | 12.50           |
-    And There is "edit" link available
+    And There is "Edit" link available
 
   Scenario: View details about dish but not logged in
     Given I'm not logged in
@@ -30,7 +30,7 @@ Feature: View Dish
     Then I'm viewing dish details including
       | name            | price           |
       | Fish and Chips  | 12.50           |
-    And There is no "edit" link available
+    And There is no "Edit" link available
 
   Scenario: View details about other user dish
       Given I login as user "user1" with password "password"
@@ -38,4 +38,4 @@ Feature: View Dish
     Then I'm viewing dish details including
       | name            | description     |
       | Apple Pie       | The best pie in town |
-    And There is no "edit" link available
+    And There is no "Edit" link available

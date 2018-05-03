@@ -19,7 +19,9 @@
     <div class="card mb-1">
       <div class="card-block row m-1">
         <h5 class="card-title col-md-12 p-1">
-            <a href="{% url 'myrestaurants:restaurant_detail' restaurant.id %}">{{ restaurant.name }}</a>
+            <a class="restaurant-link" href="{% url 'myrestaurants:restaurant_detail' restaurant.id %}">
+                {{ restaurant.name }}
+            </a>
         </h5>
         <div class="col-md-4 p-1 mb-1">
           <h6 class="card-subtitle text-muted">Location</h6>
