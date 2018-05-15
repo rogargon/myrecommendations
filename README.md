@@ -205,6 +205,21 @@ $ brew update
 $ brew install chromedriver
 ```
 
+Alternatively, for Firefox, install the browser:
+
+``` 
+sudo apt-get update
+sudo apt-get install firefox
+``` 
+
+Then, download Geckodriver and unpack it from [https://github.com/mozilla/geckodriver/releases/](https://github.com/mozilla/geckodriver/releases/)
+
+Finally, add the geckodriver to your path:
+
+```
+export PATH:$PATH:/your/path/to/geckodriver
+```
+
 ## Environment ##
 
 After installing all the required tools for BDD, we also need to configure the testing environment. In this case, the Django application myrestaurant.
@@ -231,7 +246,7 @@ def before_all(context):
     django.setup()
     context.test_runner = DiscoverRunner()
     context.test_runner.setup_test_environment()
-    context.browser = Browser('phantomjs')
+    context.browser = Browser('chrome', headless=True)
 
 def before_scenario(context, scenario):
     context.old_db_config = context.test_runner.setup_databases()
