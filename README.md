@@ -7,16 +7,16 @@ Recommendation applications developed using Django, including for the moment jus
 The project is developed following an Agile Behaviour Driven Development approach.
 
 The source code used in the tutorial is available from the "simple" branch:
-[https://github.com/rogargon/myrecommendations-bdd/tree/simple](https://github.com/rogargon/myrecommendations-bdd/tree/simple)
+[https://github.com/rogargon/myrecommendations/tree/simple](https://github.com/rogargon/myrecommendations/tree/simple)
 
 The "master" branch is an enhancement of the "simple" with an improved user interface based on Bootstrap 4, 
 which is also the version deployed to Heroku:
-[https://github.com/rogargon/myrecommendations-bdd/tree/master](https://github.com/rogargon/myrecommendations-bdd/tree/master)
+[https://github.com/rogargon/myrecommendations/tree/master](https://github.com/rogargon/myrecommendations/tree/master)
 
 
-[![Build Status](https://travis-ci.org/rogargon/myrecommendations-bdd.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations-bdd)
+[![Build Status](https://travis-ci.org/rogargon/myrecommendations.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations)
 
-[![Heroku](https://heroku-badge.herokuapp.com/?app=myrecommendations-bdd&svg=1)](https://myrecommendations-bdd.herokuapp.com)
+[![Heroku](https://heroku-badge.herokuapp.com/?app=myrecommendations&svg=1)](https://myrecommendations.herokuapp.com)
 
 Starting the MyRecommendations Project
 ======================================
@@ -697,7 +697,7 @@ The objective is now to continue defining additional scenarios for Register Rest
 
 # Finished MyRestaurants Application #
 
-The same has been done for the rest of the features. They are available from the [features/](https://github.com/rogargon/myrecommendations-bdd/tree/simple/features) folder and have been completely implemented to fulfill the requested functionality, as shown by the fact that all the Behave tests are passing.
+The same has been done for the rest of the features. They are available from the [features/](https://github.com/rogargon/myrecommendations/tree/simple/features) folder and have been completely implemented to fulfill the requested functionality, as shown by the fact that all the Behave tests are passing.
 
 Image Field
 ===========

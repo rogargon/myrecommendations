@@ -6,7 +6,7 @@ import dj_database_url
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['myrecommendations-bdd.herokuapp.com']
+ALLOWED_HOSTS = ['myrecommendations.herokuapp.com']
 
 
 MIDDLEWARE += [
