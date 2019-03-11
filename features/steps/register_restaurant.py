@@ -1,7 +1,8 @@
+from functools import reduce
+
 from behave import *
 import operator
 from django.db.models import Q
-from django.urls.base import reverse
 
 use_step_matcher("parse")
 

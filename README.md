@@ -7,21 +7,33 @@ Recommendation applications developed using Django, including for the moment jus
 The project is developed following an Agile Behaviour Driven Development approach.
 
 The source code for this project is available from:
-[https://github.com/rogargon/myrecommendations-bdd](https://github.com/rogargon/myrecommendations-bdd)
+[https://github.com/rogargon/myrecommendations](https://github.com/rogargon/myrecommendations)
 
-[![Build Status](https://travis-ci.org/rogargon/myrecommendations-bdd.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations-bdd)
+[![Build Status](https://travis-ci.org/rogargon/myrecommendations.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations)
 
-Starting the MyRecommendations Project
-======================================
+Starting the MyRecommendations Project from Scratch
+===================================================
 
-After installing [Python and Django](https://docs.djangoproject.com/en/1.11/topics/install/), the recommended approach is using [virtualenv](https://virtualenv.pypa.io/en/stable/), it is possible to create a new Django project from the command line, as also documented in the [Django Tutorial part 1](https://docs.djangoproject.com/en/1.11/intro/tutorial01/). 
+First of all, install the latest version of Python from [downloads](https://www.python.org/downloads/) and 
+[pipenv](https://pipenv.readthedocs.io/en/latest/install/) to help you manage dependencies and virtual environments.
 
-In our case the project is called 'myrecommendations':
+Then, create the folder for the new project, in our case the project is called 'myrecommendations':
 
 ```bash
-$ django-admin.py startproject myrecommendations
+$ mkdir myrecommendations
 
 $ cd myrecommendations
+```
+
+Once in the `myrecommendations` folder, activate the pipenv virtual environment to keep the Python packages
+for your project organised and start by installing Django. Then, create a new Django project:
+
+```bash
+$ pipenv shell
+
+$ pipenv install Django
+
+$ django-admin startproject myrecommendations .
 ```
 
 In *myrecommendations/settings.py*, review your database settings. For instance, for an SQLite database, they should be:
@@ -29,13 +41,13 @@ In *myrecommendations/settings.py*, review your database settings. For instance,
 ```python
 DATABASES = {
     'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 ```
 
-Then, let Django take control of the database:
+Then, back from the root folder of the project, let Django take control of the database by running:
 
 ```bash
 $ python manage.py migrate
@@ -54,7 +66,8 @@ $ python manage.py createsuperuser
 Creating the MyRestaurants Application
 ======================================
 
-Now that the project is ready, it is time to define project applications. In the case of this tutorial there is just one application, called 'myrestaurants'. To create it, type the following command from the root folder of the project:
+Now that the project is ready, it is time to define project applications. In the case of this tutorial there is just one application, called 'myrestaurants'. 
+To create it, type the following command from the root folder of the project:
 
 ```bash
 $ python manage.py startapp myrestaurants
@@ -73,18 +86,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-```
-
-Finally, to keep track of the requirements of this project, for the moment mainly Django, we can execute the command:
-
-```bash
-$ pip freeze > requirements.txt
-```
-
-This way we will get in the file *requirements.txt* all the required packages to execute the project:
-
-```python
-Django==1.11.11
 ```
 
 Agile Behaviour Driven Development (BDD)
@@ -163,21 +164,13 @@ To facilitate the description of the feature scenarios, while connecting them to
 To install Behave:
 
 ```shell
-$ pip install behave
+$ pipenv install behave
 ```
 
 Moreover, to make it possible to guide a browser from the test, and thus check if the application follows the expected behaviour from a end-user perspective, we will also use Splinter. It can be installed with the following command:
 
 ```shell
-$ pip install splinter
-```
-
-These dependencies are also detailed, with explicit versions for each package that have been tested to work together, in the *requirements.txt* file available from the root folder of the myrecommendations project:
-
-```python
-Django==1.11.11
-behave==1.2.6
-splinter==0.7.7
+$ pipenv install splinter
 ```
 
 Finally, for end-to-end test, it is necessary to have a browser to test from client side. With Splinter, different browsers can be configured for testing, for instance Chrome, the most common one. 

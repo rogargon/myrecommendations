@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from models import RestaurantReview, Restaurant
+from .models import Restaurant, RestaurantReview
 
 
 class RestaurantReviewTestCase(TestCase):

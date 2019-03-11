@@ -1,11 +1,11 @@
+from functools import reduce
+
 from behave import *
 import operator
 from django.db.models import Q
 import os
 
-from django.db.models.fields.files import ImageFieldFile
-
-from myrecommendations.settings import MEDIA_ROOT, BASE_DIR
+from myrecommendations.settings import BASE_DIR
 
 use_step_matcher("parse")
 

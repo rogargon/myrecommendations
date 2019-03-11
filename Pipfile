@@ -4,14 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Django = "==1.11.11"
+Django = "==2.1.7"
 behave = "==1.2.6"
-splinter = "==0.7.7"
-Pillow = "==5.0.0"
+splinter = "==0.10.0"
+Pillow = "==5.4.1"
 gunicorn = "*"
 django-heroku = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
