@@ -11,6 +11,9 @@ The source code for this project is available from:
 
 [![Build Status](https://travis-ci.org/rogargon/myrecommendations.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations)
 
+[![Deployment Status](https://heroku-badge.herokuapp.com/?app=myrecommendations&svg=1)](https://myrecommendations.herokuapp.com)
+
+
 Starting the MyRecommendations Project from Scratch
 ===================================================
 
@@ -201,9 +204,10 @@ We do so in a file in the *features/* folder called *environment.py*:
 import os
 import django
 from behave.runner import Context
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.core.management import call_command
 from django.shortcuts import resolve_url
 from django.test.runner import DiscoverRunner
-from django.test.testcases import LiveServerTestCase
 from splinter.browser import Browser
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "myrecommendations.settings"
@@ -217,18 +221,18 @@ def before_all(context):
     django.setup()
     context.test_runner = DiscoverRunner()
     context.test_runner.setup_test_environment()
-    context.browser = Browser('phantomjs')
+    context.browser = Browser('chrome', headless=True)
 
 def before_scenario(context, scenario):
-    context.old_db_config = context.test_runner.setup_databases()
+    context.test_runner.setup_databases()
     object.__setattr__(context, '__class__', ExtendedContext)
-    context.test = LiveServerTestCase
+    context.test = StaticLiveServerTestCase
     context.test.setUpClass()
 
 def after_scenario(context, scenario):
     context.test.tearDownClass()
     del context.test
-    context.test_runner.teardown_databases(context.old_db_config)
+    call_command('flush', verbosity=0, interactive=False)
 
 def after_all(context):
     context.test_runner.teardown_test_environment()
@@ -350,14 +354,14 @@ The second step implements the user behaviour for login. The browser, created in
 To support this behaviour, we first link the login, and also logout, views from django.contrib.auth.views in the project urls file, *myrecommendations/urls.py*:
 
 ```python
-from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin
-from django.contrib.auth.views import login, logout
+from django.contrib.auth import views
 
 urlpatterns = [
-    url(r'^login/', login, name='login'),
-    url(r'^logout/', logout, name='logout'),
-    url(r'^admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('accounts/login/', views.LoginView.as_view(), name='login'),
+    path('accounts/logout/', views.LogoutView.as_view(), name='logout'),
 ]
 ```
 
@@ -426,6 +430,7 @@ The undefined steps are related with the Register Restaurant feature and are imp
 ```python
 from behave import *
 import operator
+from functools import reduce
 from django.db.models import Q
 
 use_step_matcher("parse")
@@ -463,8 +468,10 @@ If we try to run this steps using behave, they will fail because none of the req
 First of all, we will implement the model. For the moment, given the requirements in the Register Restaurant feature, we just need a text field for the name. Consequently, we can add in *myrestaurants/models.py*:
 
 ```python
+from django.db import models
+
 class Restaurant(models.Model):
-	name = models.TextField()
+    name = models.CharField(max_length=120)
 ```
 
 We can then update the database to accomodate this new entity by running:
@@ -490,18 +497,18 @@ $ python manage.py migrate
 Now we can implement the 'myrestaurants:restaurant_create' view where the browser navigates to in the first step implemented in *register_restaurant.py*. It is defined in *myrestaurants/urls.py* and linked to the URL '/register' in '/myrestaurants':
 
 ```python
-from django.conf.urls import url
+from django.urls import path
 from django.views.generic.edit import CreateView
 
 from forms import RestaurantForm
 from models import Restaurant
 
 urlpatterns = [
-    # Register a restaurant, from: /myrestaurants/register/
-    url(r'^register/$',
+    # Register a restaurant, from: /myrestaurants/create
+    path('restaurants/create',
         CreateView.as_view(
             model=Restaurant,
-            template_name='form.html',
+            template_name='myrestaurants/form.html',
             form_class=RestaurantForm),
         name='restaurant_create'),
 ]
@@ -510,15 +517,17 @@ urlpatterns = [
 To publish the URLs and views defined in *myrestaurants/urls.py* and make them accessible from the project, they should be included from the global URLs file *myrecommendations/urls.py*:
 
 ```python
-from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth.views import login, logout
+from django.urls import path, include
+from django.contrib.auth import views
+from django.views.generic import RedirectView
 
 urlpatterns = [
-    url(r'^myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
-    url(r'^login/', login, name='login'),
-    url(r'^logout/', logout, name='logout'),
-    url(r'^admin/', admin.site.urls),
+    path('', RedirectView.as_view(pattern_name='myrestaurants:restaurant_list'), name='home'),
+    path('admin/', admin.site.urls),
+    path('myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
+    path('accounts/login/', views.LoginView.as_view(), name='login'),
+    path('accounts/logout/', views.LogoutView.as_view(), name='logout'),
 ]
 ```
 
@@ -623,11 +632,11 @@ Now, we need to define this view in *myrestaurants/urls.py* by adding a new URL 
 
 ```python
     ...,
-    # Restaurant details, from: /myrestaurants/1/
-    url(r'^(?P<pk>\d+)/$',
+    # Restaurant details, /myrestaurants/1
+    path('restaurants/<int:pk>',
         DetailView.as_view(
             model=Restaurant,
-            template_name='restaurant_detail.html'),
+            template_name='myrestaurants/restaurant_detail.html'),
         name='restaurant_detail'),
 ]
 ```
@@ -688,14 +697,12 @@ MEDIA_URL = '/media/'
 And in myrecommendations/urls.py, add at the end:
 
 ```python
-
 from django.conf import settings
 from django.views.static import serve
 
-if settings.DEBUG:
-    urlpatterns += [
-        url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT, })
-    ]
+urlpatterns += [
+    path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT, })
+]
 ```
 
 Finally, in myrestaurants/models.py add an **ImageField** to the **Dish** class to store images of the dishes:
