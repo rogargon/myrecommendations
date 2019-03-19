@@ -16,6 +16,7 @@ before_script:
 branches:
   only:
     - master
+    - development
 
 install:
   - pipenv install
@@ -28,7 +29,7 @@ deploy:
   provider: heroku
   strategy: git
   app:
-    master: myrecommendations
+    development: myrecommendations
   # travis encrypt $(heroku auth:token) --add deploy.api_key
   api_key:
     secure: cmIBk4fmvQP+q3Z4NzoxsB5Hcse+jVL0c8T25XFBNjB3Ax++XslCCPU5Mopt2BbWC/4HIwM5KlbGwerbN9U65cSjz/t8cLIh84A05XtX2UT8ibIpomeLmbx2wiIbksGrEm06cPldX2bnud6Jg0tsm2MIQNaA8fQC1j8bIOxMmy0=
