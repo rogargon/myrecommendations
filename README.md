@@ -677,7 +677,11 @@ The objective is now to continue defining additional scenarios for Register Rest
 
 # Finished MyRestaurants Application #
 
-The same has been done for the rest of the features. They are available from the [features/](features) folder and have been completely implemented to fulfill the requested functionality, as shown by the fact that all the Behave tests are passing.
+The same has been done for the rest of the features. They are available from the [features/](features) folder and have 
+been completely implemented to fulfill the requested functionality, as shown by the fact that all the Behave tests are passing.
+
+In addition to the source code in this repository, which constitutes the final application implementing all the previous 
+[features/](features), there is an additional [completed](completed.md) document providing an overview of the resulting application.
 
 Image Field
 ===========
