@@ -13,6 +13,8 @@ The source code for this project is available from:
 
 [![Deployment Status](https://heroku-badge.herokuapp.com/?app=myrecommendations&svg=1)](https://myrecommendations.herokuapp.com)
 
+![Django Application Structure](https://process.filestackapi.com/cache=expiry:max/resize=width:400/compress/P6Z7Ac0UTVWr260Fvg7x)
+
 
 Starting the MyRecommendations Project from Scratch
 ===================================================
