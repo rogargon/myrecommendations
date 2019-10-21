@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Django = "==2.1.7"
+Django = "==2.1.11"
 behave = "==1.2.6"
 splinter = "==0.10.0"
 Pillow = "==5.4.1"
