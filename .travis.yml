@@ -3,15 +3,16 @@ sudo: required
 dist: xenial
 python: '3.7'
 
+addons:
+  chrome: stable
+
 env:
   - DJANGO=2.1.7
 
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install chromium-chromedriver
-
 before_script:
-  - 'export PATH=$PATH:/usr/lib/chromium-browser/'
+  - LATEST_CHROMEDRIVER_VERSION=`curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE"`
+  - curl "https://chromedriver.storage.googleapis.com/${LATEST_CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -O
+  - unzip chromedriver_linux64.zip -d ~/bin
 
 branches:
   only:
