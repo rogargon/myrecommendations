@@ -193,7 +193,8 @@ Or **brew** in OSX:
 
 ```shell
 $ brew update
-$ brew install chromedriver
+$ brew tap homebrew/cask
+$ brew cask install chromedriver
 ```
 
 ### Testing with Firefox instead of Chrome ###
