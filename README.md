@@ -193,8 +193,28 @@ Or **brew** in OSX:
 
 ```shell
 $ brew update
-$ brew install chromedriver
+$ brew tap homebrew/cask
+$ brew cask install chromedriver
 ```
+
+### Testing with Firefox instead of Chrome ###
+
+Alternatively, for Firefox, install the browser:
+
+``` 
+sudo apt-get update
+sudo apt-get install firefox
+``` 
+
+Then, download Geckodriver and unpack it from [https://github.com/mozilla/geckodriver/releases/](https://github.com/mozilla/geckodriver/releases/)
+
+Finally, add the geckodriver to your path:
+
+```
+export PATH:$PATH:/your/path/to/geckodriver
+```
+
+And configure the test environment in `environment.py`, as detailed next, to use `firefox` instead of `chrome`.
 
 ## Environment ##
 
