@@ -24,7 +24,7 @@ First of all, install the latest version of Python from [downloads](https://www.
 
 Then, create the folder for the new project, in our case the project is called 'myrecommendations':
 
-```bash
+```shell script
 $ mkdir myrecommendations
 
 $ cd myrecommendations
@@ -33,7 +33,7 @@ $ cd myrecommendations
 Once in the `myrecommendations` folder, activate the pipenv virtual environment to keep the Python packages
 for your project organised and start by installing Django. Then, create a new Django project:
 
-```bash
+```shell script
 $ pipenv shell
 
 $ pipenv install Django
@@ -54,18 +54,16 @@ DATABASES = {
 
 Then, back from the root folder of the project, let Django take control of the database by running:
 
-```bash
+```shell script
 $ python manage.py migrate
-
 ```
 
 The 'migrate' command looks at INSTALLED_APPS defined in 'settings.py' and creates all required database tables according to the database settings.
 
 To conclude project creation, define the admin user:
 
-```bash
+```shell script
 $ python manage.py createsuperuser
-
 ```
 
 Creating the MyRestaurants Application
@@ -74,9 +72,8 @@ Creating the MyRestaurants Application
 Now that the project is ready, it is time to define project applications. In the case of this tutorial there is just one application, called 'myrestaurants'. 
 To create it, type the following command from the root folder of the project:
 
-```bash
+```shell script
 $ python manage.py startapp myrestaurants
-
 ```
 
 Then, add 'myrestaurants' to the INSTALLED_APPS list in *myrecommendations/settings.py*:
@@ -168,13 +165,13 @@ To facilitate the description of the feature scenarios, while connecting them to
 
 To install Behave:
 
-```shell
+```shell script
 $ pipenv install behave
 ```
 
 Moreover, to make it possible to guide a browser from the test, and thus check if the application follows the expected behaviour from a end-user perspective, we will also use Splinter. It can be installed with the following command:
 
-```shell
+```shell script
 $ pipenv install splinter
 ```
 
@@ -182,19 +179,25 @@ Finally, for end-to-end test, it is necessary to have a browser to test from cli
 
 Assuming Chrome is already installed in your computer, the only requirement to use it for automated testing is the ChromeDriver, available for Windows, Linux and Mac from [https://sites.google.com/a/chromium.org/chromedriver/downloads](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 
-You can also install it using different package managers. For instance with **apt** in Linux:
+You can also install it using different package managers. For instance with **apt** on Linux:
 
-```bash
-$ apt-get update
-$ apt-get install chromedriver
+```shell script
+apt-get update
+apt-get install chromedriver
 ```
 
-Or **brew** in OSX:
+Or **[Brew](https://brew.sh)** on OSX:
 
-```shell
-$ brew update
-$ brew tap homebrew/cask
-$ brew cask install chromedriver
+```shell script
+brew update
+brew tap homebrew/cask
+brew cask install chromedriver
+```
+
+Or **[Chocolatey](https://chocolatey.org/docs/installation)** on Windows:
+
+```shell script
+choco install chromedriver
 ```
 
 ### Testing with Firefox instead of Chrome ###
@@ -312,7 +315,7 @@ For instance, the scenario when a user registers a restaurant proving just the m
 
 After defining the scenario, we can start the BDD process which implies that we start coding when a test fails. To trigger the BDD test we should type from the Python environment where Behave has been installed. From the project root:
 
-```shell
+```shell script
 $ behave
 ```
 
@@ -498,7 +501,7 @@ class Restaurant(models.Model):
 
 We can then update the database to accomodate this new entity by running:
 
-```bash
+```shell script
 $ python manage.py makemigrations myrestaurants
 ```
 
@@ -512,7 +515,7 @@ Migrations for 'myrestaurants':
 
 It can be then applied to create the tables in the database that will accomodate instance of the Restaurant model:
 
-```bash
+```shell script
 $ python manage.py migrate
 ```
 
@@ -790,7 +793,7 @@ It is also important, when editing the image field using forms, to add the appro
 
 And remember, if you modify the class Dish to add the new image field *image*, you will need to migrate the database to upload the relevant tables so they include the new field:
 
-```bash
+```shell script
 $ python manage.py makemigrations myrestaurants
 
 $ python manage.py migrate
@@ -830,6 +833,6 @@ class RestaurantReviewTestCase(TestCase):
 
 To run the tests:
 
-```shell
+```shell script
 $ python manage.py test
 ```
