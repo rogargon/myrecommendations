@@ -363,7 +363,7 @@ def step_impl(context, username, password):
 
 @given('I login as user "{username}" with password "{password}"')
 def step_impl(context, username, password):
-    context.browser.visit(context.get_url('/login'))
+    context.browser.visit(context.get_url('/accounts/login/?next=/myrestaurants/'))
     form = context.browser.find_by_tag('form').first
     context.browser.fill('username', username)
     context.browser.fill('password', password)
@@ -524,9 +524,8 @@ Now we can implement the 'myrestaurants:restaurant_create' view where the browse
 ```python
 from django.urls import path
 from django.views.generic.edit import CreateView
-
-from forms import RestaurantForm
-from models import Restaurant
+from myrestaurants.forms import RestaurantForm
+from myrestaurants.models import Restaurant
 
 urlpatterns = [
     # Register a restaurant, from: /myrestaurants/create
@@ -564,7 +563,7 @@ Django provides the class ModelForm to automatically implement forms to create a
 
 ```python
 from django.forms import ModelForm
-from models import Restaurant
+from myrestaurants.models import Restaurant
 
 class RestaurantForm(ModelForm):
     class Meta:
@@ -617,7 +616,7 @@ This base template defines the global HTML structure and names subsections of it
 The *myrestaurants/templates/myrestaurants/form.html* template is a template extending the base one that displays a form in the content block:
 
 ```html
-{% extends "base.html" %}
+{% extends "myrestaurants/base.html" %}
 
 {% block content %}
 <form method="post" enctype="multipart/form-data" action="">
