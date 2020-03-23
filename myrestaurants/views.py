@@ -63,7 +63,7 @@ def review(request, pk):
     if RestaurantReview.objects.filter(restaurant=restaurant, user=request.user).exists():
         RestaurantReview.objects.get(restaurant=restaurant, user=request.user).delete()
     new_review = RestaurantReview(
-        rating=request.POST['rating'],
+        rating=request.POST.get('rating', 0),
         comment=request.POST['comment'],
         user=request.user,
         restaurant=restaurant)
