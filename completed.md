@@ -285,7 +285,7 @@ Application Templates
 The root template is defined in *base.html* in *myrestaurants/templates/myrestaurants*:
 
 ```html
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -449,7 +449,7 @@ And the template that shows them, *form.html* in *myrestaurants/templates/myrest
 
 ```html
 {% extends "myrestaurants/base.html" %}
-{% load staticfiles %}
+{% load static %}
 {% block content %}
 
 <form method="post" action="">
