@@ -11,10 +11,12 @@ COPY myrecommendations ./myrecommendations
 COPY myrestaurants ./myrestaurants
 COPY templates ./templates
 COPY manage.py ./
+# Copy media files just for demo purposes
+COPY media ./media
 
 ENV PORT 8000
 EXPOSE $PORT
-RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput --clear
 # Init DB if local, might also require `$> python manage.py createsuperuser`
 RUN python manage.py migrate
 # Set DJANGO_SETTINGS_MODULE=myrecommendations.settings_heroku when deployin on Heroku
