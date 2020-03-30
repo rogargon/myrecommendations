@@ -469,8 +469,8 @@ def step_impl(context):
             context.browser.fill(heading, row[heading])
         form.find_by_value('Submit').first.click()
 
-@then(u'I\'m viewing the details page for restaurant')
-def step_impl(context):
+@then(u'I\'m viewing the details page for restaurant by "{user}"')
+def step_impl(context, user):
     q_list = [Q((attribute, context.table.rows[0][attribute])) for attribute in context.table.headings]
     from myrestaurants.models import Restaurant
     restaurant = Restaurant.objects.filter(reduce(operator.and_, q_list)).get()
@@ -526,6 +526,8 @@ from django.urls import path
 from django.views.generic.edit import CreateView
 from myrestaurants.forms import RestaurantForm
 from myrestaurants.models import Restaurant
+
+app_name = "myrestaurants"
 
 urlpatterns = [
     # Register a restaurant, from: /myrestaurants/create
@@ -670,7 +672,7 @@ This one corresponds to a Django class view named **DetailView**, responsible fo
 The template also extends the base one and for the moment just displays the associate restaurant instance provided by the DetailView to the template *myrestaurants/templates/myrestaurants/restaurant_detail.html*:
 
 ```html
-{% extends "base.html" %}
+{% extends "myrestaurants/base.html" %}
 {% block content %}
 <h1>
     {{ restaurant.name }}
