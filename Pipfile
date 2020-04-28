@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 Django = "==3.*"
 behave = "==1.*"
+behave-django = "==1.*"
 splinter = "==0.*"
 Pillow = "==7.*"
 gunicorn = "==20.*"

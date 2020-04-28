@@ -28,7 +28,7 @@ install:
 script:
   - python manage.py test
   - python manage.py collectstatic --noinput
-  - behave
+  - python manage.py behave
 
 after_success:
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "development" ]; then
