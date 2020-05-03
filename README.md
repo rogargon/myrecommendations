@@ -214,7 +214,7 @@ Then, download Geckodriver and unpack it from [https://github.com/mozilla/geckod
 Finally, add the geckodriver to your path:
 
 ```
-export PATH:$PATH:/your/path/to/geckodriver
+export PATH=$PATH:/your/path/to/geckodriver
 ```
 
 And configure the test environment in `environment.py`, as detailed next, to use `firefox` instead of `chrome`.
