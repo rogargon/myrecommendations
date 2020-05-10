@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+    myrecommendations:
+        build: .
+        container_name: myrecommendations
+        ports:
+          - "8000:${PORT:-8000}"
