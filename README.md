@@ -163,10 +163,26 @@ The result is the following list of feature files with their corresponding conte
 
 To facilitate the description of the feature scenarios, while connecting them to Python code that tests if the scenarios are satisfied by the application, we will use the Gherkin syntax and the Behave tool. 
 
-To install Behave:
+To get Behave and integrate it with Django, install:
 
 ```shell script
 $ pipenv install behave
+$ pipenv install behave-django
+```
+
+And add the 'behave_django' application at the end of the INSTALLED_APPS list in *myrecommendations/settings.py*:
+
+```python
+INSTALLED_APPS = [
+    'myrestaurants',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'behave_django',
+]
 ```
 
 Moreover, to make it possible to guide a browser from the test, and thus check if the application follows the expected behaviour from a end-user perspective, we will also use Splinter. It can be installed with the following command:
@@ -190,8 +206,8 @@ Or **[Brew](https://brew.sh)** on OSX:
 
 ```shell script
 brew update
-brew tap homebrew/cask
-brew cask install chromedriver
+brew install chromedriver
+xattr -d com.apple.quarantine $(which chromedriver)
 ```
 
 Or **[Chocolatey](https://chocolatey.org/docs/installation)** on Windows:
@@ -226,51 +242,20 @@ After installing all the required tools for BDD, we also need to configure the t
 We do so in a file in the *features/* folder called *environment.py*:
 
 ```python
-import os
-import django
-from behave.runner import Context
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.core.management import call_command
-from django.shortcuts import resolve_url
-from django.test.runner import DiscoverRunner
 from splinter.browser import Browser
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "myrecommendations.settings"
-
-class ExtendedContext(Context):
-    def get_url(self, to=None, *args, **kwargs):
-        return self.test.live_server_url + (
-            resolve_url(to, *args, **kwargs) if to else '')
-
 def before_all(context):
-    django.setup()
-    context.test_runner = DiscoverRunner()
-    context.test_runner.setup_test_environment()
     context.browser = Browser('chrome', headless=True)
 
-def before_scenario(context, scenario):
-    context.test_runner.setup_databases()
-    object.__setattr__(context, '__class__', ExtendedContext)
-    context.test = StaticLiveServerTestCase
-    context.test.setUpClass()
-
-def after_scenario(context, scenario):
-    context.test.tearDownClass()
-    del context.test
-    call_command('flush', verbosity=0, interactive=False)
-
 def after_all(context):
-    context.test_runner.teardown_test_environment()
     context.browser.quit()
     context.browser = None
 ```
 
 This file defines the Django settings to load and test, the context to be passed to each testing step, and then what to:
 
-* **Before all tests**: setting Django, preparing it for testing and a browser session based on PhantomJS to act as the user.
-* **Before each scenario**: the Django database is initialized, together with the context to be passed to each scenario step implementation with all the data about the current application status.
-* **After each scenario**: the Django database is destroyed so the next scenario will start with a clean one. This way each scenario is independent from previous ones and interferences are avoided.
-* **After all tests**: the testing environment is destroyed together with the browser used for testing.
+* **Before all tests**: setting Google Chrome as the browser used to act as the user.
+* **After all tests**: closing the browser used for testing.
 
 Development of the MyRestaurants Features
 =========================================
@@ -316,10 +301,10 @@ For instance, the scenario when a user registers a restaurant proving just the m
 After defining the scenario, we can start the BDD process which implies that we start coding when a test fails. To trigger the BDD test we should type from the Python environment where Behave has been installed. From the project root:
 
 ```shell script
-$ behave
+$ python manage.py behave
 ```
 
-As a result, we will get in the console the templates to implement all the scenario steps that are not implemented yet:
+As a result, and after creating the `features/steps` folder, we will get in the console the templates to implement all the scenario steps that are not implemented yet:
 
 ```text
 You can implement step definitions for undefined steps with these snippets:
@@ -370,7 +355,7 @@ def step_impl(context, username, password):
     form.find_by_value('login').first.click()
 ```
 
-Both steps are parameterized so we can use the steps to login users with any username and password, as long as we have previously created them and the password matches.
+Both steps are parameterized, so we can use the steps to login users with any username and password, as long as we have previously created them and the password matches.
 
 The first steps simply creates a new object based on the existing Django User class using the provided username and password, and a fixed e-mail.
 
@@ -396,7 +381,7 @@ And create the login form template as expected by the Django login view by defau
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         ...
 ```
@@ -513,13 +498,13 @@ Migrations for 'myrestaurants':
     - Create model Restaurant
 ```
 
-It can be then applied to create the tables in the database that will accomodate instance of the Restaurant model:
+It can be then applied to create the tables in the database that will accommodate instances of the Restaurant model:
 
 ```shell script
 $ python manage.py migrate
 ```
 
-Now we can implement the 'myrestaurants:restaurant_create' view where the browser navigates to in the first step implemented in *register_restaurant.py*. It is defined in *myrestaurants/urls.py* and linked to the URL '/register' in '/myrestaurants':
+Now we can implement the 'myrestaurants:restaurant_create' view where the browser navigates to in the first step implemented in *register_restaurant.py*. It is defined in *myrestaurants/urls.py* and linked to the URL 'restaurants/create':
 
 ```python
 from django.urls import path
@@ -559,9 +544,9 @@ urlpatterns = [
 
 This way, the views defined for the myrestaurants application will be available from '/myrestaurants/...' and their names in the 'myrestaurants' namespace.
 
-The current view is a Django Model View for the creation of new model entities, a **CreateView**. It is associated to Restaurant, because it will create instances of this model, and also requires a form to be displayed and a template where the form will be shown.
+The current view is a Django Model View for the creation of new model entities, a **CreateView**. It is associated to Restaurant, because it will create instances of this model, and requires a form to be displayed together with template where the form will be shown.
 
-Django provides the class ModelForm to automatically implement forms to create and update model entities. To create restaurants, we require a RestaurantForm subclass of ModelForm like the one defined in *myrestaurants/forms.py*:
+Django provides the class ModelForm to automatically implement forms to create and update model entities. To create restaurants, we define a RestaurantForm subclass of ModelForm in *myrestaurants/forms.py*:
 
 ```python
 from django.forms import ModelForm
@@ -573,7 +558,7 @@ class RestaurantForm(ModelForm):
         exclude = ()
 ```
 
-Model forms generate appropriate form inputs with validation for all the model fields that are not explicitly excluded. Currently, it will generate just a test input for the 'name' field.
+Model Forms generate appropriate form inputs with validation for all the model fields that are not explicitly excluded. Currently, it will generate just a test input for the 'name' field.
 
 Forms are displayed using a template that renders them. We will thus start defining the templates for the myrestaurants application in *myrestaurants/templates/myrestaurants*.
 

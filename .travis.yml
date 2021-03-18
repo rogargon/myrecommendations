@@ -1,6 +1,5 @@
 language: python
-dist: xenial
-python: '3.7'
+python: '3.9'
 
 sudo: required
 services:
@@ -31,7 +30,7 @@ script:
   - python manage.py behave
 
 after_success:
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "development" ]; then
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
       export PROJECT=myrecommendations;
       docker build -f Dockerfile -t registry.heroku.com/$PROJECT/web .;
       echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com;
