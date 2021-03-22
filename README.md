@@ -11,7 +11,7 @@ The source code for this project is available from:
 
 [![Build Status](https://travis-ci.org/rogargon/myrecommendations.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations)
 
-[![Deployment Status](https://heroku-badge.herokuapp.com/?app=myrecommendations&svg=1)](https://myrecommendations.herokuapp.com)
+[![Heroku App Status](https://heroku-shields.herokuapp.com/myrecommendations)](https://myrecommendations.herokuapp.com)
 
 ![Django Application Structure](https://process.filestackapi.com/cache=expiry:max/resize=width:400/compress/P6Z7Ac0UTVWr260Fvg7x)
 
