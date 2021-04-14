@@ -1,20 +1,28 @@
 MyRecommendations
 =================
 
-Recommendation applications developed using Django, including for the moment just:
-- MyRestaurants
-
-The project is developed following an Agile Behaviour Driven Development approach.
-
-The source code for this project is available from:
-[https://github.com/rogargon/myrecommendations](https://github.com/rogargon/myrecommendations)
-
 [![Build Status](https://travis-ci.org/rogargon/myrecommendations.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations)
 
 [![Heroku App Status](https://heroku-shields.herokuapp.com/myrecommendations)](https://myrecommendations.herokuapp.com)
 
-![Django Application Structure](https://process.filestackapi.com/cache=expiry:max/resize=width:400/compress/P6Z7Ac0UTVWr260Fvg7x)
+Recommendation applications developed using Django, including for the moment just:
+- MyRestaurants
 
+<p align="center">
+   <img width="300" src="https://process.filestackapi.com/cache=expiry:max/resize=width:400/compress/P6Z7Ac0UTVWr260Fvg7x" alt="Django Application Structure"/>
+</p>
+
+The project is developed following an **Agile Behaviour Driven Development** approach. 
+You can also follow the tutorial through the **videos** available from the **YouTube** playlist **"Django Web Project Tutorial"**:
+
+<p align="center">
+   <a href="https://www.youtube.com/playlist?list=PLJ0YJaEOtqlkdqTHfeYT4kVmcA4p8dfIr" target="_blank">
+      <img width="300" src="https://ucarecdn.com/699e8d65-93a4-4aa6-bb47-17b0c11a6168/" alt="Django Web Project Video Tutorial"/>
+   </a>
+</p>
+
+The source code for this project is available from this repository:
+[https://github.com/rogargon/myrecommendations](https://github.com/rogargon/myrecommendations)
 
 Starting the MyRecommendations Project from Scratch
 ===================================================
