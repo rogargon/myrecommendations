@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Django = "==4.0.*"
+Django = "==4.0.1.*"
 behave = "==1.*"
 behave-django = "==1.*"
 selenium = "==4.1.*"
