@@ -1,9 +1,11 @@
 {% extends "myrestaurants/base.html" %}
 {% block title %}MyRestaurants - {{ restaurant.name }}{% endblock %}
 {% block content %}
-
+<div vocab="https://schema.org/" typeof="Restaurant">
     <div class="row">
-        <h4 class="col">{{ restaurant.name }}</h4>
+        <h4 class="col" property="name">
+            <img property="image" style="width: 1.5em" src="https://upload.wikimedia.org/wikipedia/commons/0/05/Wikivoyage-icon-restaurant.svg"/>
+            {{ restaurant.name }}</h4>
     </div>
 
     <div class="row mt-3">
@@ -65,10 +67,10 @@
         <div class="col-md">
             <h5>Rating</h5>
             {% if restaurant.restaurantreview_set.all|length > 0 %}
-            <p>
-                <strong>{{ restaurant.averageRating|stringformat:".1f" }}</strong>
+            <p rel="aggregateRating" typeof="AggregateRating">
+                <strong property="ratingValue">{{ restaurant.averageRating|stringformat:".1f" }}</strong>
                 {% with restaurant.restaurantreview_set.all|length as reviewCount %}
-                    (average from {{ reviewCount }} review{{ reviewCount|pluralize }})
+                    (average from <span property="reviewCount">{{ reviewCount }}</span> review{{ reviewCount|pluralize }})
                 {% endwith %}
             </p>
             {% endif %}
@@ -95,21 +97,30 @@
         <div class="col-md">
             <h5>Reviews</h5>
             {% for review in restaurant.restaurantreview_set.all %}
-                <blockquote class="blockquote review">
-                    <small>
-                        <span class="rating">
-                          {% for star in RATING_CHOICES %}{% if forloop.counter <= review.rating %}&starf;{% else %}&star;{% endif %}{% endfor %}
+                <blockquote class="blockquote review" rel="review">
+                    <small typeof="Review">
+                        {% with RATING_CHOICES|last as best %}
+                        <span class="rating" rel="reviewRating" typeof="Rating">
+                              <span property="ratingValue" content="{{ review.rating }}"></span>
+                              <span property="worstRating" content="{{ RATING_CHOICES.0.0 }}"></span>
+                              <span property="bestRating" content="{{ best.0 }}"></span>
+                          {% for star in RATING_CHOICES %}
+                              {% if forloop.counter <= review.rating %}&starf;{% else %}&star;{% endif %}
+                          {% endfor %}
                         </span>
+                        {%  endwith %}
                         {% if review.comment %}
-                            &rdquo;<strong class="mb-0">{{ review.comment }}</strong>&rdquo;{% endif %}
-                        <footer class="blockquote-footer text-center">{{ review.user }}, {{ review.date }}</footer>
+                            &rdquo;<strong class="mb-0" property="description">{{ review.comment }}</strong>&rdquo;{% endif %}
+                        <footer class="blockquote-footer text-center">
+                            <span property="author">{{ review.user }}</span>,
+                            <span property="datePublished">{{ review.date }}</span></footer>
                     </small>
                 </blockquote>
             {% empty %}<p>Sorry, no reviews for this restaurant yet</p>
             {% endfor %}
         </div>
     </div>
-
+</div>
 {% endblock %}
 {% block footer %}
     <div class="text-muted text-center">
