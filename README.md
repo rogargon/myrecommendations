@@ -1,8 +1,7 @@
 MyRecommendations
 =================
 
-[![Build Status](https://travis-ci.org/rogargon/myrecommendations.svg?branch=master)](https://travis-ci.org/rogargon/myrecommendations)
-
+[![CI/CD](https://github.com/rogargon/myrecommendations/actions/workflows/cicd.yml/badge.svg)](https://github.com/rogargon/myrecommendations/actions)
 [![Heroku App Status](https://heroku-shields.herokuapp.com/myrecommendations)](https://myrecommendations.herokuapp.com)
 
 Recommendation applications developed using Django, including for the moment just:
