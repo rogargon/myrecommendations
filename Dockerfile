@@ -19,5 +19,5 @@ EXPOSE $PORT
 RUN python manage.py collectstatic --noinput --clear
 # Init DB if local, might also require `$> python manage.py createsuperuser`
 RUN python manage.py migrate
-# Set DJANGO_SETTINGS_MODULE=myrecommendations.settings_heroku when deployin on Heroku
+# Set DJANGO_SETTINGS_MODULE=myrecommendations.settings_heroku when deploying on Heroku
 CMD gunicorn -b 0.0.0.0:$PORT myrecommendations.wsgi

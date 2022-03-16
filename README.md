@@ -55,7 +55,7 @@ In *myrecommendations/settings.py*, review your database settings. For instance,
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': BASE_DIR / 'db.sqlite3'),
     }
 }
 ```
@@ -713,7 +713,7 @@ First of all, it is necessary to install the Python image library Pillow. Follow
 Then, in myrecommendations/settings.py add:
 
 ```python
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 ```
 

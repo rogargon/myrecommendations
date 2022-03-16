@@ -4,14 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Django = "==3.*"
+Django = "==4.0.*"
 behave = "==1.*"
 behave-django = "==1.*"
 splinter = "==0.*"
-Pillow = "==8.*"
+Pillow = "==9.0.*"
 gunicorn = "==20.*"
 django-heroku = "==0.3.*"
-psycopg2 = "==2.8.*"
+psycopg2 = "==2.9.*"
+urllib3 = "==1.26.*"
 
 [dev-packages]
 
