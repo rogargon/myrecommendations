@@ -3,6 +3,8 @@ version: "3"
 services:
     myrecommendations:
         build: .
+        environment:
+          DJANGO_SETTINGS_MODULE: myrecommendations.settings_render
         container_name: myrecommendations
         ports:
           - "8000:${PORT:-8000}"
