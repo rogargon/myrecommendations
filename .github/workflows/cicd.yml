@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.9
+    - name: Set up Python 3.11
       uses: actions/setup-python@v2
       with:
-        python-version: 3.9
+        python-version: 3.11
     - name: Set up Chromedriver for e2e
       uses: nanasess/setup-chromedriver@v1
     - name: Install Dependencies
@@ -26,11 +26,3 @@ jobs:
         pipenv run python manage.py test
         pipenv run python manage.py collectstatic --noinput
         pipenv run python manage.py behave
-    - name: Build, Push and Deploy to Heroku
-      if: ${{ github.event_name == 'push' }}
-      uses: jctaveras/heroku-deploy@v2.1.3
-      with:
-        email: ${{ secrets.HEROKU_EMAIL }}
-        api_key: ${{ secrets.HEROKU_API_KEY }}
-        app_name: 'myrecommendations'
-        dockerfile_path: ''
