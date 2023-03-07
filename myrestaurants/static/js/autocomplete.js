@@ -8,10 +8,11 @@ $(document).ready(function() {
     $("#id_city").autocomplete({
         source: function( request, response ) {
             $.ajax({
-                url: "http://ws.geonames.org/searchJSON",
+                url: "https://secure.geonames.org/search",
                 dataType: "jsonp",
                 data: {
                     featureClass: "P",
+                    type: "json",
                     maxRows: 10,
                     name_startsWith: request.term,
                     username: "rogargon"
