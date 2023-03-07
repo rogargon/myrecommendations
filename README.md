@@ -2,7 +2,8 @@ MyRecommendations
 =================
 
 [![CI/CD](https://github.com/rogargon/myrecommendations/actions/workflows/cicd.yml/badge.svg)](https://github.com/rogargon/myrecommendations/actions)
-[![Heroku App Status](https://heroku-shields.herokuapp.com/myrecommendations)](https://myrecommendations.herokuapp.com)
+[![Deployment status](https://img.shields.io/uptimerobot/status/m793865373-5f4c943e54c4c9ddfdd1a2cf)](https://myrecommendations.onrender.com)
+
 
 Recommendation applications developed using Django, including for the moment just:
 - MyRestaurants
