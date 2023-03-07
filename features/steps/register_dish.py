@@ -58,9 +58,7 @@ def step_impl(context, count):
 
 @when('I edit the current dish')
 def step_impl(context):
-    context.browser.find_link_by_text('edit').click()
-    # TODO: Test also using direct edit view link
-    # context.browser.visit(context.get_url('myrestaurants:dish_edit', dish.pk))
+    context.browser.find_by_text('edit').first.click()
     form = context.browser.find_by_tag('form').first
     for heading in context.table.headings:
         context.browser.fill(heading, context.table[0][heading])

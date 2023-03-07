@@ -1,21 +1,22 @@
 [[source]]
-url = "https://pypi.python.org/simple"
+url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
 [packages]
-Django = "==4.0.*"
+Django = "==4.1.*"
 behave = "==1.*"
 behave-django = "==1.*"
-selenium = "==4.1.*"
+selenium = "==4.8.2"
 splinter = "==0.*"
-Pillow = "==9.0.*"
+Pillow = "==9.4.0"
 gunicorn = "==20.*"
 django-heroku = "==0.3.*"
 psycopg2 = "==2.9.*"
 urllib3 = "==1.26.*"
+django-crispy-forms = "==2.*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"
