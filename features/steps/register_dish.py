@@ -29,7 +29,7 @@ def step_impl(context, restaurant_name):
     for row in context.table:
         context.browser.visit(context.get_url('myrestaurants:dish_create', restaurant.pk))
         if context.browser.url == context.get_url('myrestaurants:dish_create', restaurant.pk):
-            form = context.browser.find_by_tag('form').first
+            form = context.browser.find_by_id('input-form').first
             for heading in row.headings:
                 if heading == 'image':
                     filePath = os.path.join(BASE_DIR, row[heading])
@@ -59,7 +59,7 @@ def step_impl(context, count):
 @when('I edit the current dish')
 def step_impl(context):
     context.browser.find_by_text('edit').first.click()
-    form = context.browser.find_by_tag('form').first
+    form = context.browser.find_by_id('input-form').first
     for heading in context.table.headings:
         context.browser.fill(heading, context.table[0][heading])
     form.find_by_value('Submit').first.click()

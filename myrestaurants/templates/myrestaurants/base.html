@@ -22,7 +22,7 @@
                 </form>
             </div>
         {% else %}
-            <p><a href="{% url 'login' %}?next={{request.path}}">login</a></p>
+            <p><a id="login" href="{% url 'login' %}?next={{request.path}}">login</a></p>
         {% endif %}
     {% endblock %}
 </div>
