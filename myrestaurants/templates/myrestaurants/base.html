@@ -35,7 +35,11 @@
                 <a class="nav-link" href="#">{{ user.username }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}?next={{request.path}}">Logout</a>
+                <form id="logout-form" style="display: inline-block" method="post"
+                      action="{% url 'logout' %}?next={{request.path}}">
+                    {% csrf_token %}
+                    <button class="nav-link" type="submit">Logout</button>
+                </form>
             </li>
         {% else %}
             <li class="nav-item">

@@ -74,7 +74,7 @@
                 {% endwith %}
             </p>
             {% endif %}
-            <form action="{% url 'myrestaurants:review_create' restaurant.id %}" method="post">
+            <form id="review-form" action="{% url 'myrestaurants:review_create' restaurant.id %}" method="post">
                 {% csrf_token %}
                 <div id="div_id_comment" class="form-group">
                     <label for="id_comment" class="col-form-label ">Comment:</label>

@@ -2,7 +2,8 @@ MyRecommendations
 =================
 
 [![CI/CD](https://github.com/rogargon/myrecommendations/actions/workflows/cicd.yml/badge.svg)](https://github.com/rogargon/myrecommendations/actions)
-[![Heroku App Status](https://heroku-shields.herokuapp.com/myrecommendations)](https://myrecommendations.herokuapp.com)
+[![Deployment status](https://img.shields.io/uptimerobot/status/m793865373-5f4c943e54c4c9ddfdd1a2cf)](https://myrecommendations.onrender.com)
+
 
 Recommendation applications developed using Django, including for the moment just:
 - MyRestaurants
@@ -356,10 +357,11 @@ def step_impl(context, username, password):
 @given('I login as user "{username}" with password "{password}"')
 def step_impl(context, username, password):
     context.browser.visit(context.get_url('/accounts/login/?next=/myrestaurants/'))
-    form = context.browser.find_by_tag('form').first
+    form = context.browser.find_by_id('login-form')
     context.browser.fill('username', username)
     context.browser.fill('password', password)
     form.find_by_value('login').first.click()
+    assert context.browser.is_text_present('User: ' + username)
 ```
 
 Both steps are parameterized, so we can use the steps to login users with any username and password, as long as we have previously created them and the password matches.
@@ -402,7 +404,7 @@ Then, we can define the login form in *templates/registration/login.html*:
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
-    <form method="post" action="{% url 'login' %}">
+    <form id="login-form" method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <table>
             <tr>
@@ -456,7 +458,7 @@ use_step_matcher("parse")
 def step_impl(context):
     for row in context.table:
         context.browser.visit(context.get_url('myrestaurants:restaurant_create'))
-        form = context.browser.find_by_tag('form').first
+        form = context.browser.find_by_id('input-form')
         for heading in row.headings:
             context.browser.fill(heading, row[heading])
         form.find_by_value('Submit').first.click()
@@ -580,7 +582,13 @@ The first one is a base template that defines the common structure for all appli
 <div id="header">
     {% block header %}
         {% if user.is_authenticated %}
-            <p>User: {{ user.username }} | <a href="{% url 'logout' %}?next={{request.path}}">logout</a></p>
+            <div>User: {{ user.username }}
+                <form id="logout-form" style="display: inline-block" method="post"
+                      action="{% url 'logout' %}?next={{request.path}}">
+                    {% csrf_token %}
+                    <button type="submit">logout</button>
+                </form>
+            </div>
         {% else %}
             <p><a href="{% url 'login' %}?next={{request.path}}">login</a></p>
         {% endif %}
@@ -613,7 +621,7 @@ The *myrestaurants/templates/myrestaurants/form.html* template is a template ext
 {% extends "myrestaurants/base.html" %}
 
 {% block content %}
-<form method="post" enctype="multipart/form-data" action="">
+<form id="input-form" method="post" enctype="multipart/form-data" action="">
     {% csrf_token %}
     <table>
         {{ form.as_table }}

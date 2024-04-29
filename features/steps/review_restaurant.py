@@ -21,7 +21,7 @@ def step_impl(context, restaurant_name):
     restaurant = Restaurant.objects.get(name=restaurant_name)
     for row in context.table:
         context.browser.visit(context.get_url(restaurant))
-        form = context.browser.find_by_tag('form').first
+        form = context.browser.find_by_id('review-form').first
         context.browser.execute_script("document.getElementById('rating-"+row['rating']+"').click();")
         context.browser.fill('comment', row['comment'])
         form.find_by_tag('button').first.click()

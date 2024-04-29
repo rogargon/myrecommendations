@@ -22,7 +22,7 @@ def step_impl(context):
     for row in context.table:
         context.browser.visit(context.get_url('myrestaurants:restaurant_create'))
         if context.browser.url == context.get_url('myrestaurants:restaurant_create'):
-            form = context.browser.find_by_tag('form').first
+            form = context.browser.find_by_id('input-form')
             for heading in row.headings:
                 context.browser.fill(heading, row[heading])
             form.find_by_css('button.btn-success').first.click()
@@ -47,8 +47,8 @@ def step_impl(context, name):
     restaurant = Restaurant.objects.get(name=name)
     context.browser.visit(context.get_url('myrestaurants:restaurant_edit', restaurant.pk))
     if context.browser.url == context.get_url('myrestaurants:restaurant_edit', restaurant.pk)\
-            and context.browser.find_by_tag('form'):
-        form = context.browser.find_by_tag('form').first
+            and context.browser.find_by_id('input-form'):
+        form = context.browser.find_by_id('input-form')
         for heading in context.table.headings:
             context.browser.fill(heading, context.table[0][heading])
         context.browser.find_by_css('button.btn-success').first.click()
