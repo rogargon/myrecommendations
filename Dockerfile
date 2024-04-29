@@ -16,6 +16,7 @@ COPY media ./media
 COPY db.sqlite3 ./db.sqlite3
 
 ENV PORT 8000
+ENV DJANGO_SETTINGS_MODULE=myrecommendations.settings_render
 EXPOSE $PORT
 RUN python manage.py collectstatic --noinput --clear
 # Init DB if local, might also require `$> python manage.py createsuperuser`

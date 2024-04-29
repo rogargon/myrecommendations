@@ -8,6 +8,17 @@ DEBUG = True
 ALLOWED_HOSTS = ['myrecommendations.onrender.com']
 CSRF_TRUSTED_ORIGINS = ['https://myrecommendations.onrender.com']
 
+INSTALLED_APPS = [
+    'myrestaurants',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'crispy_forms',
+    'crispy_bootstrap4'
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
