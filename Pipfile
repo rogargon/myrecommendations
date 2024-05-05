@@ -11,6 +11,7 @@ whitenoise = "==6.6.*"
 psycopg2 = "==2.9.*"
 django-crispy-forms = "==2.1.*"
 crispy-bootstrap4 = "==2024.*"
+djangorestframework = "*"
 
 [dev-packages]
 behave = "==1.2.*"

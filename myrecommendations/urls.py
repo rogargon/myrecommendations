@@ -26,6 +26,7 @@ urlpatterns = [
     path('myrestaurants/', include('myrestaurants.urls', namespace='myrestaurants')),
     path('accounts/login/', views.LoginView.as_view(), name='login'),
     path('accounts/logout/', views.LogoutView.as_view(), name='logout'),
+    path('api-auth/', include('rest_framework.urls'))
 ]
 
 # if settings.DEBUG:
