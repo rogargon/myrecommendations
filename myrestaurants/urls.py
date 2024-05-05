@@ -1,9 +1,13 @@
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.utils import timezone
 from django.views.generic import DetailView, ListView
 from myrestaurants.models import Restaurant, Dish
 from myrestaurants.forms import RestaurantForm, DishForm
-from myrestaurants.views import RestaurantCreate, DishCreate, RestaurantDetail, review, LoginRequiredCheckIsOwnerUpdateView
+from myrestaurants.views import (RestaurantCreate, DishCreate, RestaurantDetail, review,
+     LoginRequiredCheckIsOwnerUpdateView, APIDishDetail, APIDishList, APIRestaurantDetail, APIRestaurantList,
+     APIRestaurantReviewDetail, APIRestaurantReviewList)
+from rest_framework.urlpatterns import format_suffix_patterns
 
 app_name = "myrestaurants"
 
@@ -57,3 +61,22 @@ urlpatterns = [
         review,
         name='review_create'),
 ]
+
+urlpatterns += [
+    # RESTful API
+    path('api/restaurants/',
+        APIRestaurantList.as_view(), name='restaurant-list'),
+    path('api/restaurants/<int:pk>/',
+        APIRestaurantDetail.as_view(), name='restaurant-detail'),
+    path('api/dishes/',
+        login_required(APIDishList.as_view()), name='dish-list'),
+    path('api/dishes/<int:pk>/',
+        APIDishDetail.as_view(), name='dish-detail'),
+    path('api/restaurantreviews/',
+        APIRestaurantReviewList.as_view(), name='restaurantreview-list'),
+    path('api/restaurantreviews/<int:pk>/',
+        APIRestaurantReviewDetail.as_view(), name='restaurantreview-detail'),
+]
+
+# Format suffixes
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api', 'json'])

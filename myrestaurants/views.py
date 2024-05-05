@@ -10,6 +10,10 @@ from django.views.generic.edit import CreateView, UpdateView
 from myrestaurants.models import RestaurantReview, Restaurant, Dish
 from myrestaurants.forms import RestaurantForm, DishForm
 
+from rest_framework import generics, permissions
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from myrestaurants.serializers import RestaurantSerializer, DishSerializer, RestaurantReviewSerializer
+
 # Security Mixins
 
 class LoginRequiredMixin(object):
@@ -69,3 +73,51 @@ def review(request, pk):
         restaurant=restaurant)
     new_review.save()
     return HttpResponseRedirect(reverse('myrestaurants:restaurant_detail', args=(restaurant.id,)))
+
+### RESTful API views ###
+
+class IsOwnerOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        # Instance must have an attribute named `owner`.
+        return obj.user == request.user
+
+class APIRestaurantList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    model = Restaurant
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer
+
+class APIRestaurantDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    model = Restaurant
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer
+
+class APIDishList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    model = Dish
+    queryset = Dish.objects.all()
+    serializer_class = DishSerializer
+
+class APIDishDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    model = Dish
+    queryset = Dish.objects.all()
+    serializer_class = DishSerializer
+
+class APIRestaurantReviewList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    model = RestaurantReview
+    queryset = RestaurantReview.objects.all()
+    serializer_class = RestaurantReviewSerializer
+
+class APIRestaurantReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    model = RestaurantReview
+    queryset = RestaurantReview.objects.all()
+    serializer_class = RestaurantReviewSerializer
