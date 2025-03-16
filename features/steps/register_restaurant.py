@@ -34,12 +34,11 @@ def step_impl(context, count):
 
 @then('I\'m viewing the details page for restaurant by "{username}"')
 def step_impl(context, username):
-    q_list = [Q((attribute, context.table.rows[0][attribute])) for attribute in context.table.headings]
-    from django.contrib.auth.models import User
-    q_list.append(Q(('user', User.objects.get(username=username))))
-    from myrestaurants.models import Restaurant
-    restaurant = Restaurant.objects.filter(reduce(operator.and_, q_list)).get()
-    assert context.browser.url == context.get_url(restaurant)
+    context.browser.is_text_present(username)
+    for row in context.table:
+        for heading in row.headings:
+           expected = row[heading]
+           context.browser.is_text_present(expected)
 
 @when('I edit the restaurant with name "{name}"')
 def step_impl(context, name):

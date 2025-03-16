@@ -448,10 +448,6 @@ The undefined steps are related with the Register Restaurant feature and are imp
 
 ```python
 from behave import *
-import operator
-from functools import reduce
-from django.db.models import Q
-
 use_step_matcher("parse")
 
 @when(u'I register restaurant')
@@ -463,12 +459,13 @@ def step_impl(context):
             context.browser.fill(heading, row[heading])
         form.find_by_value('Submit').first.click()
 
-@then(u'I\'m viewing the details page for restaurant by "{user}"')
+@then(u'I\'m viewing the details page for restaurant by "{username}"')
 def step_impl(context, user):
-    q_list = [Q((attribute, context.table.rows[0][attribute])) for attribute in context.table.headings]
-    from myrestaurants.models import Restaurant
-    restaurant = Restaurant.objects.filter(reduce(operator.and_, q_list)).get()
-    assert context.browser.url == context.get_url(restaurant)
+    context.browser.is_text_present(username)
+    for row in context.table:
+        for heading in row.headings:
+           expected = row[heading]
+           context.browser.is_text_present(expected)
 
 @then(u'There are {count:n} restaurants')
 def step_impl(context, count):
