@@ -12,6 +12,7 @@ dependencies = [
     "Pillow==12.1.*",
     "gunicorn==25.1.*",
     "psycopg2==2.9.*",
-    "django-crispy-forms==2.6.*",
     "whitenoise==6.12.*",
+    "django-crispy-forms==2.6.*",
+    "crispy-bootstrap4>=2026.2",
 ]

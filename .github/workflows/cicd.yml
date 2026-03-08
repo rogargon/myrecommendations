@@ -11,16 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.11
+    - name: Set up Python 3.13
       uses: actions/setup-python@v2
       with:
-        python-version: 3.11
-    - name: Set up Chromedriver for e2e
-      uses: nanasess/setup-chromedriver@v2
+        python-version: 3.13
     - name: Install Dependencies
       run: |
-        pip install pipenv
-        pipenv install --dev
+        pip install uv
+        uv pip install --system -r pyproject.toml
     - name: Run Tests
       run: |
         python manage.py test

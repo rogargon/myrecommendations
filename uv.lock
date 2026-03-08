@@ -103,6 +103,19 @@ wheels = [
 ]
 
 [[package]]
+name = "crispy-bootstrap4"
+version = "2026.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "django-crispy-forms" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5b/cc/638d36595da9fbb2c9d0be98bf6007442a65a521b614cf4645d04311b061/crispy_bootstrap4-2026.2.tar.gz", hash = "sha256:66f8f14bf9c2c16ed94243236ed253a94e5a625afa1ee64022ce29db98c6cd85", size = 34645, upload-time = "2026-02-11T22:45:05.422Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ad/6d/b90d601ea2449cc6b35b4b08be90fb1f6ca1baf2be383ed195f7bfa91a32/crispy_bootstrap4-2026.2-py3-none-any.whl", hash = "sha256:4b2b99dfe3e3cacb548702159462110901bd38792b650b770e50c62284ac2227", size = 23178, upload-time = "2026-02-11T22:45:04.108Z" },
+]
+
+[[package]]
 name = "cucumber-expressions"
 version = "19.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -179,10 +192,11 @@ wheels = [
 [[package]]
 name = "myrecommendations"
 version = "0.6.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "behave" },
     { name = "behave-django" },
+    { name = "crispy-bootstrap4" },
     { name = "django" },
     { name = "django-crispy-forms" },
     { name = "gunicorn" },
@@ -197,6 +211,7 @@ dependencies = [
 requires-dist = [
     { name = "behave", specifier = "==1.3.*" },
     { name = "behave-django", specifier = "==1.9.*" },
+    { name = "crispy-bootstrap4", specifier = ">=2026.2" },
     { name = "django", specifier = "==6.0.*" },
     { name = "django-crispy-forms", specifier = "==2.6.*" },
     { name = "gunicorn", specifier = "==25.1.*" },
@@ -204,11 +219,8 @@ requires-dist = [
     { name = "psycopg2", specifier = "==2.9.*" },
     { name = "selenium", specifier = "==4.41.*" },
     { name = "splinter", specifier = "==0.*" },
-    { name = "whitenoise", specifier = "==6.12.0" },
+    { name = "whitenoise", specifier = "==6.12.*" },
 ]
-
-[package.metadata.requires-dev]
-dev = []
 
 [[package]]
 name = "outcome"
