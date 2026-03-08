@@ -15,14 +15,12 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.13
-    - name: Set up Chromedriver for e2e
-      uses: nanasess/setup-chromedriver@v2
     - name: Install Dependencies
       run: |
-        pip install pipenv
-        pipenv install --dev
+        pip install uv
+        uv pip install --system -r pyproject.toml
     - name: Run Tests
       run: |
-        pipenv run python manage.py test
-        pipenv run python manage.py collectstatic --noinput
-        pipenv run python manage.py behave
+        python manage.py test
+        python manage.py collectstatic --noinput
+        python manage.py behave

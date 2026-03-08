@@ -3,9 +3,9 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
 
-COPY Pipfile Pipfile.lock ./
-RUN pip install pipenv
-RUN pipenv install --system --deploy
+COPY pyproject.toml ./
+RUN pip install uv
+RUN uv pip install --system -r pyproject.toml
 
 COPY myrecommendations ./myrecommendations
 COPY myrestaurants ./myrestaurants
