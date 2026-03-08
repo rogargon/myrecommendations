@@ -1,4 +1,7 @@
+from selenium.webdriver.common.by import By
 from behave import *
+from selenium.webdriver.support.expected_conditions import visibility_of_element_located
+from selenium.webdriver.support.wait import WebDriverWait
 
 use_step_matcher("parse")
 
@@ -35,4 +38,8 @@ def step_impl(context, link_text):
 
 @then("I'm redirected to the login form")
 def step_impl(context):
+    wait = WebDriverWait(context.browser.driver, 3)
+    login_form = wait.until(
+        visibility_of_element_located((By.ID, "login-form"))
+    )
     assert context.browser.url.startswith(context.get_url('login'))
