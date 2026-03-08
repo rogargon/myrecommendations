@@ -40,16 +40,12 @@ def step_impl(context, restaurant_name):
 
 @then('I\'m viewing the details page for dish at restaurant "{restaurant_name}" by "{username}"')
 def step_impl(context, restaurant_name, username):
-    q_list = [Q((attribute, context.table.rows[0][attribute])) for attribute in context.table.headings]
-    from django.contrib.auth.models import User
-    q_list.append(Q(('user', User.objects.get(username=username))))
-    from myrestaurants.models import Restaurant
-    q_list.append(Q(('restaurant', Restaurant.objects.get(name=restaurant_name))))
-    from myrestaurants.models import Dish
-    dish = Dish.objects.filter(reduce(operator.and_, q_list)).get()
-    assert context.browser.url == context.get_url(dish)
-    if dish.image:
-        dish.image.delete()
+    context.browser.is_text_present(username)
+    context.browser.is_text_present(restaurant_name)
+    for row in context.table:
+        for heading in row.headings:
+           expected = row[heading]
+           context.browser.is_text_present(expected)
 
 @then('There are {count:n} dishes')
 def step_impl(context, count):

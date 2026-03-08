@@ -28,7 +28,7 @@ Starting the MyRecommendations Project from Scratch
 ===================================================
 
 First of all, install the latest version of Python from [downloads](https://www.python.org/downloads/) and 
-[pipenv](https://pipenv.readthedocs.io/en/latest/install/) to help you manage dependencies and virtual environments.
+[uv](https://docs.astral.sh/uv/getting-started/installation/) to help you manage dependencies and virtual environments.
 
 Then, create the folder for the new project, in our case the project is called 'myrecommendations':
 
@@ -38,13 +38,15 @@ $ mkdir myrecommendations
 $ cd myrecommendations
 ```
 
-Once in the `myrecommendations` folder, activate the pipenv virtual environment to keep the Python packages
+Once in the `myrecommendations` folder, create a uv virtual environment to keep the Python packages
 for your project organised and start by installing Django. Then, create a new Django project:
 
 ```shell script
-$ pipenv shell
+$ uv venv
 
-$ pipenv install Django
+$ source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
+
+$ uv pip install Django
 
 $ django-admin startproject myrecommendations .
 ```
@@ -174,8 +176,8 @@ To facilitate the description of the feature scenarios, while connecting them to
 To get Behave and integrate it with Django, install:
 
 ```shell script
-$ pipenv install behave
-$ pipenv install behave-django
+$ uv pip install behave
+$ uv pip install behave-django
 ```
 
 And add the 'behave_django' application at the end of the INSTALLED_APPS list in *myrecommendations/settings.py*:
@@ -196,52 +198,10 @@ INSTALLED_APPS = [
 Moreover, to make it possible to guide a browser from the test, and thus check if the application follows the expected behaviour from a end-user perspective, we will also use Splinter. It can be installed with the following command:
 
 ```shell script
-$ pipenv install splinter
+$ uv pip install splinter selenium
 ```
 
-Finally, for end-to-end test, it is necessary to have a browser to test from client side. With Splinter, different browsers can be configured for testing, for instance Chrome, the most common one. 
-
-Assuming Chrome is already installed in your computer, the only requirement to use it for automated testing is the ChromeDriver, available for Windows, Linux and Mac from [https://sites.google.com/a/chromium.org/chromedriver/downloads](https://sites.google.com/a/chromium.org/chromedriver/downloads)
-
-You can also install it using different package managers. For instance with **apt** on Linux:
-
-```shell script
-apt-get update
-apt-get install chromedriver
-```
-
-Or **[Brew](https://brew.sh)** on OSX:
-
-```shell script
-brew update
-brew install chromedriver
-xattr -d com.apple.quarantine $(which chromedriver)
-```
-
-Or **[Chocolatey](https://chocolatey.org/docs/installation)** on Windows:
-
-```shell script
-choco install chromedriver
-```
-
-### Testing with Firefox instead of Chrome ###
-
-Alternatively, for Firefox, install the browser:
-
-``` 
-sudo apt-get update
-sudo apt-get install firefox
-``` 
-
-Then, download Geckodriver and unpack it from [https://github.com/mozilla/geckodriver/releases/](https://github.com/mozilla/geckodriver/releases/)
-
-Finally, add the geckodriver to your path:
-
-```
-export PATH=$PATH:/your/path/to/geckodriver
-```
-
-And configure the test environment in `environment.py`, as detailed next, to use `firefox` instead of `chrome`.
+Finally, for end-to-end test, it is necessary to have a browser to test from client side. With Splinter and Selenium, different browsers can be configured for testing, for instance Chrome or Firefox, which should be installed in the machine where the tests are run.
 
 ## Environment ##
 
@@ -254,6 +214,7 @@ from splinter.browser import Browser
 
 def before_all(context):
     context.browser = Browser('chrome', headless=True)
+    # Alternatively, use `firefox` and headless=False to see the browser while testing
 
 def after_all(context):
     context.browser.quit()
@@ -362,6 +323,15 @@ def step_impl(context, username, password):
     context.browser.fill('password', password)
     form.find_by_value('login').first.click()
     assert context.browser.is_text_present('User: ' + username)
+
+@then("I'm redirected to the login form")
+def step_impl(context):
+    wait = WebDriverWait(context.browser.driver, 3)
+    login_form = wait.until(
+        visibility_of_element_located((By.ID, "login-form"))
+    )
+    # context.browser.driver.save_screenshot("debug_redirect.png")
+    assert context.browser.url.startswith(context.get_url('login'))
 ```
 
 Both steps are parameterized, so we can use the steps to login users with any username and password, as long as we have previously created them and the password matches.
@@ -448,10 +418,6 @@ The undefined steps are related with the Register Restaurant feature and are imp
 
 ```python
 from behave import *
-import operator
-from functools import reduce
-from django.db.models import Q
-
 use_step_matcher("parse")
 
 @when(u'I register restaurant')
@@ -463,12 +429,13 @@ def step_impl(context):
             context.browser.fill(heading, row[heading])
         form.find_by_value('Submit').first.click()
 
-@then(u'I\'m viewing the details page for restaurant by "{user}"')
+@then(u'I\'m viewing the details page for restaurant by "{username}"')
 def step_impl(context, user):
-    q_list = [Q((attribute, context.table.rows[0][attribute])) for attribute in context.table.headings]
-    from myrestaurants.models import Restaurant
-    restaurant = Restaurant.objects.filter(reduce(operator.and_, q_list)).get()
-    assert context.browser.url == context.get_url(restaurant)
+    context.browser.is_text_present(username)
+    for row in context.table:
+        for heading in row.headings:
+           expected = row[heading]
+           context.browser.is_text_present(expected)
 
 @then(u'There are {count:n} restaurants')
 def step_impl(context, count):

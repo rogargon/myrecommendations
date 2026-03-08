@@ -23,6 +23,6 @@ jobs:
         pipenv install --dev
     - name: Run Tests
       run: |
-        pipenv run python manage.py test
-        pipenv run python manage.py collectstatic --noinput
-        pipenv run python manage.py behave
+        python manage.py test
+        python manage.py collectstatic --noinput
+        python manage.py behave
