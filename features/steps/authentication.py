@@ -17,6 +17,10 @@ def step_impl(context, username, password):
     context.browser.fill('username', username)
     context.browser.fill('password', password)
     form.find_by_css('button.btn-success').first.click()
+    wait = WebDriverWait(context.browser.driver, 3)
+    login_form = wait.until(
+        visibility_of_element_located((By.ID, "logout-form"))
+    )
     assert context.browser.is_text_present(username)
 
 @given('I\'m not logged in')
