@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.13"
 
 [[package]]
@@ -52,16 +52,16 @@ wheels = [
 
 [[package]]
 name = "behave-django"
-version = "1.9.0"
+version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "beautifulsoup4" },
     { name = "behave" },
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/59/94/4976841a5a956357b91e1f73e55d885139d62973874e08de3ac9293dcb72/behave_django-1.9.0.tar.gz", hash = "sha256:cbae403b9c9873d4d079f3560d6c8b390eaea9fb8e8caff63439a0b06ea60309", size = 16313, upload-time = "2025-11-15T14:04:21.478Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/b6/04fc21f9ba0b35cf261e369703bac24da0605ead4a7fe02ea65026247812/behave_django-2.0.0.tar.gz", hash = "sha256:194dfa3317ed47062d1e3da6c06060faadcf50ee985656e437f2e3b35854c807", size = 17451, upload-time = "2026-06-04T00:36:54.752Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/75/8d/f9a54742833f136dbf396bbbdb9aa0f62ddaf3f1621d772abecf5eac8cf6/behave_django-1.9.0-py3-none-any.whl", hash = "sha256:41c6d95886cd59413493037cc79fbe3346a828c83594431bbd596859ad12399b", size = 12233, upload-time = "2025-11-15T14:04:20.607Z" },
+    { url = "https://files.pythonhosted.org/packages/b7/e7/b72b9b1baaf90b8a52a343f40d144d8630fccd157dab579acdb718961965/behave_django-2.0.0-py3-none-any.whl", hash = "sha256:5b0843168d82bdf2b376bc3c7bcb7d1670337eb5253aca4e33ef29a977b55a41", size = 13039, upload-time = "2026-06-04T00:36:53.694Z" },
 ]
 
 [[package]]
@@ -179,7 +179,7 @@ wheels = [
 [[package]]
 name = "myrecommendations"
 version = "0.6.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "behave" },
     { name = "behave-django" },
@@ -196,7 +196,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "behave", specifier = "==1.3.*" },
-    { name = "behave-django", specifier = "==1.9.*" },
+    { name = "behave-django", specifier = ">=1.9,<2.1" },
     { name = "django", specifier = "==6.0.*" },
     { name = "django-crispy-forms", specifier = "==2.6.*" },
     { name = "gunicorn", specifier = "==25.1.*" },
@@ -204,11 +204,8 @@ requires-dist = [
     { name = "psycopg2", specifier = "==2.9.*" },
     { name = "selenium", specifier = "==4.41.*" },
     { name = "splinter", specifier = "==0.*" },
-    { name = "whitenoise", specifier = "==6.12.0" },
+    { name = "whitenoise", specifier = "==6.12.*" },
 ]
-
-[package.metadata.requires-dev]
-dev = []
 
 [[package]]
 name = "outcome"
